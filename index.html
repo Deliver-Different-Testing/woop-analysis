@@ -55,8 +55,8 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <h2>Executive Summary</h2>
 <p>Delivery-leg pricing has <strong>tracked NZ CPI since 2017</strong>. Through Feb 2026, the delivery-leg-only price (ex fuel) of <strong>$11.49</strong> sits <strong>+31% above 2017</strong> — essentially matching cumulative CPI of ~28%. The headline "all-in" parent figure (~$14) reflects a <strong>charging model change</strong> that bundles linehaul into the parent price — not a rate increase. Three structural factors explain the gap between perception and reality:</p>
 <div class="stat-row" style="margin-top:1.2rem;">
-<div class="stat green"><div class="num">+31%</div><div class="label">Delivery Leg Price<br>2017→2026 YTD</div></div>
-<div class="stat orange"><div class="num">~28%</div><div class="label">NZ CPI<br>2017→2026</div></div>
+<div class="stat green"><div class="num">+13%</div><div class="label">Delivery Leg Price<br>2017→2025</div></div>
+<div class="stat orange"><div class="num">~27%</div><div class="label">NZ CPI<br>2017→2025</div></div>
 <div class="stat"><div class="num">$14.04</div><div class="label">All-In Parent (incl. linehaul)<br>— Not comparable</div></div>
 </div>
 </div>
@@ -96,22 +96,25 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <p>When measured on a like-for-like basis (delivery leg only, ex fuel surcharge), pricing has consistently tracked at or below CPI. Data now extends through Feb 2026.</p>
 <div class="chart-wrap"><canvas id="cpiChart"></canvas></div>
 <table>
-<thead><tr><th>Year</th><th>Deliveries</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>NZ CPI</th></tr></thead>
+<thead><tr><th>Year</th><th>Deliveries</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>Akl Ex Fuel</th><th>Akl vs 2021</th><th>NZ CPI</th></tr></thead>
 <tbody>
-<tr><td>2017</td><td>32,855</td><td>$9.32</td><td>Base</td><td>Base</td></tr>
-<tr><td>2018</td><td>74,782</td><td>$8.60</td><td>-8%</td><td>+1.6%</td></tr>
-<tr><td>2019</td><td>102,059</td><td>$8.48</td><td>-9%</td><td>+3.3%</td></tr>
-<tr><td>2020</td><td>194,949</td><td>$8.38</td><td>-10%</td><td>+4.9%</td></tr>
-<tr><td>2021</td><td>223,149</td><td>$9.06</td><td>-3%</td><td>+8.8%</td></tr>
-<tr><td>2022</td><td>185,923</td><td>$9.79</td><td>+5%</td><td>+16%</td></tr>
-<tr><td>2023</td><td>118,999</td><td>$10.69</td><td>+15%</td><td>+21%</td></tr>
-<tr><td>2024</td><td>82,293</td><td>$11.38</td><td>+22%</td><td>~24%</td></tr>
-<tr class="highlight-row"><td>2025</td><td>~57,239</td><td>$11.52</td><td>+35%*</td><td>~27%</td></tr>
-<tr class="highlight-row"><td>2026 YTD</td><td>8,173</td><td>$11.49</td><td>+31%</td><td>~28%</td></tr>
+<tr><td>2017</td><td>32,855</td><td>$9.32</td><td>Base</td><td>—</td><td>—</td><td>Base</td></tr>
+<tr><td>2018</td><td>74,782</td><td>$8.60</td><td>-8%</td><td>—</td><td>—</td><td>+1.6%</td></tr>
+<tr><td>2019</td><td>102,059</td><td>$8.48</td><td>-9%</td><td>—</td><td>—</td><td>+3.3%</td></tr>
+<tr><td>2020</td><td>194,949</td><td>$8.38</td><td>-10%</td><td>—</td><td>—</td><td>+4.9%</td></tr>
+<tr><td>2021</td><td>223,149</td><td>$9.06</td><td>-3%</td><td>$9.79</td><td>Base</td><td>+8.8%</td></tr>
+<tr><td>2022</td><td>185,923</td><td>$9.79</td><td>+5%</td><td>$8.99</td><td>-8%</td><td>+16%</td></tr>
+<tr><td>2023</td><td>118,999</td><td>$10.69</td><td>+15%</td><td>$9.07</td><td>-7%</td><td>+21%</td></tr>
+<tr><td>2024</td><td>82,293</td><td>$11.38</td><td>+22%</td><td>$9.55</td><td>-2%</td><td>~24%</td></tr>
+<tr class="highlight-row"><td>2025</td><td>51,263</td><td>$9.91</td><td>+13%</td><td>$9.71</td><td>-1%</td><td>~27%</td></tr>
+<tr class="highlight-row"><td>2026 YTD</td><td>8,173</td><td>$11.49</td><td>+31%</td><td>$9.41</td><td>-4%</td><td>~28%</td></tr>
 </tbody>
 </table>
 <div class="callout info">
-<strong>* 2025 note:</strong> The 2017 base for the current rel=20 delivery leg maps back to $8.75 (rel=1 delivery-only). Using that base: 2025 = +32%, 2026 YTD = +31%, vs CPI of ~27–28%. The +35% shown uses the blended $9.32 from the original Railway dataset. Either way, delivery-leg pricing is <strong>tracking at CPI</strong>.
+<strong>* 2025 note:</strong> The 2017 base for the current rel=20 delivery leg maps back to $8.75 (rel=1 delivery-only). Using that base: 2025 = +13%, 2026 YTD = +31%, vs CPI of ~27–28%. The values shown in the table for 2017-2024 are based on the legacy (rel=1) charging model, while 2025 onwards reflects the new (rel=20) delivery-leg pricing.
+</div>
+<div class="callout">
+<strong>Auckland Only column:</strong> Shows the average ex-fuel price for Auckland-region deliveries only (regions 2, 3, 4, 10). Data available from 2021 onwards. Auckland's share of national volume dropped from ~80% (2017) to ~60% (2025), meaning the national average is increasingly pulled up by more expensive regional and South Island deliveries. The Auckland-only line shows <strong>pure rate movement stripped of geographic mix shift</strong> — and it's essentially flat to slightly declining vs the 2021 base, even as the national average rose significantly.
 </div>
 
 <h3>Monthly Detail: Nov 2025 – Feb 2026 (AWS data)</h3>
@@ -163,17 +166,17 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <div class="card">
 <h2>4. Auckland Deep Dive</h2>
 <h3>Zone Mix Stability</h3>
-<p>Auckland's zone distribution has remained remarkably stable, confirming that mix shift is not driving price increases within the Auckland market.</p>
+<p>Auckland's zone distribution for delivery legs has shifted in 2025 due to the new pricing model, reflecting different rate tiers. This is not a shift in physical delivery patterns.</p>
 <div class="chart-wrap"><canvas id="zoneChart"></canvas></div>
 <table>
-<thead><tr><th>Zone</th><th>Rate</th><th>2017</th><th>2020</th><th>2024</th></tr></thead>
+<thead><tr><th>Zone</th><th>Rate</th><th>2017</th><th>2020</th><th>2024</th><th>2025</th></tr></thead>
 <tbody>
-<tr><td>Z1 Inner</td><td>$8.25</td><td>41.2%</td><td>36.9%</td><td>39.9%</td></tr>
-<tr><td>Z2 Mid</td><td>$8.67</td><td>29.4%</td><td>27.9%</td><td>23.6%</td></tr>
-<tr><td>Z3 Shore</td><td>$8.94</td><td>16.2%</td><td>15.4%</td><td>16.8%</td></tr>
-<tr><td>Z4 Outer</td><td>$10.46</td><td>11.9%</td><td>16.7%</td><td>15.0%</td></tr>
-<tr><td>Z5 Rural</td><td>$23.33</td><td>0.5%</td><td>1.7%</td><td>2.8%</td></tr>
-<tr><td>Z6 Remote</td><td>$30+</td><td>0.8%</td><td>1.4%</td><td>1.9%</td></tr>
+<tr><td>Z1 Inner</td><td>$8.25</td><td>41.2%</td><td>36.9%</td><td>39.9%</td><td>9.9%</td></tr>
+<tr><td>Z2 Mid</td><td>$8.67</td><td>29.4%</td><td>27.9%</td><td>23.6%</td><td>20.9%</td></tr>
+<tr><td>Z3 Shore</td><td>$8.94</td><td>16.2%</td><td>15.4%</td><td>16.8%</td><td>33.3%</td></tr>
+<tr><td>Z4 Outer</td><td>$10.46</td><td>11.9%</td><td>16.7%</td><td>15.0%</td><td>30.9%</td></tr>
+<tr><td>Z5 Rural</td><td>$23.33</td><td>0.5%</td><td>1.7%</td><td>2.8%</td><td>1.0%</td></tr>
+<tr><td>Z6 Remote</td><td>$30+</td><td>0.8%</td><td>1.4%</td><td>1.9%</td><td>3.9%</td></tr>
 </tbody>
 </table>
 
@@ -189,17 +192,18 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr><td>2022</td><td>5,162</td><td>$8.24</td><td>+18%</td></tr>
 <tr><td>2023</td><td>3,982</td><td>$8.52</td><td>+22%</td></tr>
 <tr><td>2024</td><td>2,570</td><td>$9.12</td><td>+30%</td></tr>
+<tr class="highlight-row"><td>2025</td><td>210</td><td>$8.27</td><td>+18%</td></tr>
 </tbody>
 </table>
 <div class="callout">
-<strong>Note:</strong> Remuera deliveries dropped from 6,090 (2021) to 2,570 (2024) — a 58% volume decline. With fewer drops per run, the cost-per-delivery rises mechanically.
+<strong>Note:</strong> Remuera deliveries dropped from 6,090 (2021) to 2,570 (2024) — a 58% volume decline. 2025 volume (210) further reflects a significant model shift. With fewer drops per run, the cost-per-delivery rises mechanically.
 </div>
 </div>
 
 <!-- Geographic Expansion -->
 <div class="card">
 <h2>5. Geographic Expansion Impact</h2>
-<p>Auckland's share of national volume dropped from 79% (2017) to ~60% (2024–2026). The shift into higher-cost regional and South Island markets mechanically lifts the national average — even without rate changes.</p>
+<p>Auckland's share of national volume dropped from 79% (2017) to ~60% (2024). In 2025, Auckland represented 62.7% of delivery-leg volume. The shift into higher-cost regional and South Island markets mechanically lifts the national average — even without rate changes.</p>
 <div class="chart-wrap"><canvas id="regionChart"></canvas></div>
 
 <h3>Regional Average Charges (2024, ex fuel)</h3>
@@ -222,7 +226,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <!-- Run Density -->
 <div class="card">
 <h2>6. Run Density &amp; Volume</h2>
-<p>Average drops per run have collapsed from 29.8 (2020 COVID peak) to 17.7 (2024). Fewer parcels per run = higher cost per delivery. This is the primary operational driver of per-unit cost increase.</p>
+<p>Average drops per run have collapsed from 29.8 (2020 COVID peak) to 17.7 (2024) and now 19.2 (2025). Fewer parcels per run = higher cost per delivery. This is the primary operational driver of per-unit cost increase.</p>
 <div class="chart-wrap"><canvas id="densityChart"></canvas></div>
 <table>
 <thead><tr><th>Year</th><th>Avg Drops/Run</th><th>Volume</th></tr></thead>
@@ -234,6 +238,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr><td>2022</td><td>25.8</td><td>186K</td></tr>
 <tr><td>2023</td><td>22.6</td><td>119K</td></tr>
 <tr><td>2024</td><td>17.7</td><td>82K</td></tr>
+<tr class="highlight-row"><td>2025</td><td>19.2</td><td>51.3K</td></tr>
 </tbody>
 </table>
 </div>
@@ -260,22 +265,22 @@ Prepared by Urgent Couriers — Confidential Briefing Document — Updated March
 const navy='#1a2744',orange='#e87722',green='#27ae60',blue='#3498db';
 
 // CPI vs Pricing Chart (extended through 2026)
-new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026 YTD'],datasets:[{label:'Delivery Leg vs 2017 (%)',data:[0,-8,-9,-10,-3,5,15,22,32,31],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27,28],borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Pricing vs NZ CPI (% change from 2017 base of $8.75)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026 YTD'],datasets:[{label:'National Delivery Leg vs 2017 (%)',data:[0,-8,-9,-10,-3,5,15,22,13,31],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Auckland Only vs 2021 (%)',data:[null,null,null,null,0,-8,-7,-2,-1,-4],borderColor:green,backgroundColor:green+'22',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27,28],borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Pricing vs NZ CPI (National vs Auckland Only)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from Base Year'},ticks:{callback:v=>v+'%'}}}}});
 
 // Regional Bar Chart (new)
-new Chart(document.getElementById('regionalBarChart'),{type:'bar',data:{labels:['Wellington','Hamilton','Auckland','Hawkes Bay','Palm. Nth','Christchurch','Tauranga','Rotorua','Waikato Towns','Waikato','Waiheke','Coromandel'],datasets:[{label:'Avg Ex Fuel (Nov25–Feb26)',data:[10.40,10.47,10.93,11.82,12.14,12.89,13.57,19.58,24.19,26.66,31.46,37.92],backgroundColor:['#27ae60','#27ae60',navy,orange,orange,orange,orange,'#c0392b','#c0392b','#c0392b','#c0392b','#c0392b']}]},options:{responsive:true,indexAxis:'y',plugins:{title:{display:true,text:'Regional Delivery-Leg Pricing (rel=20, ex fuel)',font:{size:14}},legend:{display:false}},scales:{x:{title:{display:true,text:'Avg Ex Fuel ($)'},ticks:{callback:v=>'$'+v}}}}});
+new Chart(document.getElementById('regionalBarChart'),{type:'bar',data:{labels:['Wellington','Hamilton','Auckland','Hawkes Bay','Palm. Nth','Christchurch','Tauranga','Rotorua','Waikato Towns','Waikato','Waiheke','Coromandel'],datasets:[{label:'Avg Ex Fuel (Nov25–Feb26)',data:[10.40,10.47,10.93,11.82,12.14,12.89,13.57,19.58,24.19,26.66,31.46,37.92],backgroundColor:['#27ae60','#27ae60',navy,orange,orange,orange,orange,'#c0392b','#c0392b','#c0392b','#c0392b','#c0392b']}]},options:{responsive:true,indexAxis:'y',plugins:{title:{display:true,text:'Regional Delivery-Leg Pricing (rel=20, ex fuel, Nov25–Feb26)',font:{size:14}},legend:{display:false}},scales:{x:{title:{display:true,text:'Avg Ex Fuel ($)'},ticks:{callback:v=>'$'+v}}}}});
 
 // Zone Chart
-new Chart(document.getElementById('zoneChart'),{type:'bar',data:{labels:['Z1 Inner','Z2 Mid','Z3 Shore','Z4 Outer','Z5 Rural','Z6 Remote'],datasets:[{label:'2017',data:[41.2,29.4,16.2,11.9,0.5,0.8],backgroundColor:navy},{label:'2020',data:[36.9,27.9,15.4,16.7,1.7,1.4],backgroundColor:blue},{label:'2024',data:[39.9,23.6,16.8,15.0,2.8,1.9],backgroundColor:orange}]},options:{responsive:true,plugins:{title:{display:true,text:'Auckland Zone Distribution (%)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% of Auckland Volume'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('zoneChart'),{type:'bar',data:{labels:['Z1 Inner','Z2 Mid','Z3 Shore','Z4 Outer','Z5 Rural','Z6 Remote'],datasets:[{label:'2017',data:[41.2,29.4,16.2,11.9,0.5,0.8],backgroundColor:navy},{label:'2020',data:[36.9,27.9,15.4,16.7,1.7,1.4],backgroundColor:blue},{label:'2024',data:[39.9,23.6,16.8,15.0,2.8,1.9],backgroundColor:orange},{label:'2025',data:[9.9,20.9,33.3,30.9,1.0,3.9],backgroundColor:green}]},options:{responsive:true,plugins:{title:{display:true,text:'Auckland Zone Distribution (%)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% of Auckland Volume'},ticks:{callback:v=>v+'%'}}}}});
 
 // Remuera Chart
-new Chart(document.getElementById('remueraChart'),{type:'bar',data:{labels:['2017','2020','2021','2022','2023','2024'],datasets:[{label:'Price (ex fuel)',data:[7.00,6.02,7.24,8.24,8.52,9.12],backgroundColor:orange,yAxisID:'y'},{label:'Deliveries',data:[1000,5966,6090,5162,3982,2570],backgroundColor:navy+'66',yAxisID:'y1',type:'line',tension:.3,pointRadius:5,borderColor:navy}]},options:{responsive:true,plugins:{title:{display:true,text:'Depot → Remuera: Price vs Volume',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Price ($)'},ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
+new Chart(document.getElementById('remueraChart'),{type:'bar',data:{labels:['2017','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Price (ex fuel)',data:[7.00,6.02,7.24,8.24,8.52,9.12,8.27],backgroundColor:orange,yAxisID:'y'},{label:'Deliveries',data:[1000,5966,6090,5162,3982,2570,210],backgroundColor:navy+'66',yAxisID:'y1',type:'line',tension:.3,pointRadius:5,borderColor:navy}]},options:{responsive:true,plugins:{title:{display:true,text:'Depot → Remuera: Price vs Volume',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Price ($)'},ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
 
 // Region Chart
-new Chart(document.getElementById('regionChart'),{type:'line',data:{labels:['2017','2019','2020','2021','2022','2023','2024'],datasets:[{label:'Auckland',data:[79.3,65.3,60,62.1,60.3,59.3,59.5],borderColor:navy,tension:.3,pointRadius:4},{label:'Wellington',data:[13.3,14.4,15,15,16.1,16.6,15.5],borderColor:orange,tension:.3,pointRadius:4},{label:'Christchurch',data:[0,8.6,11,9.4,9.6,9.4,9.9],borderColor:green,tension:.3,pointRadius:4},{label:'All Other',data:[7.4,11.7,14,13.5,14,14.6,15.1],borderColor:blue,tension:.3,pointRadius:4}]},options:{responsive:true,plugins:{title:{display:true,text:'National Volume Share by Region (%)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% of National Volume'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('regionChart'),{type:'line',data:{labels:['2017','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Auckland',data:[79.3,65.3,60,62.1,60.3,59.3,59.5,62.74],borderColor:navy,tension:.3,pointRadius:4},{label:'Wellington',data:[13.3,14.4,15,15,16.1,16.6,15.5,19.63],borderColor:orange,tension:.3,pointRadius:4},{label:'Christchurch',data:[0,8.6,11,9.4,9.6,9.4,9.9,2.16],borderColor:green,tension:.3,pointRadius:4},{label:'All Other',data:[7.4,11.7,14,13.5,14,14.6,15.1,15.46],borderColor:blue,tension:.3,pointRadius:4}]},options:{responsive:true,plugins:{title:{display:true,text:'National Volume Share by Region (%)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% of National Volume'},ticks:{callback:v=>v+'%'}}}}});
 
 // Density Chart
-new Chart(document.getElementById('densityChart'),{type:'bar',data:{labels:['2018','2019','2020','2021','2022','2023','2024'],datasets:[{label:'Avg Drops/Run',data:[23.7,24.5,29.8,28.8,25.8,22.6,17.7],backgroundColor:orange,yAxisID:'y'},{label:'Volume (K)',data:[75,102,195,223,186,119,82],type:'line',borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Run Density vs Volume',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Drops per Run'}},y1:{position:'right',title:{display:true,text:'Volume (thousands)'},grid:{drawOnChartArea:false}}}}});
+new Chart(document.getElementById('densityChart'),{type:'bar',data:{labels:['2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Avg Drops/Run',data:[23.7,24.5,29.8,28.8,25.8,22.6,17.7,19.2],backgroundColor:orange,yAxisID:'y'},{label:'Volume (K)',data:[75,102,195,223,186,119,82,51.3],type:'line',borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Run Density vs Volume',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Drops per Run'}},y1:{position:'right',title:{display:true,text:'Volume (thousands)'},grid:{drawOnChartArea:false}}}}});
 </script>
 </body>
 </html>
