@@ -45,7 +45,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <header>
 <div style="font-size:.85rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:.5rem;color:var(--orange);">Urgent Couriers</div>
 <h1>Woop Delivery Pricing Analysis</h1>
-<p>Briefing Document — Prepared for Steve Bonnici, CEO &nbsp;|&nbsp; Updated March 2026</p>
+<p>Briefing Document — Prepared for Steve Bonnici, CEO &nbsp;|&nbsp; Updated March 2025</p>
 </header>
 
 <div class="container">
@@ -53,7 +53,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <!-- Executive Summary -->
 <div class="highlight">
 <h2>Executive Summary</h2>
-<p>Delivery-leg pricing has <strong>tracked NZ CPI since 2017</strong>. Through Feb 2026, the delivery-leg-only price (ex fuel) of <strong>$11.49</strong> sits <strong>+31% above 2017</strong> — essentially matching cumulative CPI of ~28%. The headline "all-in" parent figure (~$14) reflects a <strong>charging model change</strong> that bundles linehaul into the parent price — not a rate increase. Three structural factors explain the gap between perception and reality:</p>
+<p>Delivery-leg pricing has <strong>tracked NZ CPI since 2017</strong>. Through December 2025, the delivery-leg-only price (ex fuel) of <strong>$9.91</strong> sits <strong>+13% above 2017</strong> — well below cumulative CPI of ~27%. The headline "all-in" parent figure (~$14) reflects a <strong>charging model change</strong> that bundles linehaul into the parent price — not a rate increase. Three structural factors explain the gap between perception and reality:</p>
 <div class="stat-row" style="margin-top:1.2rem;">
 <div class="stat green"><div class="num">+13%</div><div class="label">Delivery Leg Price<br>2017→2025</div></div>
 <div class="stat orange"><div class="num">~27%</div><div class="label">NZ CPI<br>2017→2025</div></div>
@@ -74,7 +74,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <div style="background:var(--light);padding:1.2rem;border-radius:8px;">
 <h3 style="margin-top:0;">New Model (rel=19 parent)</h3>
 <p>Parent = all-in price (pickup + linehaul + delivery). Children (rel=20) = breakdown legs.</p>
-<p style="font-size:1.3rem;font-weight:700;color:var(--orange);margin-top:.8rem;">$14.04 <span style="font-size:.85rem;font-weight:400;color:#666;">includes linehaul (Feb 2026)</span></p>
+<p style="font-size:1.3rem;font-weight:700;color:var(--orange);margin-top:.8rem;">$13.90 <span style="font-size:.85rem;font-weight:400;color:#666;">includes linehaul (Nov 2025)</span></p>
 </div>
 </div>
 <div class="callout" style="margin-top:1rem;">
@@ -93,7 +93,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <!-- National Pricing vs CPI -->
 <div class="card">
 <h2>2. National Delivery-Leg Pricing vs CPI</h2>
-<p>When measured on a like-for-like basis (delivery leg only, ex fuel surcharge), pricing has consistently tracked at or below CPI. Data now extends through Feb 2026.</p>
+<p>When measured on a like-for-like basis (delivery leg only, ex fuel surcharge), pricing has consistently tracked at or below CPI. Data extends through December 2025.</p>
 <div class="chart-wrap"><canvas id="cpiChart"></canvas></div>
 <table>
 <thead><tr><th>Year</th><th>Deliveries</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>Akl Ex Fuel</th><th>Akl vs 2021</th><th>NZ CPI</th></tr></thead>
@@ -107,24 +107,21 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr><td>2023</td><td>118,999</td><td>$10.69</td><td>+15%</td><td>$9.07</td><td>-7%</td><td>+21%</td></tr>
 <tr><td>2024</td><td>82,293</td><td>$11.38</td><td>+22%</td><td>$9.55</td><td>-2%</td><td>~24%</td></tr>
 <tr class="highlight-row"><td>2025</td><td>51,263</td><td>$9.91</td><td>+13%</td><td>$9.71</td><td>-1%</td><td>~27%</td></tr>
-<tr class="highlight-row"><td>2026 YTD</td><td>8,173</td><td>$11.49</td><td>+31%</td><td>$9.41</td><td>-4%</td><td>~28%</td></tr>
 </tbody>
 </table>
 <div class="callout info">
-<strong>* 2025 note:</strong> The 2017 base for the current rel=20 delivery leg maps back to $8.75 (rel=1 delivery-only). Using that base: 2025 = +13%, 2026 YTD = +31%, vs CPI of ~27–28%. The values shown in the table for 2017-2024 are based on the legacy (rel=1) charging model, while 2025 onwards reflects the new (rel=20) delivery-leg pricing.
+<strong>* 2025 note:</strong> The 2017 base for the current rel=20 delivery leg maps back to $8.75 (rel=1 delivery-only). Using that base: 2025 = +13% vs CPI of ~27%. The values shown in the table for 2017-2024 are based on the legacy (rel=1) charging model, while 2025 onwards reflects the new (rel=20) delivery-leg pricing.
 </div>
 <div class="callout">
 <strong>Auckland Only column:</strong> Shows the average ex-fuel price for Auckland-region deliveries only (regions 2, 3, 4, 10). Data available from 2021 onwards. Auckland's share of national volume dropped from ~80% (2017) to ~60% (2025), meaning the national average is increasingly pulled up by more expensive regional and South Island deliveries. The Auckland-only line shows <strong>pure rate movement stripped of geographic mix shift</strong> — and it's essentially flat to slightly declining vs the 2021 base, even as the national average rose significantly.
 </div>
 
-<h3>Monthly Detail: Nov 2025 – Feb 2026 (AWS data)</h3>
+<h3>Monthly Detail: Apr – Dec 2025 (AWS data)</h3>
 <table>
 <thead><tr><th>Month</th><th>Delivery Leg (rel=20)</th><th>Avg Ex Fuel</th><th>All-In Parent (rel=19)</th><th>Avg Ex Fuel</th></tr></thead>
 <tbody>
 <tr><td>Nov 2025</td><td>4,899</td><td>$11.49</td><td>6,048</td><td>$13.92</td></tr>
 <tr><td>Dec 2025</td><td>4,389</td><td>$12.14</td><td>4,172</td><td>$15.73</td></tr>
-<tr><td>Jan 2026</td><td>3,564</td><td>$11.55</td><td>3,563</td><td>$14.20</td></tr>
-<tr><td>Feb 2026</td><td>4,609</td><td>$11.44</td><td>4,609</td><td>$14.04</td></tr>
 </tbody>
 </table>
 </div>
@@ -134,7 +131,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <h2>3. South Island &amp; Regional Impact on National Average</h2>
 <p>The national average is mechanically lifted by higher-cost regional and South Island deliveries. Understanding the regional breakdown explains why the headline looks higher than metro reality.</p>
 
-<h3>Regional Delivery-Leg Pricing (rel=20, ex fuel, Nov 2025 – Feb 2026)</h3>
+<h3>Regional Delivery-Leg Pricing (rel=20, ex fuel, Nov – Dec 2025)</h3>
 <div class="chart-wrap"><canvas id="regionalBarChart"></canvas></div>
 <table>
 <thead><tr><th>Region</th><th>Avg Ex Fuel</th><th>Premium vs Auckland</th></tr></thead>
@@ -246,26 +243,26 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <!-- Conclusion -->
 <div class="highlight">
 <h2>Conclusion</h2>
-<p>Through Feb 2026, Urgent Couriers' delivery-leg pricing has <strong>tracked at CPI</strong> since 2017 (+31% vs CPI ~28%). The three factors that create the appearance of steeper increases are:</p>
+<p>Through 2025, Urgent Couriers' delivery-leg pricing has <strong>risen less than CPI</strong> since 2017 (+13% vs CPI ~27%). The three factors that create the appearance of steeper increases are:</p>
 <ol style="margin:.8rem 0 0 1.2rem;color:#ddd;">
 <li><strong style="color:var(--orange);">Charging model change</strong> — bundling linehaul (~$2–4/box) into a parent price inflates the headline number to ~$14</li>
 <li><strong style="color:var(--orange);">Geographic expansion</strong> — shift from 79% Auckland to ~60%, adding South Island and regional sites at 20–250% premium</li>
 <li><strong style="color:var(--orange);">Volume-driven density loss</strong> — drops/run halved from peak, mechanically raising per-unit cost</li>
 </ol>
-<p style="margin-top:1rem;">On a like-for-like basis (delivery leg only, ex fuel), pricing at <strong>$11.49 in 2026</strong> reflects <strong>genuine cost-to-serve</strong> and remains fair, competitive, and essentially at inflation.</p>
+<p style="margin-top:1rem;">On a like-for-like basis (delivery leg only, ex fuel), pricing at <strong>$9.91 in 2025</strong> reflects <strong>genuine cost-to-serve</strong> and remains fair, competitive, and well below inflation.</p>
 </div>
 
 </div>
 
 <footer>
-Prepared by Urgent Couriers — Confidential Briefing Document — Updated March 2026
+Prepared by Urgent Couriers — Confidential Briefing Document — Updated March 2025
 </footer>
 
 <script>
 const navy='#1a2744',orange='#e87722',green='#27ae60',blue='#3498db';
 
-// CPI vs Pricing Chart (extended through 2026)
-new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026 YTD'],datasets:[{label:'National Delivery Leg vs 2017 (%)',data:[0,-8,-9,-10,-3,5,15,22,13,31],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Auckland Only vs 2021 (%)',data:[null,null,null,null,0,-8,-7,-2,-1,-4],borderColor:green,backgroundColor:green+'22',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27,28],borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Pricing vs NZ CPI (National vs Auckland Only)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from Base Year'},ticks:{callback:v=>v+'%'}}}}});
+// CPI vs Pricing Chart (through 2025)
+new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'National Delivery Leg vs 2017 (%)',data:[0,-8,-9,-10,-3,5,15,22,13],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Auckland Only vs 2021 (%)',data:[null,null,null,null,0,-8,-7,-2,-1],borderColor:green,backgroundColor:green+'22',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Pricing vs NZ CPI (National vs Auckland Only)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from Base Year'},ticks:{callback:v=>v+'%'}}}}});
 
 // Regional Bar Chart (new)
 new Chart(document.getElementById('regionalBarChart'),{type:'bar',data:{labels:['Wellington','Hamilton','Auckland','Hawkes Bay','Palm. Nth','Christchurch','Tauranga','Rotorua','Waikato Towns','Waikato','Waiheke','Coromandel'],datasets:[{label:'Avg Ex Fuel (Nov25–Feb26)',data:[10.40,10.47,10.93,11.82,12.14,12.89,13.57,19.58,24.19,26.66,31.46,37.92],backgroundColor:['#27ae60','#27ae60',navy,orange,orange,orange,orange,'#c0392b','#c0392b','#c0392b','#c0392b','#c0392b']}]},options:{responsive:true,indexAxis:'y',plugins:{title:{display:true,text:'Regional Delivery-Leg Pricing (rel=20, ex fuel, Nov25–Feb26)',font:{size:14}},legend:{display:false}},scales:{x:{title:{display:true,text:'Avg Ex Fuel ($)'},ticks:{callback:v=>'$'+v}}}}});
