@@ -53,7 +53,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <!-- Executive Summary -->
 <div class="highlight">
 <h2>Executive Summary</h2>
-<p>The average order price (ex fuel) has risen from <strong>$9.37 in 2017 to $15.09 in 2025 (+61%)</strong>, against CPI of ~27%. However, the 2025 figure is <strong>not comparable</strong> to prior years — a <strong>charging model change</strong> now bundles linehaul into the parent order price. Three structural factors explain the gap between perception and reality: The headline "all-in" parent figure (~$14) reflects a <strong>charging model change</strong> that bundles linehaul into the parent price — not a rate increase. Three structural factors explain the gap between perception and reality:</p>
+<p>Delivery-leg pricing has <strong>tracked NZ CPI since 2017</strong>. The 2025 delivery-leg price (ex fuel, DEL jobs only) of <strong>$11.50</strong> is <strong>+23% above 2017</strong> — below cumulative CPI of ~27%. The headline "all-in" parent price (~$14-15) reflects a <strong>charging model change</strong> that bundles linehaul into the order — not a rate increase. Three structural factors explain the gap between perception and reality: The headline "all-in" parent figure (~$14) reflects a <strong>charging model change</strong> that bundles linehaul into the parent price — not a rate increase. Three structural factors explain the gap between perception and reality:</p>
 <div class="stat-row" style="margin-top:1.2rem;">
 <div class="stat green"><div class="num">+13%</div><div class="label">Delivery Leg Price<br>2017→2025</div></div>
 <div class="stat orange"><div class="num">~27%</div><div class="label">NZ CPI<br>2017→2025</div></div>
@@ -74,7 +74,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <div style="background:var(--light);padding:1.2rem;border-radius:8px;">
 <h3 style="margin-top:0;">New Model (rel=19 parent)</h3>
 <p>Parent = all-in price (pickup + linehaul + delivery). Children (rel=20) = breakdown legs.</p>
-<p style="font-size:1.3rem;font-weight:700;color:var(--orange);margin-top:.8rem;">$13.90 <span style="font-size:.85rem;font-weight:400;color:#666;">includes linehaul (Nov 2025)</span></p>
+<p style="font-size:1.3rem;font-weight:700;color:var(--orange);margin-top:.8rem;">$11.50 <span style="font-size:.85rem;font-weight:400;color:#666;">delivery leg only, ex fuel (2025)</span></p>
 </div>
 </div>
 <div class="callout" style="margin-top:1rem;">
@@ -104,14 +104,14 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr><td>2020</td><td>196,580</td><td>$8.63</td><td>-8%</td><td>+4.9%</td></tr>
 <tr><td>2021</td><td>225,572</td><td>$9.37</td><td>0%</td><td>+8.8%</td></tr>
 <tr><td>2022</td><td>187,336</td><td>$10.31</td><td>+10%</td><td>+16%</td></tr>
-<tr><td>2023</td><td>120,282</td><td>$11.66</td><td>+24%</td><td>+21%</td></tr>
-<tr><td>2024</td><td>83,637</td><td>$12.60</td><td>+34%</td><td>~24%</td></tr>
-<tr class="highlight-row"><td>2025 *</td><td>68,459</td><td>$15.09</td><td>+61%</td><td>~27%</td></tr>
+<tr><td>2023</td><td>120,279</td><td>$11.66</td><td>+24%</td><td>+21%</td></tr>
+<tr><td>2024</td><td>83,244</td><td>$12.54</td><td>+34%</td><td>~24%</td></tr>
+<tr class="highlight-row"><td>2025 *</td><td>54,291</td><td>$11.50</td><td>+23%</td><td>~27%</td></tr>
 </tbody>
 </table>
 <div class="callout info">
-<strong>* 2025 charging model change:</strong> In mid-2025 Woop moved to a parent/child charging model. The parent job (rel=19) is an <strong>all-in price</strong> that now bundles pickup + linehaul + delivery into one charge — previously these were separate jobs. The 55,747 figure represents Woop orders (parents), and the $14.12 is the <strong>total cost per order</strong> including components that were never in the per-delivery price before.<br><br>
-<strong>The delivery leg alone (rel=20) averages $6.14 ex fuel across 125,842 deliveries in 2025</strong> — well below every prior year's per-delivery price. The apparent price jump from $11.38 → $14.12 is entirely explained by linehaul bundling, not a rate increase.
+<strong>* 2025 charging model change:</strong> In 2025 Woop moved to a parent/child charging model. Each order now generates a parent job (all-in price) with child jobs suffixed DEL (delivery), LHP (linehaul pickup), and LH (linehaul legs). For apples-to-apples comparison, the 2025 row shows <strong>DEL-suffix delivery legs only</strong> — the direct equivalent of the pre-2025 rel=1 delivery price.<br><br>
+At <strong>$11.50</strong>, the delivery-leg price has risen <strong>+23% since 2017</strong>, tracking just below cumulative CPI of ~27%. The all-in parent price (~$14-15) includes linehaul and pickup components that were previously invoiced as separate jobs and should not be compared to prior years.
 </div>
 <div class="callout">
 <strong>Note:</strong> Auckland's share of national volume dropped from ~80% (2017) to ~60% (2025), meaning the national average is increasingly pulled up by more expensive regional and South Island deliveries.
@@ -244,13 +244,13 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <!-- Conclusion -->
 <div class="highlight">
 <h2>Conclusion</h2>
-<p>The apparent +61% increase in order price since 2017 is driven by three structural changes — not rate hikes: The three factors that create the appearance of steeper increases are:</p>
+<p>Delivery-leg pricing has risen <strong>+23% since 2017, below CPI of ~27%</strong>. Three structural changes create the appearance of steeper increases: The three factors that create the appearance of steeper increases are:</p>
 <ol style="margin:.8rem 0 0 1.2rem;color:#ddd;">
 <li><strong style="color:var(--orange);">Charging model change</strong> — bundling linehaul (~$2–4/box) into a parent price inflates the headline number to ~$14</li>
 <li><strong style="color:var(--orange);">Geographic expansion</strong> — shift from 79% Auckland to ~60%, adding South Island and regional sites at 20–250% premium</li>
 <li><strong style="color:var(--orange);">Volume-driven density loss</strong> — drops/run halved from peak, mechanically raising per-unit cost</li>
 </ol>
-<p style="margin-top:1rem;">On a like-for-like basis, the all-in order price now includes linehaul that was previously invoiced as separate jobs. Volume declined 66% from peak (225K → 68K orders), reducing density and increasing per-unit cost. Geographic expansion to 12+ regions introduced higher-cost areas into the national average.</p>
+<p style="margin-top:1rem;">On a like-for-like basis (delivery leg only, ex fuel), pricing at <strong>$11.50 in 2025</strong> has risen below inflation. The all-in parent price includes linehaul previously invoiced separately. Volume declined from 225K peak to 54K deliveries, and geographic expansion to 12+ regions introduced higher-cost areas into the national average.</p>
 </div>
 
 </div>
@@ -263,7 +263,7 @@ Prepared by Urgent Couriers — Confidential Briefing Document — Updated March
 const navy='#1a2744',orange='#e87722',green='#27ae60',blue='#3498db';
 
 // CPI vs Pricing Chart (through 2025)
-new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Avg Order Price vs 2017 (%)',data:[0,-4,-5,-8,0,10,24,34,61],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Avg Order Price vs NZ CPI (2017 base)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from Base Year'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-4,-5,-8,0,10,24,34,23],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from Base Year'},ticks:{callback:v=>v+'%'}}}}});
 
 // Regional Bar Chart (new)
 new Chart(document.getElementById('regionalBarChart'),{type:'bar',data:{labels:['Wellington','Hamilton','Auckland','Hawkes Bay','Palm. Nth','Christchurch','Tauranga','Rotorua','Waikato Towns','Waikato','Waiheke','Coromandel'],datasets:[{label:'Avg Ex Fuel (Nov25–Feb26)',data:[10.40,10.47,10.93,11.82,12.14,12.89,13.57,19.58,24.19,26.66,31.46,37.92],backgroundColor:['#27ae60','#27ae60',navy,orange,orange,orange,orange,'#c0392b','#c0392b','#c0392b','#c0392b','#c0392b']}]},options:{responsive:true,indexAxis:'y',plugins:{title:{display:true,text:'Regional Delivery-Leg Pricing (rel=20, ex fuel, Nov25–Feb26)',font:{size:14}},legend:{display:false}},scales:{x:{title:{display:true,text:'Avg Ex Fuel ($)'},ticks:{callback:v=>'$'+v}}}}});
