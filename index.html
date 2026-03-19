@@ -127,7 +127,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr><td>2023</td><td>91,999</td><td>$10.99</td><td>+28%</td><td>+21%</td></tr>
 <tr><td>2024</td><td>83,821</td><td>$12.29</td><td>+43%</td><td>~24%</td></tr>
 <tr class="highlight-row"><td>2025 (DEL only) *</td><td>80,885</td><td>$11.58</td><td>+34%</td><td>~27%</td></tr>
-<tr class="highlight-row"><td>2026 YTD (DEL only) *</td><td>9,461</td><td>$12.16</td><td>+41%</td><td>~29%</td></tr>
+<!-- 2026 removed -->
 </tbody>
 </table>
 <div class="callout info">
@@ -140,7 +140,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 
 <!-- Monthly Detail -->
 <div class="card">
-<h2>3. Monthly Detail: April 2025 – March 2026 (DEL-suffix only)</h2>
+<h2>3. Monthly Detail: April – December 2025 (DEL-suffix only)</h2>
 <p>Post-model-change monthly breakdown showing DEL delivery-leg pricing vs parent (all-in) pricing.</p>
 <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
 <table>
@@ -155,9 +155,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr><td>Oct 2025</td><td>5,176</td><td>$12.24</td><td>7,409</td><td>$12.28</td></tr>
 <tr><td>Nov 2025</td><td>7,163</td><td>$12.09</td><td>10,407</td><td>$12.04</td></tr>
 <tr><td>Dec 2025</td><td>3,953</td><td>$12.83</td><td>6,900</td><td>$12.81</td></tr>
-<tr><td>Jan 2026</td><td>3,564</td><td>$12.44</td><td>5,580</td><td>$11.70</td></tr>
-<tr><td>Feb 2026</td><td>4,608</td><td>$12.12</td><td>6,616</td><td>$12.04</td></tr>
-<tr><td>Mar 2026 (partial)</td><td>1,289</td><td>$11.54</td><td>1,302</td><td>$14.29</td></tr>
+<!-- 2026 rows removed -->
 </tbody>
 </table>
 <div class="callout info">
@@ -278,17 +276,17 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 
 <footer>
 Prepared by Urgent Couriers — Confidential Briefing Document — Updated March 2026<br>
-Data: 1,090,224 unique jobs (deduplicated), Railway PG + AWS RDS, Jul 2015 – Mar 2026
+Data: 1,090,224 unique jobs (deduplicated), Railway PG + AWS RDS, Jul 2015 – Dec 2025
 </footer>
 
 <script>
 const navy='#1a2744',orange='#e87722',green='#27ae60',blue='#3498db';
 
 // CPI vs Pricing Chart (corrected, through 2026)
-new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026 YTD'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-2,-4,-6,3,14,28,43,34,41],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27,29],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base) — Corrected & Deduplicated',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-2,-4,-6,3,14,28,43,34],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base) — Corrected & Deduplicated',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
 
 // Monthly Chart (new)
-new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar'],datasets:[{label:'DEL Avg ($)',data:[12.18,11.89,12.33,12.27,12.13,12.31,12.24,12.09,12.83,12.44,12.12,11.54],backgroundColor:orange,yAxisID:'y'},{label:'DEL Deliveries',data:[4877,5498,6478,5004,6480,5232,5176,7163,3953,3564,4608,1289],type:'line',borderColor:navy,backgroundColor:navy+'22',tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Monthly DEL Delivery-Leg Pricing (Apr 2025 – Mar 2026)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Avg Price ($)'},min:10,max:14,ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
+new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'DEL Avg ($)',data:[12.18,11.89,12.33,12.27,12.13,12.31,12.24,12.09,12.83],backgroundColor:orange,yAxisID:'y'},{label:'DEL Deliveries',data:[4877,5498,6478,5004,6480,5232,5176,7163,3953],type:'line',borderColor:navy,backgroundColor:navy+'22',tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Monthly DEL Delivery-Leg Pricing (Apr – Dec 2025)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Avg Price ($)'},min:10,max:14,ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
 
 // Regional Bar Chart
 new Chart(document.getElementById('regionalBarChart'),{type:'bar',data:{labels:['Wellington','Hamilton','Auckland','Hawkes Bay','Palm. Nth','Christchurch','Tauranga','Rotorua','Waikato Towns','Waikato','Waiheke','Coromandel'],datasets:[{label:'Avg Ex Fuel',data:[10.40,10.47,10.93,11.82,12.14,12.89,13.57,19.58,24.19,26.66,31.46,37.92],backgroundColor:['#27ae60','#27ae60',navy,orange,orange,orange,orange,'#c0392b','#c0392b','#c0392b','#c0392b','#c0392b']}]},options:{responsive:true,indexAxis:'y',plugins:{title:{display:true,text:'Regional Delivery-Leg Pricing (DEL-suffix, ex fuel)',font:{size:14}},legend:{display:false}},scales:{x:{title:{display:true,text:'Avg Ex Fuel ($)'},ticks:{callback:v=>'$'+v}}}}});
