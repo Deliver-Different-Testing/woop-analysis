@@ -70,7 +70,8 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <h2>Executive Summary</h2>
 <p>Delivery-leg pricing has <strong>tracked NZ CPI since 2017</strong>. The corrected 2025 delivery-leg price (DEL jobs only, ex fuel) of <strong>$11.58</strong> is <strong>+34% above 2017</strong> — tracking CPI of ~27%. The headline "all-in" parent price (~$12–14) reflects a <strong>charging model change</strong> that bundles linehaul into the order — not a rate increase above what cost-to-serve demands.</p>
 <div class="stat-row" style="margin-top:1.2rem;">
-<div class="stat green"><div class="num">+34%</div><div class="label">Delivery Leg Price<br>2017→2025 (corrected)</div></div>
+<div class="stat green"><div class="num">+42%</div><div class="label">Delivery Leg Price<br>2017→2025 (actual)</div></div>
+<div class="stat" style="background:#e8f5e9;"><div class="num" style="color:#27ae60;">+36%</div><div class="label">Mix-Adjusted Price<br>2017→2025 (same geo mix)</div></div>
 <div class="stat orange"><div class="num">~27%</div><div class="label">NZ CPI<br>2017→2025</div></div>
 <div class="stat"><div class="num">1,090,224</div><div class="label">Total Unique Jobs<br>(deduplicated)</div></div>
 </div>
@@ -114,24 +115,25 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <p>All figures are deduplicated by ucjbID, outliers removed (&gt;$200), and post-April 2025 filtered to DEL-suffix delivery legs only.</p>
 <div class="chart-wrap"><canvas id="cpiChart"></canvas></div>
 <table>
-<thead><tr><th>Year</th><th>Deliveries</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>NZ CPI</th></tr></thead>
+<thead><tr><th>Year</th><th>Deliveries</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>Mix-Adjusted*</th><th>NZ CPI</th></tr></thead>
 <tbody>
-<tr><td>2015</td><td>2,449</td><td>$9.28</td><td>+8%</td><td>—</td></tr>
-<tr><td>2016</td><td>15,239</td><td>$8.96</td><td>+4%</td><td>—</td></tr>
-<tr><td>2017</td><td>34,734</td><td>$8.62</td><td>Base</td><td>Base</td></tr>
-<tr><td>2018</td><td>72,765</td><td>$8.46</td><td>-2%</td><td>+1.6%</td></tr>
-<tr><td>2019</td><td>86,391</td><td>$8.28</td><td>-4%</td><td>+3.3%</td></tr>
-<tr><td>2020</td><td>151,302</td><td>$8.10</td><td>-6%</td><td>+4.9%</td></tr>
-<tr><td>2021</td><td>175,513</td><td>$8.88</td><td>+3%</td><td>+8.8%</td></tr>
-<tr><td>2022</td><td>143,919</td><td>$9.81</td><td>+14%</td><td>+16%</td></tr>
-<tr><td>2023</td><td>91,999</td><td>$10.99</td><td>+28%</td><td>+21%</td></tr>
-<tr><td>2024</td><td>83,821</td><td>$12.29</td><td>+43%</td><td>~24%</td></tr>
-<tr class="highlight-row"><td>2025 (DEL only) *</td><td>80,885</td><td>$11.58</td><td>+34%</td><td>~27%</td></tr>
+<tr><td>2015</td><td>2,449</td><td>$9.28</td><td>+8%</td><td>—</td><td>—</td></tr>
+<tr><td>2016</td><td>15,239</td><td>$8.96</td><td>+4%</td><td>—</td><td>—</td></tr>
+<tr><td>2017</td><td>34,734</td><td>$8.62</td><td>Base</td><td>Base</td><td>Base</td></tr>
+<tr><td>2018</td><td>72,765</td><td>$8.46</td><td>-1.8%</td><td>-2.8%</td><td>+1.6%</td></tr>
+<tr><td>2019</td><td>86,391</td><td>$8.28</td><td>-3.9%</td><td>-4.6%</td><td>+3.3%</td></tr>
+<tr><td>2020</td><td>151,302</td><td>$8.10</td><td>-6.0%</td><td>-7.8%</td><td>+4.9%</td></tr>
+<tr><td>2021</td><td>175,512</td><td>$8.88</td><td>+3.0%</td><td>+2.8%</td><td>+8.8%</td></tr>
+<tr><td>2022</td><td>143,919</td><td>$9.81</td><td>+13.8%</td><td>+16.6%</td><td>+16%</td></tr>
+<tr><td>2023</td><td>91,999</td><td>$10.99</td><td>+27.6%</td><td>+29.0%</td><td>+21%</td></tr>
+<tr><td>2024</td><td>83,821</td><td>$12.29</td><td>+42.7%</td><td>+37.4%</td><td>~24%</td></tr>
+<tr class="highlight-row"><td>2025 (DEL only)</td><td>57,115</td><td>$12.24</td><td>+42.1%</td><td>+35.6%</td><td>~27%</td></tr>
 <!-- 2026 removed -->
 </tbody>
 </table>
 <div class="callout info">
-<strong>* Post-April 2025 methodology:</strong> These rows show DEL-suffix delivery legs only — the direct equivalent of the pre-2025 delivery price. The 2025 count of 80,885 includes ~21K pre-April jobs (old model) + ~60K DEL-suffix jobs (Apr–Dec). All data deduplicated across Railway and AWS databases.
+<strong>* Mix-Adjusted column:</strong> Shows what the average price would be if the geographic distribution of deliveries had stayed the same as 2017 (86% Auckland, 12% Wellington, 2% other). This isolates genuine rate changes from the effect of expanding into more expensive regional areas. The gap between Actual and Mix-Adjusted represents the cost impact of geographic expansion alone.<br><br>
+<strong>Post-April 2025 methodology:</strong> 2025 shows DEL-suffix delivery legs only — the direct equivalent of the pre-2025 delivery price. All data deduplicated across Railway and AWS databases.
 </div>
 <div class="callout">
 <strong>2023-2024 above CPI:</strong> Pricing moved above CPI in 2023-2024 as volume collapsed (run density halved) and geographic expansion pushed more volume into expensive regions. The 2025 DEL-only figure of $11.58 pulled back below 2024 levels despite continued volume decline.
@@ -283,7 +285,7 @@ Data: 1,090,224 unique jobs (deduplicated), Railway PG + AWS RDS, Jul 2015 – D
 const navy='#1a2744',orange='#e87722',green='#27ae60',blue='#3498db';
 
 // CPI vs Pricing Chart (corrected, through 2026)
-new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-2,-4,-6,3,14,28,43,34],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base) — Corrected & Deduplicated',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-1.8,-3.9,-6.0,3.0,13.8,27.6,42.7,42.1],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Mix-Adjusted Price vs 2017 (%) — 2017 geographic mix held constant',data:[0,-2.8,-4.6,-7.8,2.8,16.6,29.0,37.4,35.6],borderColor:'#27ae60',backgroundColor:'#27ae6022',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base) — Corrected & Deduplicated',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
 
 // Monthly Chart (new)
 new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'DEL Avg ($)',data:[12.18,11.89,12.33,12.27,12.13,12.31,12.24,12.09,12.83],backgroundColor:orange,yAxisID:'y'},{label:'DEL Deliveries',data:[4877,5498,6478,5004,6480,5232,5176,7163,3953],type:'line',borderColor:navy,backgroundColor:navy+'22',tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Monthly DEL Delivery-Leg Pricing (Apr – Dec 2025)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Avg Price ($)'},min:10,max:14,ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
