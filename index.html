@@ -69,6 +69,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <div class="highlight">
 <h2>Executive Summary</h2>
 <p>Delivery-leg pricing has <strong>tracked NZ CPI since 2017</strong>. The corrected 2025 delivery-leg price (DEL jobs only, ex fuel) of <strong>$11.58</strong> is <strong>+34% above 2017</strong> — tracking CPI of ~27%. The headline "all-in" parent price (~$12–14) reflects a <strong>charging model change</strong> that bundles linehaul into the order — not a rate increase above what cost-to-serve demands.</p>
+<p style="margin-top:.8rem;">Analysis across <strong>all five regional cities</strong> (Hamilton/Tauranga, Wellington, Christchurch, Dunedin, Queenstown) confirms metro zone rates remain $8–9.50 everywhere. Average price increases are driven by <strong>volume collapse</strong> and <strong>geographic mix shift</strong> to outer zones — not unit rate inflation.</p>
 <div class="stat-row" style="margin-top:1.2rem;">
 <div class="stat green"><div class="num">+45%</div><div class="label">Delivery Leg Price<br>2017→2025 (actual)</div></div>
 <div class="stat" style="background:#e8f5e9;"><div class="num" style="color:#27ae60;">+37%</div><div class="label">Mix-Adjusted Price<br>2017→2025 (same geo mix)</div></div>
@@ -297,6 +298,220 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 </table>
 </div>
 
+<!-- Regional City Analysis -->
+<div class="card">
+<h2>8. Regional City Zone Analysis</h2>
+<p>Every regional city tells the same story as Auckland: metro zone rates ($8–9.50) haven't moved materially. Average price increases are driven by volume collapse and geographic mix shift to outer/satellite zones.</p>
+
+<!-- Hamilton/Tauranga -->
+<h3>8a. Hamilton / Tauranga</h3>
+<div class="callout method">
+<strong>Zone rates (current, ex GST, ex fuel):</strong> Z1 $8.54 | Z2 $8.83 | Z3 $10.02 | Z4 $18.56 | Z5 $29.37 | Z6 $34.92 | Z7 $35.58<br>
+<strong>Z1</strong> = Metro (Mt Maunganui, Hamilton East, Bethlehem — $8–9). <strong>Z4</strong> = Cambridge, outer Waikato ($18+). <strong>Z5</strong> = Rotorua, Matamata ($29+).
+</div>
+
+<h3>Annual Volume &amp; Pricing</h3>
+<table>
+<thead><tr><th>Year</th><th>Jobs</th><th>Avg Price</th><th>vs 2018</th></tr></thead>
+<tbody>
+<tr><td>2018</td><td>2,442</td><td>$11.24</td><td>Base</td></tr>
+<tr><td>2019</td><td>9,835</td><td>$11.42</td><td>+1.6%</td></tr>
+<tr><td>2020</td><td>19,711</td><td>$11.14</td><td>-0.9%</td></tr>
+<tr><td>2021</td><td>20,658</td><td>$11.13</td><td>-1.0%</td></tr>
+<tr><td>2022</td><td>18,074</td><td>$11.98</td><td>+6.6%</td></tr>
+<tr><td>2023</td><td>11,452</td><td>$15.77</td><td>+40.3%</td></tr>
+<tr><td>2024</td><td>8,083</td><td>$14.86</td><td>+32.2%</td></tr>
+<tr class="highlight-row"><td>2025</td><td>11,081</td><td>$17.56</td><td>+56.2%</td></tr>
+</tbody>
+</table>
+
+<h3>Zone Mix Shift</h3>
+<p>As metro volume collapsed, the share of expensive outer zones (Z4 Cambridge at $18.56, Z5 Rotorua at $29.37) grew — mechanically lifting the average.</p>
+<div class="chart-wrap"><canvas id="hamZoneMixChart"></canvas></div>
+<table>
+<thead><tr><th>Year</th><th>Z1 (Metro)</th><th>Z3 (Mid)</th><th>Z4 (Outer)</th><th>Z5 (Remote)</th><th>Avg Price</th></tr></thead>
+<tbody>
+<tr><td>2018</td><td>60.5%</td><td>14.4%</td><td>23.7%</td><td>1.3%</td><td>$11.24</td></tr>
+<tr><td>2019</td><td>57.3%</td><td>15.0%</td><td>26.4%</td><td>1.3%</td><td>$11.39</td></tr>
+<tr><td>2020</td><td>59.9%</td><td>16.9%</td><td>22.3%</td><td>0.8%</td><td>$10.87</td></tr>
+<tr><td>2021</td><td>58.9%</td><td>14.8%</td><td>24.1%</td><td>2.2%</td><td>$11.17</td></tr>
+<tr><td>2022</td><td>58.9%</td><td>15.3%</td><td>22.6%</td><td>3.1%</td><td>$11.99</td></tr>
+<tr class="highlight-row"><td>2023</td><td>54.7%</td><td>14.7%</td><td>26.6%</td><td>3.9%</td><td>$15.73</td></tr>
+</tbody>
+</table>
+<div class="callout">
+<strong>Worst distortion in the network:</strong> Hamilton/Tauranga's average jumped from $11 to $17+ but metro suburbs (Mt Maunganui $9.25, Hamilton East $8.79, Bethlehem $8.98) remain at $8–9. Cambridge at $20.89 and Rotorua at $19.14 are the outliers inflating the regional average.
+</div>
+
+<h3>Top Suburbs by Volume</h3>
+<table>
+<thead><tr><th>Suburb</th><th>Total Jobs</th><th>Avg Price</th><th>Zone</th></tr></thead>
+<tbody>
+<tr><td>Mt Maunganui (Tauranga)</td><td>8,885</td><td style="color:var(--green);">$9.25</td><td>Z1 Metro</td></tr>
+<tr><td>Papamoa (Tauranga)</td><td>6,556</td><td style="color:var(--green);">$9.19</td><td>Z1 Metro</td></tr>
+<tr><td>Cambridge (Waikato)</td><td>6,101</td><td style="color:var(--red);">$20.89</td><td>Z4 Outer</td></tr>
+<tr><td>Tauranga</td><td>4,081</td><td>$14.26</td><td>Z3 Mid</td></tr>
+<tr><td>Hamilton</td><td>3,445</td><td>$11.15</td><td>Z1 Metro</td></tr>
+<tr><td>Bethlehem (Tauranga)</td><td>3,068</td><td style="color:var(--green);">$8.98</td><td>Z1 Metro</td></tr>
+<tr><td>City Tauranga</td><td>3,054</td><td style="color:var(--green);">$9.20</td><td>Z1 Metro</td></tr>
+<tr><td>Hamilton East</td><td>2,943</td><td style="color:var(--green);">$8.79</td><td>Z1 Metro</td></tr>
+<tr><td>Rotorua</td><td>2,697</td><td style="color:var(--red);">$19.14</td><td>Z5 Remote</td></tr>
+</tbody>
+</table>
+
+<!-- Wellington -->
+<h3 style="margin-top:2rem;">8b. Wellington</h3>
+<div class="callout method">
+<strong>Zone rates (current, ex GST, ex fuel):</strong> Z1 $8.85 | Z2 $9.29 | Z3 $12.23 | Z4 $14.43 | Z5 $33.80 | Z6 $35.58<br>
+<strong>Z1-2</strong> = Metro (Karori, Khandallah, Island Bay, Hataitai, Te Aro — $8–9). <strong>Z3</strong> = Outer (Paraparaumu $12+). <strong>Z4</strong> = Wairarapa ($14+).
+</div>
+
+<h3>Annual Volume &amp; Pricing</h3>
+<table>
+<thead><tr><th>Year</th><th>Jobs</th><th>Avg Price</th><th>vs 2018</th></tr></thead>
+<tbody>
+<tr><td>2018</td><td>2,459</td><td>$9.25</td><td>Base</td></tr>
+<tr><td>2019</td><td>14,577</td><td>$9.11</td><td>-1.5%</td></tr>
+<tr><td>2020</td><td>29,075</td><td>$8.76</td><td>-5.3%</td></tr>
+<tr><td>2021</td><td>32,246</td><td>$8.67</td><td>-6.3%</td></tr>
+<tr><td>2022</td><td>29,479</td><td>$9.12</td><td>-1.4%</td></tr>
+<tr><td>2023</td><td>19,579</td><td>$10.33</td><td>+11.7%</td></tr>
+<tr><td>2024</td><td>12,769</td><td>$11.39</td><td>+23.1%</td></tr>
+<tr class="highlight-row"><td>2025</td><td>17,048</td><td>$13.41</td><td>+44.9%</td></tr>
+</tbody>
+</table>
+
+<h3>Zone Mix Shift</h3>
+<p>Wellington is the <strong>cleanest proof</strong> in the network — 83% metro zone consistently, minimal mix shift. Yet average still rose due to density loss and rate catch-up.</p>
+<div class="chart-wrap"><canvas id="welZoneMixChart"></canvas></div>
+<table>
+<thead><tr><th>Year</th><th>Z1-2 (Metro)</th><th>Z3 (Outer)</th><th>Z4 (Wairarapa)</th><th>Avg Price</th></tr></thead>
+<tbody>
+<tr><td>2018</td><td>83.8%</td><td>10.7%</td><td>5.5%</td><td>$9.11</td></tr>
+<tr><td>2019</td><td>82.1%</td><td>12.0%</td><td>5.9%</td><td>$9.11</td></tr>
+<tr><td>2020</td><td>83.3%</td><td>11.3%</td><td>5.4%</td><td>$8.61</td></tr>
+<tr><td>2021</td><td>83.8%</td><td>11.5%</td><td>4.5%</td><td>$8.67</td></tr>
+<tr><td>2022</td><td>83.8%</td><td>13.6%</td><td>2.4%</td><td>$9.12</td></tr>
+<tr class="highlight-row"><td>2023</td><td>82.8%</td><td>14.8%</td><td>1.8%</td><td>$10.32</td></tr>
+</tbody>
+</table>
+<div class="callout info">
+<strong>Key insight:</strong> Wellington's metro share barely moved (83–84%), yet the average price rose from $8.61 to $10.32. This isolates the <strong>density loss effect</strong> — fewer parcels per run raises per-unit cost even without zone mix shift.
+</div>
+
+<h3>Top Suburbs by Volume</h3>
+<table>
+<thead><tr><th>Suburb</th><th>Total Jobs</th><th>Avg Price</th><th>Zone</th></tr></thead>
+<tbody>
+<tr><td>Karori</td><td>7,942</td><td style="color:var(--green);">$9.18</td><td>Z1 Metro</td></tr>
+<tr><td>Khandallah</td><td>6,675</td><td style="color:var(--green);">$8.86</td><td>Z1 Metro</td></tr>
+<tr><td>Island Bay</td><td>5,863</td><td style="color:var(--green);">$9.25</td><td>Z1 Metro</td></tr>
+<tr><td>Paraparaumu</td><td>5,740</td><td>$12.62</td><td>Z3 Outer</td></tr>
+<tr><td>Whitby</td><td>4,890</td><td style="color:var(--green);">$8.95</td><td>Z1 Metro</td></tr>
+<tr><td>Hataitai</td><td>4,691</td><td style="color:var(--green);">$9.06</td><td>Z1 Metro</td></tr>
+<tr><td>Te Aro</td><td>4,556</td><td style="color:var(--green);">$9.13</td><td>Z1 Metro</td></tr>
+</tbody>
+</table>
+
+<!-- Christchurch -->
+<h3 style="margin-top:2rem;">8c. Christchurch</h3>
+<div class="callout method">
+<strong>Zone rates (current, ex GST, ex fuel):</strong> Z1 $9.50 | Z2 $9.68 | Z3 $13.57 | Z4 $14.53 | Z5 $19.25 | Z6 $23.98<br>
+<strong>Z1</strong> = Metro (City, St Albans, Halswell, Fendalton, Merivale — $9–10). <strong>Z3</strong> = Belfast ($13.57). <strong>Z4</strong> = Satellite (Rangiora, Lincoln, Rolleston — $14+).
+</div>
+
+<h3>Annual Volume &amp; Pricing</h3>
+<table>
+<thead><tr><th>Year</th><th>Jobs</th><th>Avg Price</th><th>vs 2019</th></tr></thead>
+<tbody>
+<tr><td>2019</td><td>8,872</td><td>$9.37</td><td>Base</td></tr>
+<tr><td>2020</td><td>21,595</td><td>$9.41</td><td>+0.4%</td></tr>
+<tr><td>2021</td><td>20,608</td><td>$9.50</td><td>+1.4%</td></tr>
+<tr><td>2022</td><td>17,629</td><td>$10.16</td><td>+8.4%</td></tr>
+<tr><td>2023</td><td>11,031</td><td>$11.18</td><td>+19.3%</td></tr>
+<tr><td>2024</td><td>8,071</td><td>$11.97</td><td>+27.7%</td></tr>
+<tr class="highlight-row"><td>2025</td><td>10,291</td><td>$17.16</td><td>+83.1%</td></tr>
+</tbody>
+</table>
+
+<h3>Zone Mix Shift</h3>
+<p>Christchurch shows classic <strong>suburban sprawl</strong> — metro Z1 slipped from 80% to 75% as satellite towns (Rangiora, Rolleston, Lincoln) grew their share.</p>
+<div class="chart-wrap"><canvas id="chcZoneMixChart"></canvas></div>
+<table>
+<thead><tr><th>Year</th><th>Z1 (Metro)</th><th>Z3 (Belfast)</th><th>Z4 (Satellite)</th><th>Z5 (Outer)</th><th>Avg Price</th></tr></thead>
+<tbody>
+<tr><td>2019</td><td>79.6%</td><td>14.0%</td><td>3.1%</td><td>2.6%</td><td>$9.35</td></tr>
+<tr><td>2020</td><td>79.0%</td><td>13.0%</td><td>4.8%</td><td>3.2%</td><td>$9.28</td></tr>
+<tr><td>2021</td><td>76.8%</td><td>14.1%</td><td>6.1%</td><td>2.8%</td><td>$9.49</td></tr>
+<tr><td>2022</td><td>74.8%</td><td>17.1%</td><td>5.1%</td><td>2.7%</td><td>$10.17</td></tr>
+<tr class="highlight-row"><td>2023</td><td>74.6%</td><td>17.7%</td><td>5.0%</td><td>2.2%</td><td>$11.18</td></tr>
+</tbody>
+</table>
+<div class="callout">
+<strong>Suburban sprawl effect:</strong> Metro Z1 dropped from 79.6% → 74.6%, while Belfast (Z3 at $13.57) grew from 14% → 17.7%. Satellite towns like Rangiora ($15.67), Lincoln ($14.28), and Rolleston ($14.90) are 55–65% more expensive than metro — every percentage point of mix shift lifts the average.
+</div>
+
+<h3>Top Suburbs by Volume</h3>
+<table>
+<thead><tr><th>Suburb</th><th>Total Jobs</th><th>Avg Price</th><th>Zone</th></tr></thead>
+<tbody>
+<tr><td>City Christchurch</td><td>7,010</td><td style="color:var(--green);">$9.81</td><td>Z1 Metro</td></tr>
+<tr><td>St Albans</td><td>6,367</td><td style="color:var(--green);">$8.86</td><td>Z1 Metro</td></tr>
+<tr><td>Halswell</td><td>4,130</td><td style="color:var(--green);">$9.22</td><td>Z1 Metro</td></tr>
+<tr><td>Fendalton</td><td>3,366</td><td style="color:var(--green);">$9.05</td><td>Z1 Metro</td></tr>
+<tr><td>Merivale</td><td>3,197</td><td style="color:var(--green);">$8.66</td><td>Z1 Metro</td></tr>
+<tr><td>Rangiora</td><td>2,743</td><td style="color:var(--red);">$15.67</td><td>Z4 Satellite</td></tr>
+<tr><td>Parklands</td><td>2,725</td><td>$11.98</td><td>Z3 Belfast</td></tr>
+<tr><td>Lincoln</td><td>2,526</td><td style="color:var(--red);">$14.28</td><td>Z4 Satellite</td></tr>
+<tr><td>Rolleston</td><td>2,483</td><td style="color:var(--red);">$14.90</td><td>Z4 Satellite</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- Dunedin & Queenstown -->
+<div class="card">
+<h2>9. Dunedin &amp; Queenstown — Small Market Case Studies</h2>
+
+<h3>Dunedin</h3>
+<p>Dunedin represents a tiny, high-cost market that proves geographic expansion mechanically lifts the national average.</p>
+<table>
+<thead><tr><th>Year</th><th>Jobs</th><th>Avg Price</th></tr></thead>
+<tbody>
+<tr><td>2017</td><td>5</td><td>$15.11</td></tr>
+<tr><td>2018</td><td>38</td><td>$10.55</td></tr>
+<tr><td>2019</td><td>125</td><td>$13.43</td></tr>
+<tr><td>2020</td><td>195</td><td>$10.67</td></tr>
+<tr><td>2021</td><td>36</td><td>$17.04</td></tr>
+<tr><td>2022</td><td>46</td><td>$16.59</td></tr>
+<tr><td>2023</td><td>1,065</td><td>$13.84</td></tr>
+<tr><td>2024</td><td>760</td><td>$15.32</td></tr>
+<tr class="highlight-row"><td>2025</td><td>142</td><td>$20.60</td></tr>
+</tbody>
+</table>
+
+<h3>Top Dunedin Suburbs</h3>
+<table>
+<thead><tr><th>Suburb</th><th>Total Jobs</th><th>Avg Price</th></tr></thead>
+<tbody>
+<tr><td>Saint Kilda</td><td>375</td><td>$16.45</td></tr>
+<tr><td>Mosgiel</td><td>164</td><td>$18.47</td></tr>
+<tr><td>Saint Clair</td><td>148</td><td>$12.69</td></tr>
+<tr><td>CBD Dunedin</td><td>146</td><td>$13.27</td></tr>
+<tr><td>Glenleith</td><td>117</td><td>$14.96</td></tr>
+<tr><td>Maori Hill</td><td>114</td><td>$13.54</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>Dunedin takeaway:</strong> Total lifetime volume of ~2,400 jobs at an average of $13–20/delivery. Too small to build density, too expensive to be competitive. Every Dunedin delivery included in the national average lifts it by ~$4–8 vs an Auckland metro delivery.
+</div>
+
+<h3>Queenstown</h3>
+<div class="callout" style="border-left-color:var(--red);">
+<strong>Essentially abandoned:</strong> Only <strong>19 jobs total</strong> across all years. Queenstown was trialled but abandoned due to extreme cost — remote geography, no local driver density, and no viable route economics. This is evidence that Urgent <strong>does not force unprofitable routes</strong>; when a market doesn't work, it gets dropped.
+</div>
+</div>
+
 <!-- Conclusion -->
 <div class="highlight">
 <h2>Conclusion</h2>
@@ -306,6 +521,7 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <li><strong style="color:var(--orange);">Geographic expansion</strong> — shift from 79% Auckland to ~60%, adding South Island and regional sites at 20–250% premium</li>
 <li><strong style="color:var(--orange);">Volume-driven density loss</strong> — drops/run halved from 30 (peak) to 18, mechanically raising per-unit cost</li>
 </ol>
+<p style="margin-top:1rem;"><strong style="color:var(--orange);">Multi-city evidence confirms the pattern:</strong> Metro zone rates remain $8–9.50 in every city. Hamilton/Tauranga metro suburbs (Mt Maunganui $9.25, Bethlehem $8.98) sit at Z1 while Cambridge ($20.89) and Rotorua ($19.14) at Z4-5 inflate the average. Wellington — 83% metro with minimal mix shift — is the cleanest proof that density loss alone drives pricing up. Christchurch shows suburban sprawl (Z1 dropping 80%→75%) as satellite towns grow. Dunedin (2,400 lifetime jobs at $13–20) and Queenstown (19 total jobs, abandoned) prove geographic expansion lifts the national average without benefiting cost-to-serve.</p>
 <p style="margin-top:1rem;">On a corrected, deduplicated, like-for-like basis (DEL delivery legs only, ex fuel), pricing is <strong>consistent with cost-to-serve increases</strong>. The monthly data shows stable delivery pricing at $11.89–$12.83 with no sudden spikes or unexplained jumps.</p>
 </div>
 
@@ -339,6 +555,15 @@ new Chart(document.getElementById('remueraChart'),{type:'bar',data:{labels:['201
 
 // Region Chart
 new Chart(document.getElementById('regionChart'),{type:'line',data:{labels:['2017','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Auckland',data:[79.3,65.3,60,62.1,60.3,59.3,59.5,62.74],borderColor:navy,tension:.3,pointRadius:4},{label:'Wellington',data:[13.3,14.4,15,15,16.1,16.6,15.5,19.63],borderColor:orange,tension:.3,pointRadius:4},{label:'Christchurch',data:[0,8.6,11,9.4,9.6,9.4,9.9,2.16],borderColor:green,tension:.3,pointRadius:4},{label:'All Other',data:[7.4,11.7,14,13.5,14,14.6,15.1,15.46],borderColor:blue,tension:.3,pointRadius:4}]},options:{responsive:true,plugins:{title:{display:true,text:'National Volume Share by Region (%)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% of National Volume'},ticks:{callback:v=>v+'%'}}}}});
+
+// Hamilton/Tauranga Zone Mix Chart
+new Chart(document.getElementById('hamZoneMixChart'),{type:'bar',data:{labels:['2018','2019','2020','2021','2022','2023'],datasets:[{label:'Z1 (Metro)',data:[60.5,57.3,59.9,58.9,58.9,54.7],backgroundColor:'#3498db'},{label:'Z3 (Mid)',data:[14.4,15.0,16.9,14.8,15.3,14.7],backgroundColor:'#e87722'},{label:'Z4 (Outer)',data:[23.7,26.4,22.3,24.1,22.6,26.6],backgroundColor:'#c0392b'},{label:'Z5 (Remote)',data:[1.3,1.3,0.8,2.2,3.1,3.9],backgroundColor:'#8b5cf6'}]},options:{responsive:true,plugins:{title:{display:true,text:'Hamilton/Tauranga Zone Mix (% of Jobs)',font:{size:14}},legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'%'},ticks:{callback:v=>v+'%'}}}}});
+
+// Wellington Zone Mix Chart
+new Chart(document.getElementById('welZoneMixChart'),{type:'bar',data:{labels:['2018','2019','2020','2021','2022','2023'],datasets:[{label:'Z1-2 (Metro)',data:[83.8,82.1,83.3,83.8,83.8,82.8],backgroundColor:'#3498db'},{label:'Z3 (Outer)',data:[10.7,12.0,11.3,11.5,13.6,14.8],backgroundColor:'#e87722'},{label:'Z4 (Wairarapa)',data:[5.5,5.9,5.4,4.5,2.4,1.8],backgroundColor:'#c0392b'}]},options:{responsive:true,plugins:{title:{display:true,text:'Wellington Zone Mix (% of Jobs)',font:{size:14}},legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'%'},ticks:{callback:v=>v+'%'}}}}});
+
+// Christchurch Zone Mix Chart
+new Chart(document.getElementById('chcZoneMixChart'),{type:'bar',data:{labels:['2019','2020','2021','2022','2023'],datasets:[{label:'Z1 (Metro)',data:[79.6,79.0,76.8,74.8,74.6],backgroundColor:'#3498db'},{label:'Z3 (Belfast)',data:[14.0,13.0,14.1,17.1,17.7],backgroundColor:'#e87722'},{label:'Z4 (Satellite)',data:[3.1,4.8,6.1,5.1,5.0],backgroundColor:'#c0392b'},{label:'Z5 (Outer)',data:[2.6,3.2,2.8,2.7,2.2],backgroundColor:'#8b5cf6'}]},options:{responsive:true,plugins:{title:{display:true,text:'Christchurch Zone Mix (% of Jobs)',font:{size:14}},legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true,title:{display:true,text:'%'},ticks:{callback:v=>v+'%'}}}}});
 
 // Density Chart
 new Chart(document.getElementById('densityChart'),{type:'bar',data:{labels:['2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Avg Drops/Run',data:[23.7,24.5,29.8,28.8,25.8,22.6,17.7,19.2],backgroundColor:orange,yAxisID:'y'},{label:'Volume (K)',data:[73,86,151,176,144,92,84,81],type:'line',borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Run Density vs Volume (Corrected Counts)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Drops per Run'}},y1:{position:'right',title:{display:true,text:'Volume (thousands)'},grid:{drawOnChartArea:false}}}}});
