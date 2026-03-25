@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Woop Auckland Sunday — Zone Price Movement 2017–2025</title>
+<title>Woop Zone Price Movement — All Cities 2017–2025</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <style>
@@ -123,6 +123,77 @@
       <li><strong>Z4 base rate actually below CPI:</strong> +15% (2017→2025) vs 28% CPI — outer zone rates have been held back</li>
     </ul>
   </div>
+
+  <!-- ============ HAMILTON / TAURANGA ============ -->
+  <h1 style="margin-top:48px;">Hamilton / Tauranga — Zone Price Movement</h1>
+  <p class="subtitle">Base rate (ex fuel, ex GST). All Woop client codes (WOOPH 17535 + WOOP 16867 by destination). 2018–2024.</p>
+
+  <div class="highlight">
+    <strong>Key finding:</strong> Z1 base rate increased just <strong>+2.7%</strong> from 2018 to 2024 — vs ~20% CPI. The $14.86 headline price (incl fuel) is driven by <strong>Z4 (Cambridge, Matamata, Rotorua) at 35% of volume</strong>.
+  </div>
+
+  <div class="summary">
+    <div class="card z1"><div class="zone">Zone 1 — Metro Hamilton/Tauranga</div><div class="prices"><span class="base">$8.48</span></div><span class="change good">+2.7% base</span><div class="from">From $8.25 (2018) · NZ CPI ~20%</div><div class="rate-card">Rate card: $8.54</div></div>
+    <div class="card z2"><div class="zone">Zone 2 — Mt Maunganui</div><div class="prices"><span class="base">$8.98</span></div><span class="change good">-0.6% base</span><div class="from">From $9.03 (2018)</div><div class="rate-card">Rate card: $8.83</div></div>
+    <div class="card z3"><div class="zone">Zone 3</div><div class="prices"><span class="base">$10.82</span></div><span class="change warn">+13.9% base</span><div class="from">From $9.50 (2018)</div><div class="rate-card">Rate card: $10.02</div></div>
+    <div class="card z4"><div class="zone">Zone 4 — Cambridge, Matamata</div><div class="prices"><span class="base">$17.91</span></div><span class="change good">-7.9% base</span><div class="from">From $19.44 (2018)</div><div class="rate-card">Rate card: $18.56</div></div>
+  </div>
+
+  <div class="chart-wrap"><div class="chart-title">Base Rate per Delivery by Zone</div><div class="chart-sub">Dashed grey = Z1 base if CPI only from 2018.</div><canvas id="hamBaseChart" height="320"></canvas></div>
+  <div class="chart-wrap"><div class="chart-title">Zone Volume Share</div><div class="chart-sub">Z4 (Cambridge, Matamata, Rotorua) grew from 25% to 35% — the biggest driver of headline price increase.</div><canvas id="hamShareChart" height="260"></canvas></div>
+
+  <div class="note">
+    <strong>Top suburbs (2024):</strong> Bethlehem Z1 $8.54 · Chartwell Z1 $8.53 · Hamilton East Z1 $8.55 · Flagstaff Z1 $8.41 · Mt Maunganui Z2 $8.94 · Cambridge Z4 $19.77 · Matamata Z4 $18.04 · Te Puna Z5 $25.24
+    <br><br>
+    <strong>Volume collapse:</strong> 20,658 jobs (2021 peak) → 8,083 (2024) = <strong>-61%</strong>. Z1 metro share dropped from 64% to 21%.
+  </div>
+
+  <!-- ============ WELLINGTON ============ -->
+  <h1 style="margin-top:48px;">Wellington — Zone Price Movement</h1>
+  <p class="subtitle">Base rate (ex fuel, ex GST). All Woop client codes (WOOPW 17534 + WOOP 16867 by destination). 2018–2024.</p>
+
+  <div class="highlight">
+    <strong>Strongest evidence in the network:</strong> Wellington had ~83% metro volume with minimal mix shift for most of its history. Z1 base rate increased just <strong>+4.6%</strong> vs ~20% CPI — the cleanest proof that base delivery rates have been held back.
+  </div>
+
+  <div class="summary">
+    <div class="card z1"><div class="zone">Zone 1 — Metro Wellington</div><div class="prices"><span class="base">$8.87</span></div><span class="change good">+4.6% base</span><div class="from">From $8.47 (2018) · NZ CPI ~20%</div><div class="rate-card">Rate card: $8.85</div></div>
+    <div class="card z2"><div class="zone">Zone 2 — Inner Ring</div><div class="prices"><span class="base">$9.42</span></div><span class="change good">+1.6% base</span><div class="from">From $9.27 (2018)</div><div class="rate-card">Rate card: $9.29</div></div>
+    <div class="card z3"><div class="zone">Zone 3 — Paraparaumu, Eastbourne</div><div class="prices"><span class="base">$12.09</span></div><span class="change good">-4.4% base</span><div class="from">From $12.64 (2018)</div><div class="rate-card">Rate card: $12.23</div></div>
+  </div>
+
+  <div class="chart-wrap"><div class="chart-title">Base Rate per Delivery by Zone</div><div class="chart-sub">Dashed grey = Z1 base if CPI only from 2018.</div><canvas id="welBaseChart" height="320"></canvas></div>
+  <div class="chart-wrap"><div class="chart-title">Zone Volume Share</div><div class="chart-sub">83%+ metro through 2023. 2024 Z2 jump (72%) reflects zone reclassification, not a rate increase.</div><canvas id="welShareChart" height="260"></canvas></div>
+
+  <div class="note">
+    <strong>Top suburbs (2024):</strong> Ngaio Z1 $8.92 · Whitby Z1 $9.01 · Karori Z2 $9.47 · Island Bay Z2 $9.46 · Paraparaumu Z3 $12.02 · Eastbourne Z3 $12.13
+    <br><br>
+    <strong>Volume collapse:</strong> 32,246 jobs (2021 peak) → 12,769 (2024) = <strong>-60%</strong>. Metro share remained stable until 2024 zone reclassification.
+  </div>
+
+  <!-- ============ CHRISTCHURCH ============ -->
+  <h1 style="margin-top:48px;">Christchurch — Zone Price Movement</h1>
+  <p class="subtitle">Base rate (ex fuel, ex GST). All Woop client codes (WOOPC 18005 + WOOP 16867 by destination). 2019–2024.</p>
+
+  <div class="highlight">
+    <strong>Key finding:</strong> Classic suburban sprawl. Z1 metro share dropped from <strong>84% to 58%</strong> as satellite towns (Rangiora, Rolleston, Lincoln at Z3 $13+) grew. Z1 base rate +7.8% still tracks <strong>well below CPI</strong> (~18%).
+  </div>
+
+  <div class="summary">
+    <div class="card z1"><div class="zone">Zone 1 — Metro Christchurch</div><div class="prices"><span class="base">$8.58</span></div><span class="change good">+7.8% base</span><div class="from">From $7.97 (2019) · NZ CPI ~18%</div><div class="rate-card">Rate card: $9.50</div></div>
+    <div class="card z3"><div class="zone">Zone 3 — Rolleston, Rangiora, Lincoln</div><div class="prices"><span class="base">$13.16</span></div><span class="change good">+7.2% base</span><div class="from">From $12.28 (2019)</div><div class="rate-card">Rate card: $13.57</div></div>
+    <div class="card z4"><div class="zone">Zone 4</div><div class="prices"><span class="base">$15.21</span></div><span class="change good">-4.6% base</span><div class="from">From $15.94 (2019)</div><div class="rate-card">Rate card: $14.53</div></div>
+  </div>
+
+  <div class="chart-wrap"><div class="chart-title">Base Rate per Delivery by Zone</div><div class="chart-sub">Dashed grey = Z1 base if CPI only from 2019.</div><canvas id="chcBaseChart" height="320"></canvas></div>
+  <div class="chart-wrap"><div class="chart-title">Zone Volume Share</div><div class="chart-sub">Z3 (satellite towns) grew from 9% to 27% — the biggest driver of Christchurch average price increase.</div><canvas id="chcShareChart" height="260"></canvas></div>
+
+  <div class="note">
+    <strong>Top suburbs (2024):</strong> St Albans Z1 $8.43 · Fendalton Z1 $8.45 · Strowan Z1 $8.42 · Merivale Z1 $8.43 · Rolleston Z3 $13.29 · Lincoln Z3 $13.99 · Rangiora Z3 $13.04
+    <br><br>
+    <strong>Volume collapse:</strong> 21,595 jobs (2020 peak) → 8,071 (2024) = <strong>-63%</strong>. Z1 metro dropped from 84% to 58%.
+  </div>
+
 </div>
 
 <script>
@@ -259,6 +330,120 @@ new Chart(document.getElementById('shareChart'), {
       y: { stacked: true, title: { display: true, text: '% of Sunday deliveries' }, max: 100, ticks: { callback: v => v + '%' } }
     }
   }
+});
+
+// ============================================================
+// HAMILTON / TAURANGA
+// ============================================================
+const hamYears = [2018,2019,2020,2021,2022,2023,2024];
+const hamZ1 = [8.25,8.25,8.12,7.90,7.60,8.43,8.48];
+const hamZ2 = [9.03,8.87,9.03,8.84,8.81,9.08,8.98];
+const hamZ3 = [9.50,10.70,9.99,11.06,11.66,10.02,10.82];
+const hamZ4 = [19.44,19.24,19.21,18.21,17.08,18.02,17.91];
+const hamZ5 = [null,null,null,26.51,26.46,26.08,26.72];
+const hamZ6 = [null,null,null,null,43.60,36.61,39.16];
+const hamCpi = [1.000,1.016,1.042,1.072,1.140,1.210,1.240].map(f => +(8.25*f).toFixed(2));
+const hamZ1n = [0.563,0.633,0.536,0.642,0.598,0.149,0.211];
+const hamZ2n = [0.131,0.072,0.108,0.024,0.055,0.271,0.339];
+const hamZ3n = [0.054,0.015,0.113,0.082,0.070,0.194,0.059];
+const hamZ4n = [0.252,0.279,0.243,0.218,0.242,0.283,0.346];
+const hamZ5n = [0,0,0,0.033,0.022,0.091,0.032];
+const hamZ6n = [0,0,0,0,0.013,0.012,0.014];
+
+new Chart(document.getElementById('hamBaseChart'), {
+  type:'line', data:{ labels:hamYears, datasets:[
+    {label:'Z1',data:hamZ1,borderColor:'#2563eb',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z2',data:hamZ2,borderColor:'#16a34a',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z3',data:hamZ3,borderColor:'#ea580c',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z4',data:hamZ4,borderColor:'#9333ea',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z5',data:hamZ5,borderColor:'#dc2626',borderWidth:2,pointRadius:4,tension:.3,spanGaps:false},
+    {label:'Z1 if CPI',data:hamCpi,borderColor:'#aaa',borderDash:[6,4],borderWidth:2,pointRadius:0,tension:.3}
+  ]}, options:{...baseOpts, scales:{y:{title:{display:true,text:'Base rate ($, ex fuel)'},beginAtZero:false,ticks:{callback:v=>'$'+v.toFixed(2)}}},plugins:{...baseOpts.plugins,tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+dollar(ctx.parsed.y)}}}}
+});
+new Chart(document.getElementById('hamShareChart'), {
+  type:'bar', data:{ labels:hamYears, datasets:[
+    {label:'Z1',data:hamZ1n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#2563eb'},
+    {label:'Z2',data:hamZ2n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#16a34a'},
+    {label:'Z3',data:hamZ3n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#ea580c'},
+    {label:'Z4',data:hamZ4n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#9333ea'},
+    {label:'Z5',data:hamZ5n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#dc2626'},
+    {label:'Z6',data:hamZ6n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#6b7280'}
+  ]}, options:{...baseOpts,scales:{x:{stacked:true},y:{stacked:true,max:100,title:{display:true,text:'% of deliveries'},ticks:{callback:v=>v+'%'}}}}
+});
+
+// ============================================================
+// WELLINGTON
+// ============================================================
+const welYears = [2018,2019,2020,2021,2022,2023,2024];
+const welZ1 = [8.47,8.33,8.12,7.99,7.95,8.22,8.87];
+const welZ2 = [9.27,9.22,9.40,9.83,10.48,10.23,9.42];
+const welZ3 = [12.64,13.00,12.59,11.47,12.84,10.91,12.09];
+const welZ4 = [13.83,null,14.21,21.07,null,18.95,15.18];
+const welZ5 = [null,null,null,null,34.10,null,32.30];
+const welCpi = [1.000,1.016,1.042,1.072,1.140,1.210,1.240].map(f => +(8.47*f).toFixed(2));
+const welZ1n = [0.639,0.711,0.839,0.828,0.841,0.824,0.128];
+const welZ2n = [0.227,0.153,0.025,0.052,0.129,0.024,0.721];
+const welZ3n = [0.107,0.135,0.130,0.113,0.027,0.130,0.125];
+const welZ4n = [0.028,0,0.005,0.005,0,0.013,0.016];
+const welZ5n = [0,0,0,0,0.003,0,0.011];
+
+new Chart(document.getElementById('welBaseChart'), {
+  type:'line', data:{ labels:welYears, datasets:[
+    {label:'Z1',data:welZ1,borderColor:'#2563eb',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z2',data:welZ2,borderColor:'#16a34a',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z3',data:welZ3,borderColor:'#ea580c',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z4',data:welZ4,borderColor:'#9333ea',borderWidth:2,pointRadius:4,tension:.3,spanGaps:false},
+    {label:'Z5',data:welZ5,borderColor:'#dc2626',borderWidth:2,pointRadius:4,tension:.3,spanGaps:false},
+    {label:'Z1 if CPI',data:welCpi,borderColor:'#aaa',borderDash:[6,4],borderWidth:2,pointRadius:0,tension:.3}
+  ]}, options:{...baseOpts, scales:{y:{title:{display:true,text:'Base rate ($, ex fuel)'},beginAtZero:false,ticks:{callback:v=>'$'+v.toFixed(2)}}},plugins:{...baseOpts.plugins,tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+dollar(ctx.parsed.y)}}}}
+});
+new Chart(document.getElementById('welShareChart'), {
+  type:'bar', data:{ labels:welYears, datasets:[
+    {label:'Z1',data:welZ1n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#2563eb'},
+    {label:'Z2',data:welZ2n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#16a34a'},
+    {label:'Z3',data:welZ3n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#ea580c'},
+    {label:'Z4',data:welZ4n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#9333ea'},
+    {label:'Z5',data:welZ5n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#dc2626'}
+  ]}, options:{...baseOpts,scales:{x:{stacked:true},y:{stacked:true,max:100,title:{display:true,text:'% of deliveries'},ticks:{callback:v=>v+'%'}}}}
+});
+
+// ============================================================
+// CHRISTCHURCH
+// ============================================================
+const chcYears = [2019,2020,2021,2022,2023,2024];
+const chcZ1 = [7.97,8.10,8.01,7.95,8.23,8.58];
+const chcZ2 = [null,null,10.59,null,10.30,10.24];
+const chcZ3 = [12.28,12.56,12.81,12.04,12.53,13.16];
+const chcZ4 = [15.94,16.43,14.66,14.06,14.99,15.21];
+const chcZ5 = [19.85,19.63,17.62,19.09,20.28,17.95];
+const chcZ6 = [42.79,29.25,null,null,null,null];
+const chcCpi = [1.000,1.026,1.055,1.122,1.191,1.220].map(f => +(7.97*f).toFixed(2));
+const chcZ1n = [0.839,0.815,0.683,0.670,0.644,0.576];
+const chcZ2n = [0,0,0.127,0,0.024,0.090];
+const chcZ3n = [0.094,0.094,0.126,0.284,0.303,0.268];
+const chcZ4n = [0.039,0.060,0.048,0.015,0.016,0.026];
+const chcZ5n = [0.012,0.007,0.014,0.020,0.011,0.036];
+const chcZ6n = [0.016,0.014,0,0,0,0];
+
+new Chart(document.getElementById('chcBaseChart'), {
+  type:'line', data:{ labels:chcYears, datasets:[
+    {label:'Z1',data:chcZ1,borderColor:'#2563eb',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z2',data:chcZ2,borderColor:'#16a34a',borderWidth:2,pointRadius:4,tension:.3,spanGaps:false},
+    {label:'Z3',data:chcZ3,borderColor:'#ea580c',borderWidth:3,pointRadius:5,tension:.3},
+    {label:'Z4',data:chcZ4,borderColor:'#9333ea',borderWidth:2,pointRadius:4,tension:.3},
+    {label:'Z5',data:chcZ5,borderColor:'#dc2626',borderWidth:2,pointRadius:4,tension:.3},
+    {label:'Z1 if CPI',data:chcCpi,borderColor:'#aaa',borderDash:[6,4],borderWidth:2,pointRadius:0,tension:.3}
+  ]}, options:{...baseOpts, scales:{y:{title:{display:true,text:'Base rate ($, ex fuel)'},beginAtZero:false,ticks:{callback:v=>'$'+v.toFixed(2)}}},plugins:{...baseOpts.plugins,tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+dollar(ctx.parsed.y)}}}}
+});
+new Chart(document.getElementById('chcShareChart'), {
+  type:'bar', data:{ labels:chcYears, datasets:[
+    {label:'Z1',data:chcZ1n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#2563eb'},
+    {label:'Z2',data:chcZ2n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#16a34a'},
+    {label:'Z3',data:chcZ3n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#ea580c'},
+    {label:'Z4',data:chcZ4n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#9333ea'},
+    {label:'Z5',data:chcZ5n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#dc2626'},
+    {label:'Z6',data:chcZ6n.map(v=>+(v*100).toFixed(1)),backgroundColor:'#6b7280'}
+  ]}, options:{...baseOpts,scales:{x:{stacked:true},y:{stacked:true,max:100,title:{display:true,text:'% of deliveries'},ticks:{callback:v=>v+'%'}}}}
 });
 </script>
 </body>
