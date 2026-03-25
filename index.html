@@ -115,25 +115,26 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <p>All figures are deduplicated by ucjbID, outliers removed (&gt;$200), and post-April 2025 filtered to DEL-suffix delivery legs only.</p>
 <div class="chart-wrap"><canvas id="cpiChart"></canvas></div>
 <table>
-<thead><tr><th>Year</th><th>Deliveries</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>Mix-Adjusted*</th><th>NZ CPI</th></tr></thead>
+<thead><tr><th>Year</th><th>Deliveries</th><th>Drops/Run</th><th>Avg Ex Fuel</th><th>vs 2017</th><th>Mix-Adj*</th><th>Fully Adj**</th><th>NZ CPI</th></tr></thead>
 <tbody>
-<tr><td>2015</td><td>2,449</td><td>$9.28</td><td>+8%</td><td>—</td><td>—</td></tr>
-<tr><td>2016</td><td>15,239</td><td>$8.96</td><td>+4%</td><td>—</td><td>—</td></tr>
-<tr><td>2017</td><td>34,734</td><td>$8.62</td><td>Base</td><td>Base</td><td>Base</td></tr>
-<tr><td>2018</td><td>72,765</td><td>$8.46</td><td>-1.8%</td><td>-2.8%</td><td>+1.6%</td></tr>
-<tr><td>2019</td><td>86,391</td><td>$8.28</td><td>-3.9%</td><td>-4.6%</td><td>+3.3%</td></tr>
-<tr><td>2020</td><td>151,302</td><td>$8.10</td><td>-6.0%</td><td>-7.8%</td><td>+4.9%</td></tr>
-<tr><td>2021</td><td>175,512</td><td>$8.88</td><td>+3.0%</td><td>+2.8%</td><td>+8.8%</td></tr>
-<tr><td>2022</td><td>143,919</td><td>$9.81</td><td>+13.8%</td><td>+16.6%</td><td>+16%</td></tr>
-<tr><td>2023</td><td>91,999</td><td>$10.99</td><td>+27.6%</td><td>+29.0%</td><td>+21%</td></tr>
-<tr><td>2024</td><td>83,821</td><td>$12.29</td><td>+42.7%</td><td>+37.4%</td><td>~24%</td></tr>
-<tr class="highlight-row"><td>2025 (DEL only) *</td><td>64,690</td><td>$12.49</td><td>+45.0%</td><td>+37.4%</td><td>~27%</td></tr>
+<tr><td>2015</td><td>2,449</td><td>—</td><td>$9.28</td><td>+8%</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>2016</td><td>15,239</td><td>—</td><td>$8.96</td><td>+4%</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>2017</td><td>34,734</td><td>~20</td><td>$8.62</td><td>Base</td><td>Base</td><td>Base</td><td>Base</td></tr>
+<tr><td>2018</td><td>72,765</td><td>23.7</td><td>$8.46</td><td>-1.8%</td><td>-2.8%</td><td>+5.6%</td><td>+1.6%</td></tr>
+<tr><td>2019</td><td>86,391</td><td>24.5</td><td>$8.28</td><td>-3.9%</td><td>-4.6%</td><td>+5.3%</td><td>+3.3%</td></tr>
+<tr><td>2020</td><td>151,302</td><td>29.8</td><td>$8.10</td><td>-6.0%</td><td>-7.8%</td><td>+10.9%</td><td>+4.9%</td></tr>
+<tr><td>2021</td><td>175,512</td><td>28.8</td><td>$8.88</td><td>+3.0%</td><td>+2.8%</td><td>+21.9%</td><td>+8.8%</td></tr>
+<tr><td>2022</td><td>143,919</td><td>25.8</td><td>$9.81</td><td>+13.8%</td><td>+16.6%</td><td>+31.8%</td><td>+16%</td></tr>
+<tr><td>2023</td><td>91,999</td><td>22.6</td><td>$10.99</td><td>+27.6%</td><td>+29.0%</td><td>+37.1%</td><td>+21%</td></tr>
+<tr><td>2024</td><td>83,821</td><td>17.7</td><td>$12.29</td><td>+42.7%</td><td>+37.4%</td><td>+28.8%</td><td>~24%</td></tr>
+<tr class="highlight-row"><td>2025 (DEL only)</td><td>64,690</td><td>19.2</td><td>$12.49</td><td>+45.0%</td><td>+37.4%</td><td>+34.5%</td><td>~27%</td></tr>
 <!-- 2026 removed -->
 </tbody>
 </table>
 <div class="callout info">
-<strong>* Mix-Adjusted column:</strong> Shows what the average price would be if the geographic distribution of deliveries had stayed the same as 2017 (86% Auckland, 12% Wellington, 2% other). This isolates genuine rate changes from the effect of expanding into more expensive regional areas. The gap between Actual and Mix-Adjusted represents the cost impact of geographic expansion alone.<br><br>
-<strong>* 2025 methodology:</strong> Jan–Feb from Railway PG (pre parent-child, all jobs). March onwards: DEL-suffix delivery legs only (parent-child era). Jan–Mar sourced from Railway PG, Apr–Dec from Urgent Prod RDS. No overlap — Railway capped at March, RDS from April. 64,690 total delivery-leg jobs.
+<strong>* Mix-Adjusted:</strong> Holds the 2017 geographic distribution constant (86% Auckland, 12% Wellington, 2% other) to isolate rate changes from regional expansion.<br><br>
+<strong>** Fully Adjusted:</strong> Removes both geographic mix shift AND run density effects. Uses a fixed/variable cost model where fixed costs per run (driver loading, first/last mile) are spread across fewer drops as density falls. At 2024's 17.7 drops/run (vs 2017's ~20), the density loss alone adds ~7% to per-delivery cost. During the 2020–2021 peak (30 drops/run), Woop benefited from unusually high density that compressed per-delivery costs well below their true structural level.<br><br>
+<strong>2025 methodology:</strong> Jan–Feb from Railway PG (pre parent-child, all jobs). March onwards: DEL-suffix delivery legs only (parent-child era). Jan–Mar sourced from Railway PG, Apr–Dec from Urgent Prod RDS. No overlap — Railway capped at March, RDS from April. 64,690 total delivery-leg jobs.
 </div>
 <div class="callout">
 <strong>2023-2024 above CPI:</strong> Pricing moved above CPI in 2023-2024 as volume collapsed (run density halved) and geographic expansion pushed more volume into expensive regions. The 2025 DEL-only figure of $11.58 pulled back below 2024 levels despite continued volume decline.
@@ -285,7 +286,7 @@ Data: 1,090,224 unique jobs (deduplicated), Railway PG + AWS RDS, Jul 2015 – D
 const navy='#1a2744',orange='#e87722',green='#27ae60',blue='#3498db';
 
 // CPI vs Pricing Chart (corrected, through 2026)
-new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-1.8,-3.9,-6.0,3.0,13.8,27.6,42.7,45.0],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Mix-Adjusted Price vs 2017 (%) — 2017 geographic mix held constant',data:[0,-2.8,-4.6,-7.8,2.8,16.6,29.0,37.4,37.4],borderColor:'#27ae60',backgroundColor:'#27ae6022',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base) — Corrected & Deduplicated',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
+new Chart(document.getElementById('cpiChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Delivery-Leg Price vs 2017 (%)',data:[0,-1.8,-3.9,-6.0,3.0,13.8,27.6,42.7,45.0],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Mix-Adjusted (geographic only)',data:[0,-2.8,-4.6,-7.8,2.8,16.6,29.0,37.4,37.4],borderColor:'#27ae60',backgroundColor:'#27ae6022',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]},{label:'Fully Adjusted (geographic + density)',data:[0,5.6,5.3,10.9,21.9,31.8,37.1,28.8,34.5],borderColor:'#8b5cf6',backgroundColor:'#8b5cf622',fill:false,tension:.3,pointRadius:5,borderDash:[2,4],pointStyle:'rectRot',pointRadius:6},{label:'NZ CPI vs 2017 (%)',data:[0,1.6,3.3,4.9,8.8,16,21,24,27],borderColor:navy,backgroundColor:navy+'22',fill:false,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Delivery-Leg Price vs NZ CPI (2017 base) — Corrected & Deduplicated',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% Change from 2017'},ticks:{callback:v=>v+'%'}}}}});
 
 // Monthly Chart (new)
 new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],datasets:[{label:'DEL Avg ($)',data:[12.18,11.89,12.33,12.27,12.13,12.31,12.24,12.09,12.83],backgroundColor:orange,yAxisID:'y'},{label:'DEL Deliveries',data:[4877,5498,6478,5004,6480,5232,5176,7163,3953],type:'line',borderColor:navy,backgroundColor:navy+'22',tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Monthly DEL Delivery-Leg Pricing (Apr – Dec 2025)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Avg Price ($)'},min:10,max:14,ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
