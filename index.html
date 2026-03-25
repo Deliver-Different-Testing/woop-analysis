@@ -194,68 +194,55 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 </div>
 </div>
 
-<!-- Auckland Deep Dive -->
+<!-- Auckland Zone 1-2 Deep Dive -->
 <div class="card">
-<h2>5. Auckland Deep Dive — Zone Pricing Analysis</h2>
-<p>Auckland uses a concentric zone system where pricing increases with distance from the CBD. Zones are determined by the from-area and to-area of each delivery, mapped through Urgent's zone matrix (<code>tucZone</code>). We've consolidated the granular zone values into 5 rings:</p>
+<h2>5. Auckland Zone 1-2 (Central) — Deep Dive</h2>
+<p>Auckland uses a concentric zone system where pricing increases with distance from the CBD. Zone 1-2 covers central Auckland (CBD and inner suburbs) — the highest-volume zone and the best like-for-like comparison over time.</p>
 
 <div class="callout method">
-<strong>Zone definitions:</strong> Zone 1-2 = Central Auckland (CBD, inner suburbs). Zone 3 = Inner Ring (Newmarket, Mt Eden, Ponsonby corridor). Zone 4-5 = Mid Ring (Shore, West, South). Zone 6-8 = Outer Ring (Manukau, North Shore outer, Henderson). Zone 9+ = Regional/Rural (Pukekohe, Warkworth, Waiheke, etc.)
+<strong>Methodology:</strong> Zone is determined by mapping each job's from-suburb and to-suburb through Urgent's zone matrix (<code>tucZone</code>). Zone values ≤2.0 = central Auckland. 2025 data: Jan–Feb from Railway PG (all jobs, pre parent-child), Apr–Dec from RDS (DEL-suffix delivery legs only). March excluded (transition month).
 </div>
 
-<h3>Zone Pricing by Year</h3>
-<p>Average delivery price increases significantly with distance — the outermost zones cost 50–60% more than central.</p>
-<div class="chart-wrap"><canvas id="zonePriceChart"></canvas></div>
+<h3>Zone 1-2 Pricing Over Time</h3>
+<div class="chart-wrap"><canvas id="z12PriceChart"></canvas></div>
 <table>
-<thead><tr><th>Zone</th><th>2017 Avg</th><th>2020 Avg</th><th>2022 Avg</th><th>2024 Avg</th><th>Change 17→24</th></tr></thead>
+<thead><tr><th>Year</th><th>Z1-2 Jobs</th><th>Z1-2 Avg Price</th><th>vs 2017</th><th>Z1-2 Share of Auckland</th><th>All Auckland Avg</th></tr></thead>
 <tbody>
-<tr><td>Z1-2 Central</td><td>$7.82</td><td>$6.84</td><td>$9.60</td><td>$12.99</td><td style="color:var(--red);">+66%</td></tr>
-<tr><td>Z3 Inner Ring</td><td>$8.13</td><td>$7.25</td><td>$8.77</td><td>$10.33</td><td>+27%</td></tr>
-<tr><td>Z4-5 Mid Ring</td><td>$8.39</td><td>$7.76</td><td>$9.60</td><td>$11.16</td><td>+33%</td></tr>
-<tr><td>Z6-8 Outer Ring</td><td>$8.36</td><td>$8.08</td><td>$9.28</td><td>$12.16</td><td>+45%</td></tr>
-<tr><td>Z9+ Regional</td><td>$12.92</td><td>$12.40</td><td>$14.63</td><td>$18.78</td><td>+45%</td></tr>
+<tr><td>2017</td><td>14,051</td><td>$7.84</td><td>Base</td><td>44.7%</td><td>$8.37</td></tr>
+<tr><td>2018</td><td>25,696</td><td>$8.10</td><td>+3.4%</td><td>42.6%</td><td>$8.28</td></tr>
+<tr><td>2019</td><td>28,614</td><td>$7.18</td><td>-8.3%</td><td>40.1%</td><td>$8.04</td></tr>
+<tr><td>2020</td><td>43,275</td><td>$6.85</td><td>-12.6%</td><td>35.5%</td><td>$7.90</td></tr>
+<tr><td>2021</td><td>49,913</td><td>$8.41</td><td>+7.3%</td><td>35.1%</td><td>$8.93</td></tr>
+<tr><td>2022</td><td>38,633</td><td>$9.60</td><td>+22.6%</td><td>33.9%</td><td>$10.08</td></tr>
+<tr><td>2023</td><td>25,147</td><td>$10.70</td><td>+36.5%</td><td>34.7%</td><td>$11.36</td></tr>
+<tr><td>2024</td><td>31,062</td><td>$13.00</td><td style="color:var(--red);font-weight:700;">+66.0%</td><td>37.0%</td><td>$12.61</td></tr>
+<tr class="highlight-row"><td>2025</td><td>23,055</td><td>$12.09</td><td>+54.2%</td><td>~40%</td><td>—</td></tr>
 </tbody>
 </table>
 
-<h3>Zone Mix Shift (% of Auckland Jobs)</h3>
-<p>The mix of where deliveries go has shifted over time. Central Auckland's share dropped from 44.5% to 33.9% (2017–2022) as Woop expanded into outer suburbs, then recovered to 37% in 2024.</p>
-<div class="chart-wrap"><canvas id="zoneMixChart"></canvas></div>
-<table>
-<thead><tr><th>Year</th><th>Z1-2 Central</th><th>Z3 Inner</th><th>Z4-5 Mid</th><th>Z6-8 Outer</th><th>Z9+ Regional</th><th>Jobs</th><th>Avg Price</th></tr></thead>
-<tbody>
-<tr><td>2017</td><td>44.5%</td><td>27.8%</td><td>14.8%</td><td>5.2%</td><td>5.1%</td><td>31,641</td><td>$8.31</td></tr>
-<tr><td>2018</td><td>42.5%</td><td>28.0%</td><td>14.0%</td><td>5.9%</td><td>9.1%</td><td>60,661</td><td>$8.23</td></tr>
-<tr><td>2019</td><td>40.0%</td><td>27.2%</td><td>15.2%</td><td>6.5%</td><td>11.0%</td><td>71,533</td><td>$8.03</td></tr>
-<tr><td>2020</td><td>35.5%</td><td>29.9%</td><td>12.7%</td><td>10.0%</td><td>11.5%</td><td>121,913</td><td>$7.89</td></tr>
-<tr><td>2021</td><td>35.1%</td><td>29.2%</td><td>13.0%</td><td>10.3%</td><td>11.6%</td><td>142,433</td><td>$8.91</td></tr>
-<tr><td>2022</td><td>33.9%</td><td>29.0%</td><td>12.8%</td><td>11.3%</td><td>12.2%</td><td>114,080</td><td>$10.07</td></tr>
-<tr><td>2023</td><td>34.7%</td><td>29.0%</td><td>12.1%</td><td>11.3%</td><td>11.7%</td><td>72,459</td><td>$11.34</td></tr>
-<tr class="highlight-row"><td>2024</td><td>37.0%</td><td>25.9%</td><td>16.2%</td><td>8.7%</td><td>7.3%</td><td>83,971</td><td>$12.60</td></tr>
-</tbody>
-</table>
+<div class="stat-row">
+<div class="stat orange"><div class="num">+54%</div><div class="label">Z1-2 Price vs 2017<br>(2025, central Auckland)</div></div>
+<div class="stat"><div class="num">~27%</div><div class="label">NZ CPI<br>2017→2025</div></div>
+<div class="stat green"><div class="num">$12.09</div><div class="label">Z1-2 Avg 2025<br>(pulled back from $13.00)</div></div>
+<div class="stat"><div class="num">23,055</div><div class="label">Z1-2 Deliveries<br>2025</div></div>
+</div>
 
-<h3>Zone-Adjusted Price (Holding 2017 Auckland Mix Constant)</h3>
-<p>If the zone mix had stayed at 2017 proportions, what would the average Auckland price be each year? This isolates genuine rate increases from the effect of delivering to more expensive zones.</p>
-<div class="chart-wrap"><canvas id="zoneAdjChart"></canvas></div>
-<table>
-<thead><tr><th>Year</th><th>Actual Avg</th><th>Zone-Adjusted</th><th>Gap</th><th>Actual vs 2017</th><th>Zone-Adj vs 2017</th></tr></thead>
-<tbody>
-<tr><td>2017</td><td>$8.31</td><td>$8.07</td><td>—</td><td>Base</td><td>Base</td></tr>
-<tr><td>2018</td><td>$8.23</td><td>$7.91</td><td>$0.32</td><td>-1.0%</td><td>-2.0%</td></tr>
-<tr><td>2019</td><td>$8.03</td><td>$7.52</td><td>$0.51</td><td>-3.4%</td><td>-6.8%</td></tr>
-<tr><td>2020</td><td>$7.89</td><td>$7.26</td><td>$0.63</td><td>-5.1%</td><td>-10.0%</td></tr>
-<tr><td>2021</td><td>$8.91</td><td>$8.28</td><td>$0.63</td><td>+7.2%</td><td>+2.6%</td></tr>
-<tr><td>2022</td><td>$10.07</td><td>$9.36</td><td>$0.71</td><td>+21.2%</td><td>+16.0%</td></tr>
-<tr><td>2023</td><td>$11.34</td><td>$10.46</td><td>$0.88</td><td>+36.5%</td><td>+29.6%</td></tr>
-<tr class="highlight-row"><td>2024</td><td>$12.60</td><td>$11.89</td><td>$0.71</td><td>+51.6%</td><td>+47.3%</td></tr>
-</tbody>
-</table>
+<h3>Zone 1-2 Share of Auckland Volume</h3>
+<p>Central Auckland's share of total Auckland volume dropped steadily from 44.7% (2017) to a low of 33.9% (2022) as Woop expanded into outer suburbs. It has since recovered to ~40% in 2025.</p>
+<div class="chart-wrap"><canvas id="z12ShareChart"></canvas></div>
+
 <div class="callout">
-<strong>Key insight:</strong> The zone mix shift within Auckland accounts for ~4 percentage points of the apparent price increase (51.6% actual vs 47.3% zone-adjusted). Combined with the national geographic mix shift (~8pp from the city-level analysis), total geographic effects explain ~12pp of the headline increase. The remaining ~35pp zone-adjusted increase is genuine rate movement driven by CPI, fuel surcharges, and density loss.
+<strong>Key findings:</strong>
+<ul style="margin:.5rem 0 0 1rem;">
+<li><strong>2017–2020:</strong> Prices fell as volume surged (high density compressed costs). Z1-2 averaged $6.85 at peak volume in 2020 — below the 2017 base of $7.84</li>
+<li><strong>2021–2024:</strong> Prices climbed rapidly as volume collapsed and density halved. Z1-2 hit $13.00 in 2024 (+66% vs 2017) — well above CPI</li>
+<li><strong>2025:</strong> Pulled back to $12.09 (+54%) — still above CPI (~27%) but down $0.91 from 2024's peak, suggesting some price stabilisation</li>
+<li><strong>Volume vs price inverse:</strong> When Z1-2 had 43K–50K jobs (2020–21), prices were $6.85–$8.41. When volume halved to 25K–31K (2023–24), prices nearly doubled. Density is the dominant cost driver in central Auckland</li>
+</ul>
 </div>
 
 <h3>Same-Route Benchmark: Depot → Remuera (ex fuel)</h3>
-<p>Isolating a single, unchanged route removes all geographic and mix variables.</p>
+<p>Isolating a single, unchanged route within Zone 1-2 removes all geographic and mix variables.</p>
 <div class="chart-wrap"><canvas id="remueraChart"></canvas></div>
 <table>
 <thead><tr><th>Year</th><th>Deliveries</th><th>Ex Fuel</th><th>vs 2017</th></tr></thead>
@@ -269,6 +256,9 @@ footer{text-align:center;padding:2rem;color:#999;font-size:.8rem;}
 <tr class="highlight-row"><td>2025</td><td>210</td><td>$8.27</td><td>+18%</td></tr>
 </tbody>
 </table>
+<div class="callout info">
+<strong>Remuera benchmark tells a different story:</strong> On this single controlled route, pricing is only +18% vs 2017 — right in line with CPI. The gap between the Remuera benchmark (+18%) and broader Z1-2 (+54%) is explained by mix shift <em>within</em> central Auckland — the composition of Z1-2 deliveries has changed even though the zone boundaries haven't.
+</div>
 </div>
 
 <!-- Geographic Expansion -->
@@ -336,14 +326,11 @@ new Chart(document.getElementById('monthlyChart'),{type:'bar',data:{labels:['Apr
 // Regional Bar Chart
 new Chart(document.getElementById('regionalBarChart'),{type:'bar',data:{labels:['Wellington','Hamilton','Auckland','Hawkes Bay','Palm. Nth','Christchurch','Tauranga','Rotorua','Waikato Towns','Waikato','Waiheke','Coromandel'],datasets:[{label:'Avg Ex Fuel',data:[10.40,10.47,10.93,11.82,12.14,12.89,13.57,19.58,24.19,26.66,31.46,37.92],backgroundColor:['#27ae60','#27ae60',navy,orange,orange,orange,orange,'#c0392b','#c0392b','#c0392b','#c0392b','#c0392b']}]},options:{responsive:true,indexAxis:'y',plugins:{title:{display:true,text:'Regional Delivery-Leg Pricing (DEL-suffix, ex fuel)',font:{size:14}},legend:{display:false}},scales:{x:{title:{display:true,text:'Avg Ex Fuel ($)'},ticks:{callback:v=>'$'+v}}}}});
 
-// Zone Price by Year Chart
-new Chart(document.getElementById('zonePriceChart'),{type:'bar',data:{labels:['Z1-2 Central','Z3 Inner','Z4-5 Mid','Z6-8 Outer','Z9+ Regional'],datasets:[{label:'2017',data:[7.82,8.13,8.39,8.36,12.92],backgroundColor:navy},{label:'2020',data:[6.84,7.25,7.76,8.08,12.40],backgroundColor:blue},{label:'2022',data:[9.60,8.77,9.60,9.28,14.63],backgroundColor:green},{label:'2024',data:[12.99,10.33,11.16,12.16,18.78],backgroundColor:orange}]},options:{responsive:true,plugins:{title:{display:true,text:'Average Delivery Price by Auckland Zone',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Avg Price ($)'},ticks:{callback:v=>'$'+v}}}}});
+// Z1-2 Price + Volume Chart
+new Chart(document.getElementById('z12PriceChart'),{type:'bar',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Z1-2 Avg Price ($)',data:[7.84,8.10,7.18,6.85,8.41,9.60,10.70,13.00,12.09],backgroundColor:[navy,navy,blue,blue,navy,orange,orange,'#c0392b',orange],yAxisID:'y'},{label:'Z1-2 Jobs (K)',data:[14.1,25.7,28.6,43.3,49.9,38.6,25.1,31.1,23.1],type:'line',borderColor:navy,backgroundColor:navy+'22',fill:true,tension:.3,pointRadius:5,yAxisID:'y1'}]},options:{responsive:true,plugins:{title:{display:true,text:'Auckland Zone 1-2 (Central): Price vs Volume',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Avg Price ($)'},ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Jobs (thousands)'},grid:{drawOnChartArea:false}}}}});
 
-// Zone Mix Shift Chart
-new Chart(document.getElementById('zoneMixChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024'],datasets:[{label:'Z1-2 Central',data:[44.5,42.5,40.0,35.5,35.1,33.9,34.7,37.0],borderColor:navy,tension:.3,pointRadius:4,fill:false},{label:'Z3 Inner Ring',data:[27.8,28.0,27.2,29.9,29.2,29.0,29.0,25.9],borderColor:blue,tension:.3,pointRadius:4,fill:false},{label:'Z4-5 Mid Ring',data:[14.8,14.0,15.2,12.7,13.0,12.8,12.1,16.2],borderColor:orange,tension:.3,pointRadius:4,fill:false},{label:'Z6-8 Outer',data:[5.2,5.9,6.5,10.0,10.3,11.3,11.3,8.7],borderColor:green,tension:.3,pointRadius:4,fill:false},{label:'Z9+ Regional',data:[5.1,9.1,11.0,11.5,11.6,12.2,11.7,7.3],borderColor:'#c0392b',tension:.3,pointRadius:4,fill:false}]},options:{responsive:true,plugins:{title:{display:true,text:'Auckland Zone Mix Shift (% of Jobs)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'% of Auckland Jobs'},ticks:{callback:v=>v+'%'}}}}});
-
-// Zone-Adjusted Price Chart
-new Chart(document.getElementById('zoneAdjChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024'],datasets:[{label:'Actual Avg Price',data:[8.31,8.23,8.03,7.89,8.91,10.07,11.34,12.60],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5},{label:'Zone-Adjusted (2017 mix)',data:[8.07,7.91,7.52,7.26,8.28,9.36,10.46,11.89],borderColor:green,backgroundColor:green+'22',fill:false,tension:.3,pointRadius:5,borderDash:[6,3]}]},options:{responsive:true,plugins:{title:{display:true,text:'Auckland: Actual vs Zone-Adjusted Price (2017 mix held constant)',font:{size:14}},legend:{position:'bottom'}},scales:{y:{title:{display:true,text:'Avg Price ($)'},ticks:{callback:v=>'$'+v.toFixed(2)}}}}});
+// Z1-2 Share of Auckland Chart
+new Chart(document.getElementById('z12ShareChart'),{type:'line',data:{labels:['2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Z1-2 Share of Auckland (%)',data:[44.7,42.6,40.1,35.5,35.1,33.9,34.7,37.0,40.0],borderColor:orange,backgroundColor:orange+'22',fill:true,tension:.3,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'Zone 1-2 Share of Total Auckland Volume',font:{size:14}},legend:{display:false}},scales:{y:{title:{display:true,text:'% of Auckland Jobs'},min:25,max:50,ticks:{callback:v=>v+'%'}}}}});
 
 // Remuera Chart
 new Chart(document.getElementById('remueraChart'),{type:'bar',data:{labels:['2017','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Price (ex fuel)',data:[7.00,6.02,7.24,8.24,8.52,9.12,8.27],backgroundColor:orange,yAxisID:'y'},{label:'Deliveries',data:[1000,5966,6090,5162,3982,2570,210],backgroundColor:navy+'66',yAxisID:'y1',type:'line',tension:.3,pointRadius:5,borderColor:navy}]},options:{responsive:true,plugins:{title:{display:true,text:'Depot → Remuera: Price vs Volume',font:{size:14}},legend:{position:'bottom'}},scales:{y:{position:'left',title:{display:true,text:'Price ($)'},ticks:{callback:v=>'$'+v.toFixed(2)}},y1:{position:'right',title:{display:true,text:'Deliveries'},grid:{drawOnChartArea:false}}}}});
