@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Woop Auckland Sunday — Zone Price Movement 2017–2025</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #1a1a2e; padding: 24px; }
@@ -12,168 +13,217 @@
   h1 { font-size: 1.5rem; margin-bottom: 4px; }
   .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 24px; }
   .chart-wrap { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 24px; }
-  .chart-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; }
+  .chart-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+  .chart-sub { font-size: 0.85rem; color: #888; margin-bottom: 16px; }
   canvas { width: 100% !important; }
-  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .card .zone { font-size: 0.85rem; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-  .card .price-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px; }
-  .card .price { font-size: 1.6rem; font-weight: 700; }
-  .card .change { font-size: 0.95rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
-  .card .change.up { background: #ffeaea; color: #c0392b; }
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid; }
+  .card.z1 { border-color: #2563eb; } .card.z2 { border-color: #16a34a; }
+  .card.z3 { border-color: #ea580c; } .card.z4 { border-color: #9333ea; }
+  .card .zone { font-size: 0.85rem; color: #666; font-weight: 600; }
+  .card .prices { display: flex; gap: 16px; align-items: baseline; margin-top: 6px; }
+  .card .base { font-size: 1.5rem; font-weight: 700; }
+  .card .total { font-size: 1rem; color: #999; }
+  .card .change { font-size: 0.9rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 6px; }
+  .card .change.good { background: #e8f5e9; color: #2e7d32; }
+  .card .change.warn { background: #fff3e0; color: #e65100; }
   .card .from { font-size: 0.8rem; color: #999; margin-top: 4px; }
+  .card .rate-card { font-size: 0.8rem; color: #aaa; margin-top: 2px; }
   .note { background: #fff; border-radius: 10px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-size: 0.9rem; line-height: 1.6; color: #444; }
   .note strong { color: #1a1a2e; }
   .note ul { margin: 8px 0 0 20px; }
-  .cpi-ref { display: inline-block; background: #e8f5e9; color: #2e7d32; font-weight: 600; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; }
+  .highlight { background: #fffde7; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #f9a825; margin-bottom: 24px; font-size: 0.95rem; }
   a.back { display: inline-block; margin-bottom: 16px; color: #3b82f6; text-decoration: none; font-size: 0.9rem; }
   a.back:hover { text-decoration: underline; }
+  .legend-note { font-size: 0.8rem; color: #999; text-align: center; margin-top: -12px; margin-bottom: 20px; }
 </style>
 </head>
 <body>
 <div class="container">
   <a class="back" href="index.html">← Back to Woop Analysis</a>
   <h1>Woop Auckland Sunday — Zone Price Movement</h1>
-  <p class="subtitle">Actual job prices (incl. fuel surcharge) for Speed 95 Home Delivery, Sundays only. Zones identified by price clustering.</p>
+  <p class="subtitle">Base rate (ex fuel, ex GST) from RawBaseAmount vs total charged price. Speed 95 Home Delivery, Sundays only.</p>
+
+  <div class="highlight">
+    <strong>Key finding:</strong> Zone 1 base rate increased <strong>+28.1%</strong> from 2017 to 2025 — tracking NZ CPI almost exactly (~28%). The headline +63% increase in average price is driven by <strong>fuel surcharge (+12-14%)</strong> and <strong>zone mix shift</strong> (Z1 share dropped from 93% to 34%).
+  </div>
 
   <div class="summary">
-    <div class="card">
-      <div class="zone" style="color:#2563eb">Zone 1 — Central</div>
-      <div class="price-row">
-        <span class="price" style="color:#2563eb">$9.89</span>
-        <span class="change up">+45.4%</span>
-      </div>
-      <div class="from">From $6.80 (2017) · <span class="cpi-ref">CPI ~28%</span></div>
+    <div class="card z1">
+      <div class="zone">Zone 1 — Central Auckland</div>
+      <div class="prices"><span class="base">$8.76</span> <span class="total">($9.85 incl. fuel)</span></div>
+      <span class="change good">+28.1% base</span>
+      <div class="from">From $6.84 (2017) · NZ CPI ~28%</div>
+      <div class="rate-card">2025 rate card: $8.81</div>
     </div>
-    <div class="card">
-      <div class="zone" style="color:#16a34a">Zone 2</div>
-      <div class="price-row">
-        <span class="price" style="color:#16a34a">$10.37</span>
-        <span class="change up">+52.5%</span>
-      </div>
-      <div class="from">From $6.80 (2019) · <span class="cpi-ref">CPI ~22%</span></div>
+    <div class="card z2">
+      <div class="zone">Zone 2</div>
+      <div class="prices"><span class="base">$9.25</span> <span class="total">($10.41 incl. fuel)</span></div>
+      <span class="change warn">+47.3% base</span>
+      <div class="from">From $6.28 (2020) · NZ CPI ~14%</div>
+      <div class="rate-card">2025 rate card: $9.25</div>
     </div>
-    <div class="card">
-      <div class="zone" style="color:#ea580c">Zone 3</div>
-      <div class="price-row">
-        <span class="price" style="color:#ea580c">$10.79</span>
-        <span class="change up">+43.9%</span>
-      </div>
-      <div class="from">From $7.50 (2019) · <span class="cpi-ref">CPI ~22%</span></div>
+    <div class="card z3">
+      <div class="zone">Zone 3</div>
+      <div class="prices"><span class="base">$9.74</span> <span class="total">($10.97 incl. fuel)</span></div>
+      <span class="change good">+25.7% base</span>
+      <div class="from">From $7.75 (2017) · NZ CPI ~28%</div>
+      <div class="rate-card">2025 rate card: $9.70</div>
     </div>
-    <div class="card">
-      <div class="zone" style="color:#9333ea">Zone 4</div>
-      <div class="price-row">
-        <span class="price" style="color:#9333ea">$12.67</span>
-        <span class="change up">+35.9%</span>
-      </div>
-      <div class="from">From $9.32 (2022) · <span class="cpi-ref">CPI ~11%</span></div>
+    <div class="card z4">
+      <div class="zone">Zone 4</div>
+      <div class="prices"><span class="base">$11.76</span> <span class="total">($13.26 incl. fuel)</span></div>
+      <span class="change good">+15.0% base</span>
+      <div class="from">From $10.23 (2017) · NZ CPI ~28%</div>
+      <div class="rate-card">2025 rate card: $11.33</div>
     </div>
   </div>
 
   <div class="chart-wrap">
-    <div class="chart-title">Average Price per Delivery by Zone (2017–2025)</div>
-    <canvas id="priceChart" height="300"></canvas>
+    <div class="chart-title">Base Rate per Delivery by Zone (ex fuel, ex GST)</div>
+    <div class="chart-sub">Solid lines = base rate (RawBaseAmount). The rate actually charged before fuel surcharge.</div>
+    <canvas id="baseChart" height="320"></canvas>
+  </div>
+  <div class="legend-note">Dashed grey line = NZ CPI applied to Z1 2017 base ($6.84)</div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Base Rate vs Total Charged (incl. fuel) — Zone 1</div>
+    <div class="chart-sub">The gap between lines = fuel surcharge. Fuel charging started ~2021.</div>
+    <canvas id="fuelChart" height="280"></canvas>
   </div>
 
   <div class="chart-wrap">
-    <div class="chart-title">Price Change Indexed to Base Year (100 = first year with data)</div>
+    <div class="chart-title">Indexed Base Rate (100 = first year with data)</div>
+    <div class="chart-sub">Compares rate movement across zones on equal footing regardless of base price level.</div>
     <canvas id="indexChart" height="280"></canvas>
   </div>
 
   <div class="chart-wrap">
     <div class="chart-title">Zone Volume Share — Auckland Sundays</div>
+    <div class="chart-sub">Classified by base rate using rate card ratio boundaries.</div>
     <canvas id="shareChart" height="260"></canvas>
   </div>
 
   <div class="note">
+    <strong>Methodology:</strong>
+    <ul>
+      <li><strong>Base rate</strong> = <code>RawBaseAmount</code> field from tucJobArchive (ex fuel, ex GST). Pre-2021 this equals the total charged amount (no fuel surcharge applied to Woop)</li>
+      <li><strong>Zone classification</strong> uses ratio boundaries from 2025 rate card (Z1=$8.81, Z2=$9.25, Z3=$9.70, Z4=$11.33), scaled to each year's Z1 anchor price</li>
+      <li><strong>2025 base rates match rate card almost exactly:</strong> Z1 $8.76≈$8.81, Z2 $9.25=$9.25, Z3 $9.74≈$9.70</li>
+      <li><strong>Data sources:</strong> Railway PG (historical through Mar 2025) + RDS (Apr 2025 onwards, DEL-suffix children only)</li>
+      <li>Auckland only, Sundays only, Speed 95 (Home Delivery) + Speed 4 (3 Hour, pre-2019). Cap $200 to exclude data errors</li>
+    </ul>
+    <br>
     <strong>Key observations:</strong>
     <ul>
-      <li><strong>Z1 dipped 8.8% during 2017–2020</strong> (volume surge from 23K → 109K jobs drove density discounts), then jumped 59.5% from 2020–2025 as volume fell back to 54K</li>
-      <li><strong>All zones exceed CPI</strong> — the gap is primarily fuel surcharge (FAF), which is baked into job prices but not in the ex-fuel rate card</li>
-      <li><strong>Zone mix shifted dramatically</strong> — Z1 went from 93% of volume (2017) to 34% (2025) as Woop expanded delivery range into outer suburbs</li>
-      <li><strong>Z4 shows the smallest increase</strong> (+36% since 2022) — outer zone pricing was already higher, less room for density-driven increases</li>
-      <li>2017–2018 had effectively only Z1 volume (93%+); Z2–Z4 only show meaningful data from 2019</li>
+      <li><strong>Z1 base rate tracks CPI:</strong> +28.1% vs ~28% NZ CPI (2017→2025). The "above CPI" increase that Woop perceives is almost entirely fuel surcharge</li>
+      <li><strong>Z1 dipped during COVID volume surge:</strong> $6.84 → $5.82 (2020, -15%) when volume hit 109K jobs/year, then recovered as volume normalised</li>
+      <li><strong>Fuel surcharge adds 12-14%</strong> on top of base rate (visible from 2022 onwards). Pre-2021 Woop was not charged fuel</li>
+      <li><strong>Zone mix is the biggest driver of average price increase:</strong> Z1 share dropped from 93% (2017) to 34% (2025) as Woop expanded delivery range</li>
+      <li><strong>Z4 base rate actually below CPI:</strong> +15% (2017→2025) vs 28% CPI — outer zone rates have been held back</li>
     </ul>
   </div>
 </div>
 
 <script>
 const years = [2017,2018,2019,2020,2021,2022,2023,2024,2025];
-const z1 = [6.80,6.80,6.30,6.20,6.00,7.81,8.75,9.34,9.89];
-const z2 = [null,null,6.80,6.67,6.52,8.33,9.24,9.64,10.37];
-const z3 = [null,null,7.50,7.07,7.26,8.77,9.59,10.08,10.79];
-const z4 = [null,null,null,null,null,9.32,10.13,10.38,12.67];
 
-// CPI line (NZ, approx 2.8% pa from 2017 base)
+// Base rates (ex fuel) per zone
+const z1b = [6.84,6.78,6.28,5.82,6.13,7.46,7.78,8.21,8.76];
+const z2b = [null,null,null,6.28,6.73,7.83,8.21,8.67,9.25];
+const z3b = [7.75,7.53,6.78,6.79,7.34,8.18,8.60,9.13,9.74];
+const z4b = [10.23,10.26,8.61,8.78,8.58,9.56,10.03,10.84,11.76];
+
+// Total charged (incl fuel)
+const z1t = [6.84,6.78,6.28,5.82,6.13,7.86,8.78,9.43,9.85];
+const z2t = [null,null,null,6.28,6.73,8.47,9.38,9.87,10.41];
+const z3t = [7.75,7.53,6.78,6.79,7.44,8.89,9.84,10.36,10.97];
+const z4t = [10.23,10.26,8.61,8.78,8.65,10.26,11.40,12.35,13.26];
+
+// Volumes per zone
+const z1n = [21937,41868,24551,34438,30697,29647,20666,20055,18358];
+const z2n = [0,0,0,23082,917,26626,16965,18526,16098];
+const z3n = [238,2584,15512,24514,25526,23920,13706,13475,7483];
+const z4n = [446,1998,21361,24639,61769,13439,8655,8068,7340];
+
+// CPI line from Z1 2017 base
 const cpiFactors = [1.000,1.016,1.033,1.059,1.090,1.161,1.232,1.264,1.280];
-const z1cpi = z1.map((v,i) => +(6.80 * cpiFactors[i]).toFixed(2));
-
-// Volume shares
-const shares = {
-  z1: [93.4,86.8,39.4,52.9,25.8,47.6,57.3,68.3,34.3],
-  z2: [1.0,5.4,24.9,22.5,15.6,30.0,21.4,11.2,30.5],
-  z3: [1.4,5.3,20.7,14.2,40.6,11.7,18.7,9.1,17.0],
-  z4: [2.0,1.3,13.6,3.7,16.1,7.7,6.1,1.2,13.7],
-  other:[2.2,1.2,1.4,6.7,1.9,3.0,-3.5,10.2,4.5]
-};
-// Fix: compute other as remainder
-shares.other = shares.z1.map((_,i) => +(100 - shares.z1[i] - shares.z2[i] - shares.z3[i] - shares.z4[i]).toFixed(1));
+const z1cpi = cpiFactors.map(f => +(6.84 * f).toFixed(2));
 
 const baseOpts = {
   responsive: true,
   interaction: { mode: 'index', intersect: false },
   plugins: { legend: { position: 'bottom' } }
 };
+const dollar = v => '$' + (v||0).toFixed(2);
 
-// Chart 1: Absolute prices
-new Chart(document.getElementById('priceChart'), {
+// Chart 1: Base rates
+new Chart(document.getElementById('baseChart'), {
   type: 'line',
   data: {
     labels: years,
     datasets: [
-      { label: 'Zone 1', data: z1, borderColor: '#2563eb', backgroundColor: '#2563eb20', borderWidth: 3, pointRadius: 5, tension: 0.3 },
-      { label: 'Zone 2', data: z2, borderColor: '#16a34a', backgroundColor: '#16a34a20', borderWidth: 3, pointRadius: 5, tension: 0.3, spanGaps: false },
-      { label: 'Zone 3', data: z3, borderColor: '#ea580c', backgroundColor: '#ea580c20', borderWidth: 3, pointRadius: 5, tension: 0.3, spanGaps: false },
-      { label: 'Zone 4', data: z4, borderColor: '#9333ea', backgroundColor: '#9333ea20', borderWidth: 3, pointRadius: 5, tension: 0.3, spanGaps: false },
-      { label: 'Z1 if CPI only', data: z1cpi, borderColor: '#999', borderDash: [6,4], borderWidth: 2, pointRadius: 0, tension: 0.3 }
+      { label: 'Z1 Base', data: z1b, borderColor: '#2563eb', backgroundColor: '#2563eb15', borderWidth: 3, pointRadius: 5, tension: 0.3, fill: false },
+      { label: 'Z2 Base', data: z2b, borderColor: '#16a34a', borderWidth: 3, pointRadius: 5, tension: 0.3, spanGaps: false },
+      { label: 'Z3 Base', data: z3b, borderColor: '#ea580c', borderWidth: 3, pointRadius: 5, tension: 0.3, spanGaps: false },
+      { label: 'Z4 Base', data: z4b, borderColor: '#9333ea', borderWidth: 3, pointRadius: 5, tension: 0.3, spanGaps: false },
+      { label: 'Z1 if CPI only', data: z1cpi, borderColor: '#aaa', borderDash: [6,4], borderWidth: 2, pointRadius: 0, tension: 0.3 }
     ]
   },
   options: {
     ...baseOpts,
-    scales: {
-      y: { title: { display: true, text: 'Price per delivery ($)' }, beginAtZero: false,
-        ticks: { callback: v => '$' + v.toFixed(2) }
-      }
-    },
+    scales: { y: { title: { display: true, text: 'Base rate per delivery ($, ex fuel)' }, beginAtZero: false, ticks: { callback: v => '$'+v.toFixed(2) } } },
+    plugins: { ...baseOpts.plugins, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + dollar(ctx.parsed.y) } } }
+  }
+});
+
+// Chart 2: Z1 base vs total
+new Chart(document.getElementById('fuelChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [
+      { label: 'Z1 Total (incl fuel)', data: z1t, borderColor: '#ef4444', backgroundColor: '#ef444420', borderWidth: 2.5, pointRadius: 4, tension: 0.3, fill: '+1' },
+      { label: 'Z1 Base (ex fuel)', data: z1b, borderColor: '#2563eb', borderWidth: 3, pointRadius: 5, tension: 0.3 },
+      { label: 'CPI from 2017', data: z1cpi, borderColor: '#aaa', borderDash: [6,4], borderWidth: 2, pointRadius: 0, tension: 0.3 }
+    ]
+  },
+  options: {
+    ...baseOpts,
+    scales: { y: { title: { display: true, text: '$ per delivery' }, beginAtZero: false, ticks: { callback: v => '$'+v.toFixed(2) } } },
     plugins: {
       ...baseOpts.plugins,
-      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + (ctx.parsed.y||0).toFixed(2) } }
+      tooltip: { callbacks: { 
+        label: ctx => {
+          const l = ctx.dataset.label + ': ' + dollar(ctx.parsed.y);
+          if (ctx.datasetIndex === 0 && z1b[ctx.dataIndex]) {
+            const faf = ((z1t[ctx.dataIndex]/z1b[ctx.dataIndex])-1)*100;
+            return l + (faf > 0.5 ? ` (FAF: +${faf.toFixed(1)}%)` : ' (no fuel)');
+          }
+          return l;
+        }
+      }}
     }
   }
 });
 
-// Chart 2: Indexed
-function indexSeries(arr) {
-  const base = arr.find(v => v !== null);
-  return arr.map(v => v !== null ? +((v / base) * 100).toFixed(1) : null);
+// Chart 3: Indexed
+function idx(arr, baseYr) {
+  const bi = years.indexOf(baseYr);
+  const base = arr[bi];
+  if (!base) return arr.map(() => null);
+  return arr.map(v => v !== null ? +((v/base)*100).toFixed(1) : null);
 }
-const iz1 = indexSeries(z1);
-const iz2 = indexSeries(z2);
-const iz3 = indexSeries(z3);
-const iz4 = indexSeries(z4);
-const icpi = cpiFactors.map(f => +(f * 100).toFixed(1));
-
 new Chart(document.getElementById('indexChart'), {
   type: 'line',
   data: {
     labels: years,
     datasets: [
-      { label: 'Z1 (base 2017)', data: iz1, borderColor: '#2563eb', borderWidth: 3, pointRadius: 4, tension: 0.3 },
-      { label: 'Z2 (base 2019)', data: iz2, borderColor: '#16a34a', borderWidth: 3, pointRadius: 4, tension: 0.3, spanGaps: false },
-      { label: 'Z3 (base 2019)', data: iz3, borderColor: '#ea580c', borderWidth: 3, pointRadius: 4, tension: 0.3, spanGaps: false },
-      { label: 'Z4 (base 2022)', data: iz4, borderColor: '#9333ea', borderWidth: 3, pointRadius: 4, tension: 0.3, spanGaps: false },
-      { label: 'NZ CPI', data: icpi, borderColor: '#999', borderDash: [6,4], borderWidth: 2, pointRadius: 0, tension: 0.3 }
+      { label: 'Z1 (base 2017)', data: idx(z1b, 2017), borderColor: '#2563eb', borderWidth: 3, pointRadius: 4, tension: 0.3 },
+      { label: 'Z2 (base 2020)', data: idx(z2b, 2020), borderColor: '#16a34a', borderWidth: 3, pointRadius: 4, tension: 0.3, spanGaps: false },
+      { label: 'Z3 (base 2017)', data: idx(z3b, 2017), borderColor: '#ea580c', borderWidth: 3, pointRadius: 4, tension: 0.3, spanGaps: false },
+      { label: 'Z4 (base 2017)', data: idx(z4b, 2017), borderColor: '#9333ea', borderWidth: 3, pointRadius: 4, tension: 0.3, spanGaps: false },
+      { label: 'NZ CPI', data: cpiFactors.map(f => +(f*100).toFixed(1)), borderColor: '#aaa', borderDash: [6,4], borderWidth: 2, pointRadius: 0, tension: 0.3 }
     ]
   },
   options: {
@@ -182,25 +232,31 @@ new Chart(document.getElementById('indexChart'), {
   }
 });
 
-// Chart 3: Stacked area - volume share
+// Chart 4: Volume share
+const totalN = years.map((_,i) => z1n[i]+z2n[i]+z3n[i]+z4n[i]);
+const otherN = years.map((_,i) => {
+  const all = [21937+238+446+862, 41868+2584+1998+1805, 24551+15512+21361+906, 34438+23082+24514+24639+2122, 30697+917+25526+61769+3632, 29647+26626+23920+13439+3868, 20666+16965+13706+8655+3398, 20055+18526+13475+8068+7251, 18358+16098+7483+7340+4342];
+  return all[i] - z1n[i] - z2n[i] - z3n[i] - z4n[i];
+});
+function pct(arr) { return arr.map((v,i) => { const t = z1n[i]+z2n[i]+z3n[i]+z4n[i]+otherN[i]; return t > 0 ? +(v/t*100).toFixed(1) : 0; }); }
+
 new Chart(document.getElementById('shareChart'), {
-  type: 'line',
+  type: 'bar',
   data: {
     labels: years,
     datasets: [
-      { label: 'Zone 1', data: shares.z1, borderColor: '#2563eb', backgroundColor: '#2563eb40', fill: true, tension: 0.3 },
-      { label: 'Zone 2', data: shares.z2, borderColor: '#16a34a', backgroundColor: '#16a34a40', fill: true, tension: 0.3 },
-      { label: 'Zone 3', data: shares.z3, borderColor: '#ea580c', backgroundColor: '#ea580c40', fill: true, tension: 0.3 },
-      { label: 'Zone 4', data: shares.z4, borderColor: '#9333ea', backgroundColor: '#9333ea40', fill: true, tension: 0.3 },
-      { label: 'Z5+', data: shares.other, borderColor: '#6b7280', backgroundColor: '#6b728040', fill: true, tension: 0.3 }
+      { label: 'Z1', data: pct(z1n), backgroundColor: '#2563eb' },
+      { label: 'Z2', data: pct(z2n), backgroundColor: '#16a34a' },
+      { label: 'Z3', data: pct(z3n), backgroundColor: '#ea580c' },
+      { label: 'Z4', data: pct(z4n), backgroundColor: '#9333ea' },
+      { label: 'Z5+', data: pct(otherN), backgroundColor: '#6b7280' }
     ]
   },
   options: {
     ...baseOpts,
     scales: {
-      y: { stacked: true, title: { display: true, text: '% of Sunday deliveries' }, max: 100,
-        ticks: { callback: v => v + '%' }
-      }
+      x: { stacked: true },
+      y: { stacked: true, title: { display: true, text: '% of Sunday deliveries' }, max: 100, ticks: { callback: v => v + '%' } }
     }
   }
 });
