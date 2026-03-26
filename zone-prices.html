@@ -142,7 +142,7 @@
   <div class="chart-wrap"><div class="chart-title">Zone Volume Share</div><div class="chart-sub">Z4 (Cambridge, Matamata, Rotorua) grew from 25% to 35% — the biggest driver of headline price increase.</div><canvas id="hamShareChart" height="260"></canvas></div>
 
   <div class="note">
-    <strong>Top suburbs (2024):</strong> Bethlehem Z1 $8.54 · Chartwell Z1 $8.53 · Hamilton East Z1 $8.55 · Flagstaff Z1 $8.41 · Mt Maunganui Z2 $8.94 · Cambridge Z4 $19.77 · Matamata Z4 $18.04 · Te Puna Z5 $25.24
+    <strong>Top suburbs (2025):</strong> Mt Maunganui 658 jobs $9.92 · Papamoa 422 $10.04 · Cambridge 369 $22.02 · Frankton 314 $5.29 · Tauranga 298 $17.59 · Hamilton East 200 $8.65 · Bethlehem 195 $9.85 · Flagstaff 177 $8.95
     <br><br>
     <strong>Volume collapse:</strong> 20,658 jobs (2021 peak) → 8,083 (2024) = <strong>-61%</strong>. Z1 metro share dropped from 64% to 21%.
   </div>
@@ -165,7 +165,7 @@
   <div class="chart-wrap"><div class="chart-title">Zone Volume Share</div><div class="chart-sub">83%+ metro through 2023. 2024 Z2 jump (72%) reflects zone reclassification, not a rate increase.</div><canvas id="welShareChart" height="260"></canvas></div>
 
   <div class="note">
-    <strong>Top suburbs (2024):</strong> Ngaio Z1 $8.92 · Whitby Z1 $9.01 · Karori Z2 $9.47 · Island Bay Z2 $9.46 · Paraparaumu Z3 $12.02 · Eastbourne Z3 $12.13
+    <strong>Top suburbs (2025):</strong> Karori 495 jobs $9.86 · Island Bay 430 $9.80 · Mt Victoria 384 $9.85 · Khandallah 377 $9.31 · Wadestown 361 $9.80 · Thorndon 357 $9.79 · Paraparaumu 347 $12.66 · Hataitai 315 $9.83
     <br><br>
     <strong>Volume collapse:</strong> 32,246 jobs (2021 peak) → 12,769 (2024) = <strong>-60%</strong>. Metro share remained stable until 2024 zone reclassification.
   </div>
@@ -188,7 +188,7 @@
   <div class="chart-wrap"><div class="chart-title">Zone Volume Share</div><div class="chart-sub">Z3 (satellite towns) grew from 9% to 27% — the biggest driver of Christchurch average price increase.</div><canvas id="chcShareChart" height="260"></canvas></div>
 
   <div class="note">
-    <strong>Top suburbs (2024):</strong> St Albans Z1 $8.43 · Fendalton Z1 $8.45 · Strowan Z1 $8.42 · Merivale Z1 $8.43 · Rolleston Z3 $13.29 · Lincoln Z3 $13.99 · Rangiora Z3 $13.04
+    <strong>Top suburbs (2025):</strong> St Albans 305 jobs $10.00 · Halswell 215 $10.59 · Rangiora 212 $15.19 · Rolleston 210 $16.29 · Fendalton 203 $10.24 · Lincoln 185 $15.46 · Northwood 182 $10.61 · Cashmere 159 $10.33
     <br><br>
     <strong>Volume collapse:</strong> 21,595 jobs (2020 peak) → 8,071 (2024) = <strong>-63%</strong>. Z1 metro dropped from 84% to 58%.
   </div>
@@ -335,19 +335,19 @@ new Chart(document.getElementById('shareChart'), {
 // HAMILTON / TAURANGA
 // ============================================================
 const hamYears = [2018,2019,2020,2021,2022,2023,2024,2025];
-const hamZ1 = [8.25,8.25,8.12,7.90,7.60,8.43,8.48,8.52];
-const hamZ2 = [9.03,8.87,9.03,8.84,8.81,9.08,8.98,9.24];
-const hamZ3 = [9.50,10.70,9.99,11.06,11.66,10.02,10.82,9.51];
-const hamZ4 = [19.44,19.24,19.21,18.21,17.08,18.02,17.91,18.66];
-const hamZ5 = [null,null,null,26.51,26.46,26.08,26.72,29.37];
-const hamZ6 = [null,null,null,null,43.60,36.61,39.16,35.54];
+const hamZ1 = [8.25,8.25,8.12,7.90,7.60,8.43,8.48,7.78];
+const hamZ2 = [9.03,8.87,9.03,8.84,8.81,9.08,8.98,9.20];
+const hamZ3 = [9.50,10.70,9.99,11.06,11.66,10.02,10.82,11.08];
+const hamZ4 = [19.44,19.24,19.21,18.21,17.08,18.02,17.91,19.07];
+const hamZ5 = [null,null,null,26.51,26.46,26.08,26.72,27.56];
+const hamZ6 = [null,null,null,null,43.60,36.61,39.16,35.65];
 const hamCpi = [1.000,1.016,1.042,1.072,1.140,1.210,1.240,1.270].map(f => +(8.25*f).toFixed(2));
-const hamZ1n = [0.563,0.633,0.536,0.642,0.598,0.149,0.211,0.313];
-const hamZ2n = [0.131,0.072,0.108,0.024,0.055,0.271,0.339,0.249];
-const hamZ3n = [0.054,0.015,0.113,0.082,0.070,0.194,0.059,0.207];
-const hamZ4n = [0.252,0.279,0.243,0.218,0.242,0.283,0.346,0.148];
-const hamZ5n = [0,0,0,0.033,0.022,0.091,0.032,0.028];
-const hamZ6n = [0,0,0,0,0.013,0.012,0.014,0.055];
+const hamZ1n = [0.563,0.633,0.536,0.642,0.598,0.149,0.211,0.312];
+const hamZ2n = [0.131,0.072,0.108,0.024,0.055,0.271,0.339,0.250];
+const hamZ3n = [0.054,0.015,0.113,0.082,0.070,0.194,0.059,0.225];
+const hamZ4n = [0.252,0.279,0.243,0.218,0.242,0.283,0.346,0.130];
+const hamZ5n = [0,0,0,0.033,0.022,0.091,0.032,0.034];
+const hamZ6n = [0,0,0,0,0.013,0.012,0.014,0.048];
 
 new Chart(document.getElementById('hamBaseChart'), {
   type:'line', data:{ labels:hamYears, datasets:[
@@ -374,17 +374,17 @@ new Chart(document.getElementById('hamShareChart'), {
 // WELLINGTON
 // ============================================================
 const welYears = [2018,2019,2020,2021,2022,2023,2024,2025];
-const welZ1 = [8.47,8.33,8.12,7.99,7.95,8.22,8.87,8.83];
-const welZ2 = [9.27,9.22,9.40,9.83,10.48,10.23,9.42,9.30];
-const welZ3 = [12.64,13.00,12.59,11.47,12.84,10.91,12.09,12.21];
-const welZ4 = [13.83,null,14.21,21.07,null,18.95,15.18,14.32];
-const welZ5 = [null,null,null,null,34.10,null,32.30,33.82];
+const welZ1 = [8.47,8.33,8.12,7.99,7.95,8.22,8.87,8.81];
+const welZ2 = [9.27,9.22,9.40,9.83,10.48,10.23,9.42,9.27];
+const welZ3 = [12.64,13.00,12.59,11.47,12.84,10.91,12.09,12.34];
+const welZ4 = [13.83,null,14.21,21.07,null,18.95,15.18,13.79];
+const welZ5 = [null,null,null,null,34.10,null,32.30,33.73];
 const welCpi = [1.000,1.016,1.042,1.072,1.140,1.210,1.240,1.270].map(f => +(8.47*f).toFixed(2));
-const welZ1n = [0.639,0.711,0.839,0.828,0.841,0.824,0.128,0.210];
-const welZ2n = [0.227,0.153,0.025,0.052,0.129,0.024,0.721,0.669];
-const welZ3n = [0.107,0.135,0.130,0.113,0.027,0.130,0.125,0.107];
-const welZ4n = [0.028,0,0.005,0.005,0,0.013,0.016,0.001];
-const welZ5n = [0,0,0,0,0.003,0,0.011,0.005];
+const welZ1n = [0.639,0.711,0.839,0.828,0.841,0.824,0.128,0.168];
+const welZ2n = [0.227,0.153,0.025,0.052,0.129,0.024,0.721,0.607];
+const welZ3n = [0.107,0.135,0.130,0.113,0.027,0.130,0.125,0.111];
+const welZ4n = [0.028,0,0.005,0.005,0,0.013,0.016,0.105];
+const welZ5n = [0,0,0,0,0.003,0,0.011,0.009];
 
 new Chart(document.getElementById('welBaseChart'), {
   type:'line', data:{ labels:welYears, datasets:[
@@ -410,19 +410,19 @@ new Chart(document.getElementById('welShareChart'), {
 // CHRISTCHURCH
 // ============================================================
 const chcYears = [2019,2020,2021,2022,2023,2024,2025];
-const chcZ1 = [7.97,8.10,8.01,7.95,8.23,8.58,9.46];
+const chcZ1 = [7.97,8.10,8.01,7.95,8.23,8.58,9.42];
 const chcZ2 = [null,null,10.59,null,10.30,10.24,9.69];
-const chcZ3 = [12.28,12.56,12.81,12.04,12.53,13.16,13.52];
-const chcZ4 = [15.94,16.43,14.66,14.06,14.99,15.21,14.51];
-const chcZ5 = [19.85,19.63,17.62,19.09,20.28,17.95,19.19];
-const chcZ6 = [42.79,29.25,null,null,null,null,23.90];
+const chcZ3 = [12.28,12.56,12.81,12.04,12.53,13.16,13.50];
+const chcZ4 = [15.94,16.43,14.66,14.06,14.99,15.21,14.92];
+const chcZ5 = [19.85,19.63,17.62,19.09,20.28,17.95,20.42];
+const chcZ6 = [42.79,29.25,null,null,null,null,26.15];
 const chcCpi = [1.000,1.026,1.055,1.122,1.191,1.220,1.250].map(f => +(7.97*f).toFixed(2));
-const chcZ1n = [0.839,0.815,0.683,0.670,0.644,0.576,0.430];
-const chcZ2n = [0,0,0.127,0,0.024,0.090,0.198];
-const chcZ3n = [0.094,0.094,0.126,0.284,0.303,0.268,0.009];
-const chcZ4n = [0.039,0.060,0.048,0.015,0.016,0.026,0.318];
-const chcZ5n = [0.012,0.007,0.014,0.020,0.011,0.036,0.027];
-const chcZ6n = [0.016,0.014,0,0,0,0,0.019];
+const chcZ1n = [0.839,0.815,0.683,0.670,0.644,0.576,0.424];
+const chcZ2n = [0,0,0.127,0,0.024,0.090,0.141];
+const chcZ3n = [0.094,0.094,0.126,0.284,0.303,0.268,0.016];
+const chcZ4n = [0.039,0.060,0.048,0.015,0.016,0.026,0.335];
+const chcZ5n = [0.012,0.007,0.014,0.020,0.011,0.036,0.065];
+const chcZ6n = [0.016,0.014,0,0,0,0,0.020];
 
 new Chart(document.getElementById('chcBaseChart'), {
   type:'line', data:{ labels:chcYears, datasets:[
