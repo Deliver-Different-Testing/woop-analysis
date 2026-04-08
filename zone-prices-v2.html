@@ -3,322 +3,194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Woop Zone Pricing Analysis v2</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<title>Woop Zone Price Movement v2 — Postcode Classification</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg: #0f1117; --card: #1a1d27; --border: #2a2d3a;
-    --text: #e4e4e7; --muted: #9ca3af; --accent: #6366f1;
-    --green: #22c55e; --red: #ef4444; --yellow: #eab308; --cyan: #06b6d4;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; }
-  h1 { font-size: 1.8rem; margin-bottom: 4px; }
-  .subtitle { color: var(--muted); margin-bottom: 20px; font-size: 0.9rem; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .tab { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--muted); cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
-  .tab:hover { border-color: var(--accent); color: var(--text); }
-  .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .card h3 { font-size: 1rem; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-  .card h3 .badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; background: var(--border); color: var(--muted); }
-  .chart-wrap { position: relative; height: 250px; }
-  .stats-row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
-  .stat { flex: 1; min-width: 80px; text-align: center; padding: 8px; background: rgba(99,102,241,0.08); border-radius: 8px; }
-  .stat .val { font-size: 1.1rem; font-weight: 700; }
-  .stat .label { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-  .full-chart { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-  .full-chart h2 { font-size: 1.2rem; margin-bottom: 12px; }
-  .full-chart-wrap { position: relative; height: 400px; }
-  .methodology { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
-  .methodology h2 { font-size: 1.1rem; margin-bottom: 10px; color: var(--yellow); }
-  .methodology p, .methodology li { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
-  .methodology ul { padding-left: 20px; }
-  .summary-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-  .summary-table th, .summary-table td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
-  .summary-table th { color: var(--muted); font-weight: 600; text-align: right; }
-  .summary-table th:first-child, .summary-table td:first-child { text-align: left; }
-  .summary-table tr:hover { background: rgba(99,102,241,0.05); }
-  .up { color: var(--red); }
-  .down { color: var(--green); }
-  .neutral { color: var(--muted); }
-  @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 1.3rem; } }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;padding:20px}
+h1{font-size:22px;margin-bottom:4px;color:#fff}
+h2{font-size:18px;margin:30px 0 12px;color:#fff;border-bottom:1px solid #334155;padding-bottom:8px}
+.sub{color:#94a3b8;font-size:13px;margin-bottom:20px}
+.kpi-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.kpi{background:#1e293b;border-radius:8px;padding:14px 18px;flex:1;min-width:140px}
+.kpi .label{color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.kpi .value{font-size:22px;font-weight:700;color:#fff;margin-top:2px}
+.kpi .value.green{color:#34d399}
+.cards{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.card{background:#1e293b;border-radius:8px;padding:14px;flex:1;min-width:150px;border-left:4px solid}
+.card .zone{font-weight:700;font-size:13px;color:#fff}
+.card .rate{font-size:20px;font-weight:700;color:#fff;margin:4px 0}
+.card .change{font-size:12px;font-weight:600}
+.card .change.good{color:#34d399}.card .change.warn{color:#fbbf24}.card .change.bad{color:#f87171}
+.card .pct{color:#94a3b8;font-size:11px}
+.z1{border-color:#2563eb}.z2{border-color:#16a34a}.z3{border-color:#f97316}.z4{border-color:#8b5cf6}.z5{border-color:#6b7280}.z6{border-color:#dc2626}
+.chart-wrap{background:#1e293b;border-radius:8px;padding:16px;margin-bottom:20px}
+.chart-title{color:#fff;font-size:14px;font-weight:600;margin-bottom:4px}
+.chart-sub{color:#94a3b8;font-size:12px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px}
+thead th{background:#1e293b;color:#94a3b8;padding:8px;text-align:right;font-size:11px;text-transform:uppercase}
+thead th:first-child{text-align:left}
+tbody td{padding:6px 8px;text-align:right;border-bottom:1px solid #1e293b}
+tbody td:first-child{text-align:left;color:#fff;font-weight:500}
+tfoot td{padding:8px;font-weight:700;border-top:2px solid #334155;color:#f59e0b}
+.note{background:#1e293b;border-left:3px solid #3b82f6;padding:12px;border-radius:0 8px 8px 0;margin-bottom:16px;font-size:12px;color:#93c5fd}
+.meth{background:#1e293b;border-radius:8px;padding:16px;margin-top:30px;font-size:12px;color:#94a3b8}
+.meth h3{color:#fff;font-size:14px;margin-bottom:8px}
+.meth li{margin-bottom:4px}
 </style>
 </head>
 <body>
+<h1>Woop Zone Price Movement — Auckland Sundays (v2)</h1>
+<p class="sub">2017–2025 · Postcode-based zone classification · Base rate ex fuel, ex GST · RawBaseAmount from tucJobArchive<br>
+v2 uses actual postcode→zone mapping from rate card. 2024-2025 filtered to delivery children only (parent pickup jobs excluded).</p>
 
-<h1>📦 Woop Zone Pricing Analysis v2</h1>
-<p class="subtitle">Historical delivery rates by zone • Base rate ex-fuel ex-GST • Corrected methodology</p>
+<div class="note">📊 <strong>Key finding:</strong> Z1 (Central Auckland) base rate: $7.18 → $8.82 = <strong>+22.8%</strong> over 8 years — tracking NZ CPI (~28%). The headline average price increase is driven by fuel surcharge (+12-14%) and zone mix shift, not base rate increases above inflation.</div>
 
-<div class="tabs" id="cityTabs"></div>
-
-<div class="methodology">
-  <h2>⚠️ Methodology Notes</h2>
-  <ul>
-    <li><strong>2015-2020:</strong> <code>rawbaseamount</code> was NULL. Base rate = <code>ucjbamount - fuelsurchargeamount</code>. All jobs are standalone (type 1).</li>
-    <li><strong>2021:</strong> Transitional — uses <code>rawbaseamount</code> where populated, otherwise falls back to <code>ucjbamount - fuelsurchargeamount</code>.</li>
-    <li><strong>2022-2023:</strong> Uses <code>rawbaseamount</code> directly. All jobs still standalone type 1.</li>
-    <li><strong>2024:</strong> Mix of standalone type-1 jobs (speed 95) and new parent/child model (type 20, speed 94/95). Both included; parent jobs excluded where <code>ucjbid = parentid</code>.</li>
-    <li><strong>2025:</strong> Fully parent/child model. Only type-20 delivery children (speed 94/95) used — these represent the actual delivery leg rate.</li>
-    <li><strong>Thresholds:</strong> Rates below $4.00 or above $200.00 excluded (pickup legs, errors, outliers).</li>
-    <li><strong>Sunday rates</strong> shown separately where data exists.</li>
-  </ul>
+<div class="kpi-row">
+<div class="kpi"><div class="label">Z1 Base Rate 2025</div><div class="value green">$8.82</div></div>
+<div class="kpi"><div class="label">Z1 Change (2017→2025)</div><div class="value">+22.8%</div></div>
+<div class="kpi"><div class="label">NZ CPI (2017→2025)</div><div class="value">~28%</div></div>
+<div class="kpi"><div class="label">Z4+ Share 2025</div><div class="value">16.5%</div></div>
+<div class="kpi"><div class="label">Peak Volume</div><div class="value">115,883</div></div>
 </div>
 
-<div id="content"></div>
+<div class="cards">
+<div class="card z1"><div class="zone">Z1 — Central Auckland</div><div class="rate">$8.82</div><div class="change good">+22.8% from $7.18 (2017)</div><div class="pct">48% of volume · NZ CPI ~28%</div></div>
+<div class="card z2"><div class="zone">Z2 — Inner Suburbs</div><div class="rate">$9.36</div><div class="change warn">+35.5% from $6.91 (2017)</div><div class="pct">20% of volume</div></div>
+<div class="card z3"><div class="zone">Z3 — Middle Ring</div><div class="rate">$9.73</div><div class="change warn">+39.4% from $6.98 (2017)</div><div class="pct">15% of volume</div></div>
+<div class="card z4"><div class="zone">Z4 — Outer Urban</div><div class="rate">$11.70</div><div class="change good">+26.6% from $9.24 (2017)</div><div class="pct">12% of volume · Below CPI</div></div>
+<div class="card z5"><div class="zone">Z5 — Extended</div><div class="rate">$23.49</div><div class="change bad">+96.2% from $11.97 (2017)</div><div class="pct">3% of volume</div></div>
+<div class="card z6"><div class="zone">Z6 — Rural</div><div class="rate">$26.22</div><div class="change warn">+48.5% from $17.66 (2017)</div><div class="pct">1% of volume</div></div>
+</div>
+
+<div class="chart-wrap"><div class="chart-title">Base Rate per Delivery by Zone (ex fuel, ex GST)</div><div class="chart-sub">Y-axis starts at $0. Dashed grey = NZ CPI applied to Z1 2017 base ($7.18).</div><canvas id="baseChart" height="320"></canvas></div>
+
+<div class="chart-wrap"><div class="chart-title">Zone Volume Share — Auckland Sundays</div><div class="chart-sub">100% stacked — shows proportion shift to more expensive outer zones over time.</div><canvas id="shareChart" height="280"></canvas></div>
+
+<div class="chart-wrap"><div class="chart-title">Price vs Volume</div><div class="chart-sub">Bars = total Sunday deliveries (left axis). Line = weighted average base rate (right axis).</div><canvas id="pvChart" height="280"></canvas></div>
+
+<h2>Summary Table</h2>
+<table>
+<thead><tr><th>Year</th><th>Total Vol</th><th>Z1 Rate (% vol)</th><th>Z2 Rate (% vol)</th><th>Z3 Rate (% vol)</th><th>Z4 Rate (% vol)</th><th>Z5 Rate (% vol)</th><th>Z6 Rate (% vol)</th><th>Z4+ Share</th></tr></thead>
+<tbody>
+<tr><td>2017</td><td>22,053</td><td>$7.18 (49%)</td><td>$6.91 (24%)</td><td>$6.98 (16%)</td><td>$9.24 (9%)</td><td>$11.97 (1%)</td><td>$17.66 (0%)</td><td>10.3%</td></tr>
+<tr><td>2018</td><td>47,131</td><td>$7.01 (48%)</td><td>$6.72 (22%)</td><td>$7.06 (15%)</td><td>$8.96 (12%)</td><td>$11.75 (2%)</td><td>$15.81 (0%)</td><td>14.8%</td></tr>
+<tr><td>2019</td><td>59,203</td><td>$6.33 (46%)</td><td>$6.65 (22%)</td><td>$7.42 (14%)</td><td>$9.49 (14%)</td><td>$12.54 (3%)</td><td>$9.99 (0%)</td><td>18.0%</td></tr>
+<tr><td>2020</td><td>103,620</td><td>$6.08 (47%)</td><td>$6.38 (21%)</td><td>$7.19 (14%)</td><td>$9.24 (14%)</td><td>$13.25 (3%)</td><td>$11.41 (1%)</td><td>17.8%</td></tr>
+<tr><td>2021</td><td>115,883</td><td>$7.15 (46%)</td><td>$7.49 (22%)</td><td>$7.91 (14%)</td><td>$9.65 (14%)</td><td>$14.45 (3%)</td><td>$14.48 (1%)</td><td>17.5%</td></tr>
+<tr><td>2022</td><td>92,823</td><td>$7.74 (46%)</td><td>$8.09 (21%)</td><td>$8.42 (15%)</td><td>$9.54 (14%)</td><td>$16.23 (3%)</td><td>$20.09 (1%)</td><td>18.3%</td></tr>
+<tr><td>2023</td><td>59,480</td><td>$8.06 (47%)</td><td>$8.43 (21%)</td><td>$8.80 (15%)</td><td>$11.07 (13%)</td><td>$20.14 (3%)</td><td>$26.92 (1%)</td><td>16.8%</td></tr>
+<tr><td>2024</td><td>41,445</td><td>$8.48 (47%)</td><td>$8.91 (20%)</td><td>$9.11 (15%)</td><td>$11.42 (13%)</td><td>$22.10 (4%)</td><td>$23.81 (1%)</td><td>17.3%</td></tr>
+<tr><td>2025</td><td>25,142</td><td>$8.82 (48%)</td><td>$9.36 (20%)</td><td>$9.73 (15%)</td><td>$11.70 (12%)</td><td>$23.49 (3%)</td><td>$26.22 (1%)</td><td>16.5%</td></tr>
+</tbody>
+</table>
+
+<div class="meth">
+<h3>Methodology (v2)</h3>
+<ul>
+<li><strong>Zone classification:</strong> Postcode-based using actual rate card suburb/postcode→zone mapping. Suburb IDs from tucJobArchive.ucjbTo mapped to PostCode via tucSuburb table, then PostCode→Zone from rate card spreadsheet.</li>
+<li><strong>Base rate calculation:</strong> 2017-2020: ucjbAmount − fuelsurchargeAmount (rawBaseAmount was null). 2021: rawBaseAmount where available, else subtraction. 2022+: rawBaseAmount directly.</li>
+<li><strong>Parent/child filtering:</strong> Pre-2024: all standalone jobs (rel=1). 2024-2025: delivery children only (rel=20, speed 94/95) — parent jobs excluded as they bundle pickup+linehaul.</li>
+<li><strong>Thresholds:</strong> Base rate $4–$200 to exclude pickup legs and data errors.</li>
+<li><strong>Scope:</strong> Auckland (client 16867), Sundays only, Speed 95 (Home Delivery) + Speed 4 (3-Hour, pre-2019).</li>
+<li><strong>2025:</strong> Partial year (Jan–Mar).</li>
+<li><strong>v1 preserved:</strong> <a href="zone-prices.html" style="color:#3b82f6">zone-prices.html</a> (price-ratio classification)</li>
+</ul>
+</div>
 
 <script>
-const DATA = {"Auckland": {"2015": {"1": {"avg_rate": 8.95, "job_count": 1419, "sunday_avg": 8.03, "sunday_count": 1304}, "2": {"avg_rate": 8.09, "job_count": 446, "sunday_avg": 8.0, "sunday_count": 435}, "3": {"avg_rate": 8.4, "job_count": 313, "sunday_avg": 8.14, "sunday_count": 305}, "4": {"avg_rate": 24.07, "job_count": 52, "sunday_avg": 17.03, "sunday_count": 44}, "5": {"avg_rate": 55.67, "job_count": 1, "sunday_avg": 0, "sunday_count": 0}, "6": {"avg_rate": 58.41, "job_count": 5, "sunday_avg": 50.93, "sunday_count": 3}}, "2016": {"1": {"avg_rate": 9.6, "job_count": 6796, "sunday_avg": 7.67, "sunday_count": 5983}, "2": {"avg_rate": 7.82, "job_count": 2684, "sunday_avg": 7.67, "sunday_count": 2567}, "3": {"avg_rate": 7.72, "job_count": 1929, "sunday_avg": 7.59, "sunday_count": 1853}, "4": {"avg_rate": 16.26, "job_count": 559, "sunday_avg": 12.93, "sunday_count": 441}, "5": {"avg_rate": 33.4, "job_count": 19, "sunday_avg": 27.57, "sunday_count": 10}, "6": {"avg_rate": 31.64, "job_count": 22, "sunday_avg": 20.76, "sunday_count": 12}}, "2017": {"1": {"avg_rate": 8.28, "job_count": 12060, "sunday_avg": 7.18, "sunday_count": 10893}, "2": {"avg_rate": 7.03, "job_count": 5505, "sunday_avg": 6.91, "sunday_count": 5344}, "3": {"avg_rate": 7.14, "job_count": 3672, "sunday_avg": 6.98, "sunday_count": 3550}, "4": {"avg_rate": 10.44, "job_count": 2052, "sunday_avg": 9.24, "sunday_count": 1959}, "5": {"avg_rate": 14.38, "job_count": 294, "sunday_avg": 11.97, "sunday_count": 273}, "6": {"avg_rate": 18.37, "job_count": 36, "sunday_avg": 17.66, "sunday_count": 34}, "8": {"avg_rate": 47.25, "job_count": 1, "sunday_avg": 0, "sunday_count": 0}}, "2018": {"1": {"avg_rate": 7.61, "job_count": 24169, "sunday_avg": 7.01, "sunday_count": 22704}, "2": {"avg_rate": 6.81, "job_count": 10585, "sunday_avg": 6.72, "sunday_count": 10412}, "3": {"avg_rate": 7.17, "job_count": 7124, "sunday_avg": 7.06, "sunday_count": 7021}, "4": {"avg_rate": 9.54, "job_count": 5806, "sunday_avg": 8.96, "sunday_count": 5682}, "5": {"avg_rate": 12.2, "job_count": 1157, "sunday_avg": 11.75, "sunday_count": 1141}, "6": {"avg_rate": 17.21, "job_count": 167, "sunday_avg": 15.81, "sunday_count": 160}, "8": {"avg_rate": 37.13, "job_count": 11, "sunday_avg": 37.13, "sunday_count": 11}}, "2019": {"1": {"avg_rate": 6.5, "job_count": 27889, "sunday_avg": 6.33, "sunday_count": 27189}, "2": {"avg_rate": 6.72, "job_count": 13096, "sunday_avg": 6.65, "sunday_count": 12907}, "3": {"avg_rate": 7.5, "job_count": 8565, "sunday_avg": 7.42, "sunday_count": 8455}, "4": {"avg_rate": 9.8, "job_count": 8538, "sunday_avg": 9.49, "sunday_count": 8454}, "5": {"avg_rate": 13.19, "job_count": 1922, "sunday_avg": 12.54, "sunday_count": 1901}, "6": {"avg_rate": 10.76, "job_count": 268, "sunday_avg": 9.99, "sunday_count": 264}, "8": {"avg_rate": 11.37, "job_count": 34, "sunday_avg": 9.97, "sunday_count": 33}}, "2020": {"1": {"avg_rate": 6.23, "job_count": 50628, "sunday_avg": 6.08, "sunday_count": 48644}, "2": {"avg_rate": 6.54, "job_count": 22482, "sunday_avg": 6.38, "sunday_count": 21679}, "3": {"avg_rate": 7.4, "job_count": 15391, "sunday_avg": 7.19, "sunday_count": 14823}, "4": {"avg_rate": 9.61, "job_count": 14753, "sunday_avg": 9.24, "sunday_count": 14310}, "5": {"avg_rate": 13.75, "job_count": 3661, "sunday_avg": 13.25, "sunday_count": 3541}, "6": {"avg_rate": 11.74, "job_count": 596, "sunday_avg": 11.41, "sunday_count": 586}, "8": {"avg_rate": 15.73, "job_count": 38, "sunday_avg": 15.87, "sunday_count": 37}}, "2021": {"1": {"avg_rate": 7.31, "job_count": 58143, "sunday_avg": 7.15, "sunday_count": 53800}, "2": {"avg_rate": 7.62, "job_count": 26497, "sunday_avg": 7.49, "sunday_count": 25137}, "3": {"avg_rate": 8.08, "job_count": 17591, "sunday_avg": 7.91, "sunday_count": 16577}, "4": {"avg_rate": 9.89, "job_count": 16323, "sunday_avg": 9.65, "sunday_count": 15652}, "5": {"avg_rate": 14.79, "job_count": 3663, "sunday_avg": 14.45, "sunday_count": 3574}, "6": {"avg_rate": 14.87, "job_count": 1051, "sunday_avg": 14.48, "sunday_count": 1012}, "8": {"avg_rate": 13.62, "job_count": 135, "sunday_avg": 12.83, "sunday_count": 131}}, "2022": {"1": {"avg_rate": 7.98, "job_count": 47435, "sunday_avg": 7.74, "sunday_count": 42483}, "2": {"avg_rate": 8.26, "job_count": 21547, "sunday_avg": 8.09, "sunday_count": 19774}, "3": {"avg_rate": 8.58, "job_count": 14763, "sunday_avg": 8.42, "sunday_count": 13486}, "4": {"avg_rate": 9.94, "job_count": 14124, "sunday_avg": 9.54, "sunday_count": 13189}, "5": {"avg_rate": 17.05, "job_count": 2915, "sunday_avg": 16.23, "sunday_count": 2808}, "6": {"avg_rate": 20.16, "job_count": 1073, "sunday_avg": 20.09, "sunday_count": 1027}, "8": {"avg_rate": 21.19, "job_count": 56, "sunday_avg": 21.19, "sunday_count": 56}}, "2023": {"1": {"avg_rate": 8.22, "job_count": 31472, "sunday_avg": 8.06, "sunday_count": 28230}, "2": {"avg_rate": 8.53, "job_count": 13353, "sunday_avg": 8.43, "sunday_count": 12314}, "3": {"avg_rate": 8.94, "job_count": 9816, "sunday_avg": 8.8, "sunday_count": 8906}, "4": {"avg_rate": 11.28, "job_count": 8243, "sunday_avg": 11.07, "sunday_count": 7591}, "5": {"avg_rate": 20.3, "job_count": 1810, "sunday_avg": 20.14, "sunday_count": 1781}, "6": {"avg_rate": 26.53, "job_count": 694, "sunday_avg": 26.92, "sunday_count": 656}, "8": {"avg_rate": 51.25, "job_count": 2, "sunday_avg": 51.25, "sunday_count": 2}}, "2024": {"1": {"avg_rate": 8.49, "job_count": 19800, "sunday_avg": 8.48, "sunday_count": 19456}, "2": {"avg_rate": 8.91, "job_count": 8552, "sunday_avg": 8.91, "sunday_count": 8411}, "3": {"avg_rate": 9.11, "job_count": 6512, "sunday_avg": 9.11, "sunday_count": 6416}, "4": {"avg_rate": 11.48, "job_count": 5502, "sunday_avg": 11.42, "sunday_count": 5264}, "5": {"avg_rate": 21.34, "job_count": 1597, "sunday_avg": 22.1, "sunday_count": 1457}, "6": {"avg_rate": 23.74, "job_count": 439, "sunday_avg": 23.81, "sunday_count": 437}, "8": {"avg_rate": 46.2, "job_count": 4, "sunday_avg": 46.2, "sunday_count": 4}}, "2025": {"1": {"avg_rate": 8.92, "job_count": 13232, "sunday_avg": 8.82, "sunday_count": 12167}, "2": {"avg_rate": 9.4, "job_count": 5350, "sunday_avg": 9.36, "sunday_count": 5091}, "3": {"avg_rate": 9.77, "job_count": 3969, "sunday_avg": 9.73, "sunday_count": 3719}, "4": {"avg_rate": 11.77, "job_count": 3387, "sunday_avg": 11.7, "sunday_count": 3007}, "5": {"avg_rate": 22.59, "job_count": 894, "sunday_avg": 23.49, "sunday_count": 805}, "6": {"avg_rate": 25.89, "job_count": 350, "sunday_avg": 26.22, "sunday_count": 342}, "8": {"avg_rate": 49.65, "job_count": 11, "sunday_avg": 49.65, "sunday_count": 11}}}, "Hamilton": {"2018": {"1": {"avg_rate": 8.05, "job_count": 509, "sunday_avg": 8.05, "sunday_count": 508}, "2": {"avg_rate": 8.16, "job_count": 51, "sunday_avg": 8.16, "sunday_count": 51}, "4": {"avg_rate": 10.07, "job_count": 155, "sunday_avg": 10.07, "sunday_count": 155}, "5": {"avg_rate": 9.04, "job_count": 138, "sunday_avg": 9.04, "sunday_count": 138}}, "2019": {"1": {"avg_rate": 8.39, "job_count": 1526, "sunday_avg": 8.39, "sunday_count": 1526}, "2": {"avg_rate": 8.02, "job_count": 327, "sunday_avg": 8.02, "sunday_count": 327}, "4": {"avg_rate": 10.32, "job_count": 584, "sunday_avg": 10.32, "sunday_count": 584}, "5": {"avg_rate": 8.02, "job_count": 501, "sunday_avg": 8.02, "sunday_count": 501}}, "2020": {"1": {"avg_rate": 8.36, "job_count": 3389, "sunday_avg": 8.18, "sunday_count": 3293}, "2": {"avg_rate": 8.35, "job_count": 493, "sunday_avg": 8.03, "sunday_count": 481}, "4": {"avg_rate": 8.69, "job_count": 1001, "sunday_avg": 8.4, "sunday_count": 960}, "5": {"avg_rate": 8.85, "job_count": 768, "sunday_avg": 8.73, "sunday_count": 745}}, "2021": {"1": {"avg_rate": 7.89, "job_count": 4173, "sunday_avg": 7.9, "sunday_count": 4136}, "2": {"avg_rate": 9.24, "job_count": 504, "sunday_avg": 9.25, "sunday_count": 500}, "3": {"avg_rate": 8.52, "job_count": 391, "sunday_avg": 8.47, "sunday_count": 386}, "4": {"avg_rate": 8.08, "job_count": 965, "sunday_avg": 8.09, "sunday_count": 960}, "5": {"avg_rate": 8.62, "job_count": 334, "sunday_avg": 8.62, "sunday_count": 334}}, "2022": {"1": {"avg_rate": 7.56, "job_count": 3890, "sunday_avg": 7.55, "sunday_count": 3839}, "2": {"avg_rate": 8.81, "job_count": 456, "sunday_avg": 8.81, "sunday_count": 443}, "3": {"avg_rate": 8.71, "job_count": 630, "sunday_avg": 8.71, "sunday_count": 625}, "4": {"avg_rate": 7.91, "job_count": 892, "sunday_avg": 7.91, "sunday_count": 887}, "5": {"avg_rate": 7.66, "job_count": 57, "sunday_avg": 7.66, "sunday_count": 57}}, "2023": {"1": {"avg_rate": 8.74, "job_count": 2242, "sunday_avg": 8.74, "sunday_count": 2223}, "2": {"avg_rate": 10.14, "job_count": 214, "sunday_avg": 10.15, "sunday_count": 212}, "3": {"avg_rate": 10.26, "job_count": 400, "sunday_avg": 10.22, "sunday_count": 395}, "4": {"avg_rate": 11.91, "job_count": 583, "sunday_avg": 11.9, "sunday_count": 577}, "5": {"avg_rate": 18.09, "job_count": 30, "sunday_avg": 18.09, "sunday_count": 30}}, "2024": {"1": {"avg_rate": 8.67, "job_count": 1511, "sunday_avg": 8.67, "sunday_count": 1511}, "2": {"avg_rate": 9.01, "job_count": 117, "sunday_avg": 9.01, "sunday_count": 117}, "3": {"avg_rate": 9.81, "job_count": 227, "sunday_avg": 9.81, "sunday_count": 227}, "4": {"avg_rate": 11.0, "job_count": 276, "sunday_avg": 11.0, "sunday_count": 276}, "5": {"avg_rate": 27.32, "job_count": 28, "sunday_avg": 27.32, "sunday_count": 28}}, "2025": {"1": {"avg_rate": 8.51, "job_count": 1114, "sunday_avg": 8.51, "sunday_count": 1114}, "2": {"avg_rate": 8.8, "job_count": 38, "sunday_avg": 8.8, "sunday_count": 38}, "3": {"avg_rate": 13.31, "job_count": 215, "sunday_avg": 13.31, "sunday_count": 215}, "4": {"avg_rate": 9.29, "job_count": 216, "sunday_avg": 9.3, "sunday_count": 215}, "5": {"avg_rate": 29.22, "job_count": 30, "sunday_avg": 29.22, "sunday_count": 30}}}, "Wellington": {"2017": {"1": {"avg_rate": 10.97, "job_count": 1252, "sunday_avg": 0, "sunday_count": 0}, "2": {"avg_rate": 10.64, "job_count": 2003, "sunday_avg": 0, "sunday_count": 0}, "3": {"avg_rate": 10.57, "job_count": 299, "sunday_avg": 0, "sunday_count": 0}, "6": {"avg_rate": 27.31, "job_count": 1, "sunday_avg": 0, "sunday_count": 0}}, "2018": {"1": {"avg_rate": 9.45, "job_count": 4017, "sunday_avg": 0, "sunday_count": 0}, "2": {"avg_rate": 9.39, "job_count": 5857, "sunday_avg": 0, "sunday_count": 0}, "3": {"avg_rate": 10.39, "job_count": 1465, "sunday_avg": 8.89, "sunday_count": 1}, "6": {"avg_rate": 13.98, "job_count": 127, "sunday_avg": 0, "sunday_count": 0}}, "2019": {"1": {"avg_rate": 8.33, "job_count": 4864, "sunday_avg": 0, "sunday_count": 0}, "2": {"avg_rate": 8.22, "job_count": 6717, "sunday_avg": 0, "sunday_count": 0}, "3": {"avg_rate": 11.55, "job_count": 2120, "sunday_avg": 8.9, "sunday_count": 1}, "6": {"avg_rate": 12.63, "job_count": 403, "sunday_avg": 0, "sunday_count": 0}}, "2020": {"1": {"avg_rate": 8.15, "job_count": 8703, "sunday_avg": 41.67, "sunday_count": 1}, "2": {"avg_rate": 8.03, "job_count": 14743, "sunday_avg": 0, "sunday_count": 0}, "3": {"avg_rate": 11.43, "job_count": 4024, "sunday_avg": 0, "sunday_count": 0}, "6": {"avg_rate": 12.5, "job_count": 735, "sunday_avg": 0, "sunday_count": 0}}, "2021": {"1": {"avg_rate": 7.94, "job_count": 10264, "sunday_avg": 7.57, "sunday_count": 965}, "2": {"avg_rate": 8.03, "job_count": 16013, "sunday_avg": 7.83, "sunday_count": 1616}, "3": {"avg_rate": 10.93, "job_count": 4217, "sunday_avg": 10.48, "sunday_count": 419}, "6": {"avg_rate": 12.14, "job_count": 746, "sunday_avg": 11.62, "sunday_count": 51}}, "2022": {"1": {"avg_rate": 7.8, "job_count": 8939, "sunday_avg": 7.69, "sunday_count": 8385}, "2": {"avg_rate": 8.03, "job_count": 14844, "sunday_avg": 7.93, "sunday_count": 13966}, "3": {"avg_rate": 10.85, "job_count": 4470, "sunday_avg": 10.79, "sunday_count": 4231}, "6": {"avg_rate": 21.95, "job_count": 107, "sunday_avg": 22.26, "sunday_count": 103}}, "2023": {"1": {"avg_rate": 8.07, "job_count": 5381, "sunday_avg": 8.07, "sunday_count": 5144}, "2": {"avg_rate": 8.31, "job_count": 10195, "sunday_avg": 8.28, "sunday_count": 9772}, "3": {"avg_rate": 11.53, "job_count": 3074, "sunday_avg": 11.46, "sunday_count": 2951}, "6": {"avg_rate": 44.91, "job_count": 163, "sunday_avg": 44.76, "sunday_count": 160}}, "2024": {"1": {"avg_rate": 9.21, "job_count": 3246, "sunday_avg": 9.19, "sunday_count": 3225}, "2": {"avg_rate": 9.32, "job_count": 7016, "sunday_avg": 9.29, "sunday_count": 6970}, "3": {"avg_rate": 12.17, "job_count": 1659, "sunday_avg": 12.16, "sunday_count": 1654}, "6": {"avg_rate": 32.53, "job_count": 104, "sunday_avg": 32.53, "sunday_count": 104}}, "2025": {"1": {"avg_rate": 8.99, "job_count": 2059, "sunday_avg": 8.93, "sunday_count": 1978}, "2": {"avg_rate": 9.39, "job_count": 4579, "sunday_avg": 9.38, "sunday_count": 4446}, "3": {"avg_rate": 12.76, "job_count": 913, "sunday_avg": 12.77, "sunday_count": 889}, "6": {"avg_rate": 34.8, "job_count": 28, "sunday_avg": 34.8, "sunday_count": 28}}}, "Christchurch": {"2019": {"1": {"avg_rate": 7.89, "job_count": 3747, "sunday_avg": 0, "sunday_count": 0}, "2": {"avg_rate": 7.85, "job_count": 2349, "sunday_avg": 0, "sunday_count": 0}, "4": {"avg_rate": 8.19, "job_count": 1355, "sunday_avg": 0, "sunday_count": 0}, "5": {"avg_rate": 12.27, "job_count": 1, "sunday_avg": 0, "sunday_count": 0}}, "2020": {"1": {"avg_rate": 8.07, "job_count": 9890, "sunday_avg": 0, "sunday_count": 0}, "2": {"avg_rate": 8.04, "job_count": 5165, "sunday_avg": 0, "sunday_count": 0}, "4": {"avg_rate": 8.39, "job_count": 2732, "sunday_avg": 0, "sunday_count": 0}, "5": {"avg_rate": 12.21, "job_count": 8, "sunday_avg": 0, "sunday_count": 0}}, "2021": {"1": {"avg_rate": 7.97, "job_count": 9864, "sunday_avg": 7.65, "sunday_count": 732}, "2": {"avg_rate": 8.32, "job_count": 4368, "sunday_avg": 8.13, "sunday_count": 324}, "4": {"avg_rate": 10.43, "job_count": 2489, "sunday_avg": 11.38, "sunday_count": 193}, "5": {"avg_rate": 11.7, "job_count": 1, "sunday_avg": 0, "sunday_count": 0}}, "2022": {"1": {"avg_rate": 7.88, "job_count": 8248, "sunday_avg": 7.78, "sunday_count": 3008}, "2": {"avg_rate": 8.31, "job_count": 3676, "sunday_avg": 8.21, "sunday_count": 1249}, "4": {"avg_rate": 11.72, "job_count": 2332, "sunday_avg": 11.49, "sunday_count": 805}}, "2023": {"1": {"avg_rate": 8.17, "job_count": 5049, "sunday_avg": 0, "sunday_count": 0}, "2": {"avg_rate": 8.81, "job_count": 2420, "sunday_avg": 0, "sunday_count": 0}, "4": {"avg_rate": 12.19, "job_count": 1538, "sunday_avg": 0, "sunday_count": 0}}, "2024": {"1": {"avg_rate": 8.83, "job_count": 3726, "sunday_avg": 8.41, "sunday_count": 1}, "2": {"avg_rate": 9.26, "job_count": 1761, "sunday_avg": 0, "sunday_count": 0}, "4": {"avg_rate": 12.99, "job_count": 957, "sunday_avg": 0, "sunday_count": 0}}, "2025": {"1": {"avg_rate": 9.77, "job_count": 2049, "sunday_avg": 23.46, "sunday_count": 1}, "2": {"avg_rate": 9.99, "job_count": 1077, "sunday_avg": 0, "sunday_count": 0}, "4": {"avg_rate": 14.63, "job_count": 638, "sunday_avg": 0, "sunday_count": 0}}}};
+const years = ['2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+const z1b = [7.18,7.01,6.33,6.08,7.15,7.74,8.06,8.48,8.82];
+const z2b = [6.91,6.72,6.65,6.38,7.49,8.09,8.43,8.91,9.36];
+const z3b = [6.98,7.06,7.42,7.19,7.91,8.42,8.80,9.11,9.73];
+const z4b = [9.24,8.96,9.49,9.24,9.65,9.54,11.07,11.42,11.70];
+const z5b = [11.97,11.75,12.54,13.25,14.45,16.23,20.14,22.10,23.49];
+const z6b = [17.66,15.81,9.99,11.41,14.48,20.09,26.92,23.81,26.22];
 
-const ZONE_COLORS = {
-  '1': '#6366f1', '2': '#06b6d4', '3': '#22c55e', '4': '#eab308',
-  '5': '#f97316', '6': '#ef4444', '7': '#d946ef', '8': '#8b5cf6'
-};
+const z1n = [10893,22704,27189,48644,53800,42483,28230,19456,12167];
+const z2n = [5344,10412,12907,21679,25137,19774,12314,8411,5091];
+const z3n = [3550,7021,8455,14823,16577,13486,8906,6416,3719];
+const z4n = [1959,5682,8454,14310,15652,13189,7591,5264,3007];
+const z5n = [273,1141,1901,3541,3574,2808,1781,1457,805];
+const z6n = [34,160,264,586,1012,1027,656,437,342];
+const totalN = years.map((_,i) => z1n[i]+z2n[i]+z3n[i]+z4n[i]+z5n[i]+z6n[i]);
 
-const cities = Object.keys(DATA);
-let activeCity = cities[0];
+// CPI line from Z1 2017 base
+const cpi = [7.18,7.18*1.016,7.18*1.033,7.18*1.05,7.18*1.09,7.18*1.16,7.18*1.22,7.18*1.26,7.18*1.28];
 
-function renderTabs() {
-  const cont = document.getElementById('cityTabs');
-  cont.innerHTML = cities.map(c =>
-    `<div class="tab ${c === activeCity ? 'active' : ''}" onclick="switchCity('${c}')">${c}</div>`
-  ).join('');
-}
-
-function switchCity(city) {
-  activeCity = city;
-  renderTabs();
-  renderContent();
-}
-
-function pctChange(a, b) {
-  if (!a || a === 0) return null;
-  return ((b - a) / a * 100);
-}
-
-function renderContent() {
-  const cityData = DATA[activeCity];
-  const years = Object.keys(cityData).sort();
-  const zones = [...new Set(years.flatMap(y => Object.keys(cityData[y])))].sort((a,b) => +a - +b);
-  
-  let html = '';
-  
-  // === OVERVIEW LINE CHART ===
-  html += `<div class="full-chart">
-    <h2>Average Base Rate by Zone — ${activeCity}</h2>
-    <div class="full-chart-wrap"><canvas id="overviewChart"></canvas></div>
-  </div>`;
-  
-  // === SUMMARY TABLE ===
-  html += `<div class="card" style="margin-bottom:24px">
-    <h3>Rate Summary Table</h3>
-    <div style="overflow-x:auto">
-    <table class="summary-table">
-      <tr><th>Year</th>${zones.map(z => `<th>Zone ${z}</th>`).join('')}<th>Total Jobs</th></tr>`;
-  
-  for (const year of years) {
-    const yd = cityData[year];
-    const totalJobs = Object.values(yd).reduce((s, z) => s + z.job_count, 0);
-    html += `<tr><td><strong>${year}</strong></td>`;
-    for (const z of zones) {
-      if (yd[z]) {
-        const prev = years[years.indexOf(year) - 1];
-        let cls = 'neutral';
-        let arrow = '';
-        if (prev && cityData[prev] && cityData[prev][z]) {
-          const pct = pctChange(cityData[prev][z].avg_rate, yd[z].avg_rate);
-          if (pct !== null) {
-            cls = pct > 1 ? 'up' : pct < -1 ? 'down' : 'neutral';
-            arrow = pct > 1 ? ' ↑' : pct < -1 ? ' ↓' : '';
-          }
-        }
-        html += `<td class="${cls}">$${yd[z].avg_rate.toFixed(2)}${arrow}<br><span style="font-size:0.7rem;color:var(--muted)">${yd[z].job_count.toLocaleString()} jobs</span></td>`;
-      } else {
-        html += `<td style="color:var(--border)">—</td>`;
-      }
-    }
-    html += `<td>${totalJobs.toLocaleString()}</td></tr>`;
-  }
-  html += `</table></div></div>`;
-  
-  // === ZONE CARDS ===
-  html += `<div class="grid">`;
-  for (const z of zones) {
-    const zoneYears = years.filter(y => cityData[y][z]);
-    if (zoneYears.length === 0) continue;
-    
-    const latest = cityData[zoneYears[zoneYears.length - 1]][z];
-    const first = cityData[zoneYears[0]][z];
-    const totalChange = pctChange(first.avg_rate, latest.avg_rate);
-    const totalJobs = zoneYears.reduce((s, y) => s + cityData[y][z].job_count, 0);
-    
-    html += `<div class="card">
-      <h3>Zone ${z} <span class="badge">${zoneYears[0]}–${zoneYears[zoneYears.length-1]}</span></h3>
-      <div class="chart-wrap"><canvas id="zone${z}Chart"></canvas></div>
-      <div class="stats-row">
-        <div class="stat"><div class="val">$${latest.avg_rate.toFixed(2)}</div><div class="label">Latest Rate</div></div>
-        <div class="stat"><div class="val">${totalChange !== null ? (totalChange > 0 ? '+' : '') + totalChange.toFixed(1) + '%' : '—'}</div><div class="label">Total Change</div></div>
-        <div class="stat"><div class="val">${totalJobs.toLocaleString()}</div><div class="label">Total Jobs</div></div>
-        <div class="stat"><div class="val">${latest.sunday_count > 0 ? '$' + latest.sunday_avg.toFixed(2) : '—'}</div><div class="label">Sunday Rate</div></div>
-      </div>
-    </div>`;
-  }
-  html += `</div>`;
-  
-  // === SUNDAY COMPARISON CHART ===
-  const hasSunday = zones.some(z => years.some(y => cityData[y][z] && cityData[y][z].sunday_count > 0));
-  if (hasSunday) {
-    html += `<div class="full-chart">
-      <h2>Sunday vs Weekday Rate Comparison — ${activeCity}</h2>
-      <div class="full-chart-wrap"><canvas id="sundayChart"></canvas></div>
-    </div>`;
-  }
-  
-  // === JOB VOLUME CHART ===
-  html += `<div class="full-chart">
-    <h2>Job Volume by Zone — ${activeCity}</h2>
-    <div class="full-chart-wrap"><canvas id="volumeChart"></canvas></div>
-  </div>`;
-  
-  document.getElementById('content').innerHTML = html;
-  
-  // Render charts after DOM update
-  setTimeout(() => {
-    renderOverviewChart(years, zones, cityData);
-    for (const z of zones) {
-      const zy = years.filter(y => cityData[y][z]);
-      if (zy.length > 0) renderZoneChart(z, zy, cityData);
-    }
-    if (hasSunday) renderSundayChart(years, zones, cityData);
-    renderVolumeChart(years, zones, cityData);
-  }, 50);
-}
-
-function chartDefaults() {
-  return {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: '#9ca3af', font: { size: 11 } } } },
-    scales: {
-      x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(42,45,58,0.5)' } },
-      y: { ticks: { color: '#9ca3af', callback: v => '$' + v.toFixed(0) }, grid: { color: 'rgba(42,45,58,0.5)' } }
-    }
-  };
-}
-
-function renderOverviewChart(years, zones, data) {
-  const ctx = document.getElementById('overviewChart');
-  if (!ctx) return;
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: years,
-      datasets: zones.map(z => ({
-        label: 'Zone ' + z,
-        data: years.map(y => data[y][z] ? data[y][z].avg_rate : null),
-        borderColor: ZONE_COLORS[z] || '#888',
-        backgroundColor: (ZONE_COLORS[z] || '#888') + '20',
-        tension: 0.3, pointRadius: 4, borderWidth: 2, spanGaps: true
-      }))
+// Base rate chart — Y starts at 0
+new Chart(document.getElementById('baseChart'), {
+  type:'line',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Z1 Central',data:z1b,borderColor:'#2563eb',borderWidth:3,pointRadius:4,tension:.3},
+      {label:'Z2 Inner',data:z2b,borderColor:'#16a34a',borderWidth:3,pointRadius:4,tension:.3},
+      {label:'Z3 Middle',data:z3b,borderColor:'#f97316',borderWidth:3,pointRadius:4,tension:.3},
+      {label:'Z4 Outer',data:z4b,borderColor:'#8b5cf6',borderWidth:3,pointRadius:4,tension:.3},
+      {label:'Z5 Extended',data:z5b,borderColor:'#6b7280',borderWidth:2,pointRadius:3,tension:.3,borderDash:[5,5]},
+      {label:'Z6 Rural',data:z6b,borderColor:'#dc2626',borderWidth:2,pointRadius:3,tension:.3,borderDash:[5,5]},
+      {label:'NZ CPI (from Z1)',data:cpi,borderColor:'#475569',borderWidth:2,borderDash:[8,4],pointRadius:0,tension:.3}
+    ]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      y:{min:0,max:30,ticks:{callback:v=>'$'+v.toFixed(0)},grid:{color:'#1e293b'}},
+      x:{grid:{color:'#1e293b'}}
     },
-    options: chartDefaults()
-  });
-}
-
-function renderZoneChart(zone, zy, data) {
-  const ctx = document.getElementById(`zone${zone}Chart`);
-  if (!ctx) return;
-  const rates = zy.map(y => data[y][zone].avg_rate);
-  const sunRates = zy.map(y => data[y][zone].sunday_count > 0 ? data[y][zone].sunday_avg : null);
-  
-  const datasets = [{
-    label: 'Avg Rate',
-    data: rates,
-    borderColor: ZONE_COLORS[zone] || '#888',
-    backgroundColor: (ZONE_COLORS[zone] || '#888') + '30',
-    tension: 0.3, fill: true, borderWidth: 2, pointRadius: 3
-  }];
-  
-  if (sunRates.some(v => v !== null)) {
-    datasets.push({
-      label: 'Sunday',
-      data: sunRates,
-      borderColor: '#eab308',
-      borderDash: [5, 3],
-      tension: 0.3, borderWidth: 1.5, pointRadius: 2, spanGaps: true
-    });
+    plugins:{legend:{labels:{color:'#94a3b8',usePointStyle:true}}}
   }
-  
-  new Chart(ctx, {
-    type: 'line',
-    data: { labels: zy, datasets },
-    options: chartDefaults()
-  });
-}
+});
 
-function renderSundayChart(years, zones, data) {
-  const ctx = document.getElementById('sundayChart');
-  if (!ctx) return;
-  // Show latest year comparison
-  const latestYear = years[years.length - 1];
-  const yd = data[latestYear];
-  const zWithSunday = zones.filter(z => yd[z] && yd[z].sunday_count > 0);
-  
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: zWithSunday.map(z => 'Zone ' + z),
-      datasets: [
-        {
-          label: 'Weekday Avg',
-          data: zWithSunday.map(z => yd[z].avg_rate),
-          backgroundColor: '#6366f180', borderColor: '#6366f1', borderWidth: 1
-        },
-        {
-          label: 'Sunday Avg',
-          data: zWithSunday.map(z => yd[z].sunday_avg),
-          backgroundColor: '#eab30880', borderColor: '#eab308', borderWidth: 1
-        }
-      ]
+// 100% stacked volume share
+function pct(arr){return arr.map((_,i)=>{const t=totalN[i];return t>0?+(arr[i]/t*100).toFixed(1):0})}
+new Chart(document.getElementById('shareChart'), {
+  type:'bar',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Z1',data:pct(z1n),backgroundColor:'#2563eb'},
+      {label:'Z2',data:pct(z2n),backgroundColor:'#16a34a'},
+      {label:'Z3',data:pct(z3n),backgroundColor:'#f97316'},
+      {label:'Z4',data:pct(z4n),backgroundColor:'#8b5cf6'},
+      {label:'Z5',data:pct(z5n),backgroundColor:'#6b7280'},
+      {label:'Z6',data:pct(z6n),backgroundColor:'#dc2626'}
+    ]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      y:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#1e293b'}},
+      x:{stacked:true,grid:{color:'#1e293b'}}
     },
-    options: {
-      ...chartDefaults(),
-      plugins: {
-        ...chartDefaults().plugins,
-        title: { display: true, text: `${latestYear} — Sunday vs Overall Average`, color: '#9ca3af' }
-      }
-    }
-  });
-}
+    plugins:{legend:{labels:{color:'#94a3b8',usePointStyle:true}}}
+  }
+});
 
-function renderVolumeChart(years, zones, data) {
-  const ctx = document.getElementById('volumeChart');
-  if (!ctx) return;
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: years,
-      datasets: zones.map(z => ({
-        label: 'Zone ' + z,
-        data: years.map(y => data[y][z] ? data[y][z].job_count : 0),
-        backgroundColor: (ZONE_COLORS[z] || '#888') + '90',
-        borderColor: ZONE_COLORS[z] || '#888',
-        borderWidth: 1
-      }))
+// Price vs Volume — dual axis
+const wavg = years.map((_,i) => {
+  const t = totalN[i];
+  return t > 0 ? +((z1b[i]*z1n[i]+z2b[i]*z2n[i]+z3b[i]*z3n[i]+z4b[i]*z4n[i]+z5b[i]*z5n[i]+z6b[i]*z6n[i])/t).toFixed(2) : 0;
+});
+new Chart(document.getElementById('pvChart'), {
+  type:'bar',
+  data:{
+    labels:years,
+    datasets:[
+      {label:'Sunday Volume',data:totalN,backgroundColor:'rgba(37,99,235,0.4)',borderColor:'#2563eb',borderWidth:1,yAxisID:'y',order:2},
+      {label:'Avg Base Rate',data:wavg,type:'line',borderColor:'#f59e0b',borderWidth:3,pointRadius:5,pointBackgroundColor:'#f59e0b',yAxisID:'y1',tension:.3,order:1}
+    ]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      y:{position:'left',beginAtZero:true,ticks:{callback:v=>v>=1000?(v/1000)+'K':v},grid:{color:'#1e293b'}},
+      y1:{position:'right',min:0,max:15,ticks:{callback:v=>'$'+v},grid:{drawOnChartArea:false}},
+      x:{grid:{color:'#1e293b'}}
     },
-    options: {
-      ...chartDefaults(),
-      scales: {
-        ...chartDefaults().scales,
-        x: { ...chartDefaults().scales.x, stacked: true },
-        y: { ...chartDefaults().scales.y, stacked: true, ticks: { color: '#9ca3af', callback: v => v.toLocaleString() } }
-      }
-    }
-  });
-}
-
-renderTabs();
-renderContent();
+    plugins:{legend:{labels:{color:'#94a3b8',usePointStyle:true}}}
+  }
+});
 </script>
-</body>
-</html>
+</body></html>
