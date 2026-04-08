@@ -160,15 +160,32 @@ const runs = [
 ];
 
 const BASE_FUEL = 1.86;
-const MFV_RATE = 0.063;
+
+// Actual MFV rate matrix from tblFuelSurcharge (pump price → rate)
+// Rate is set monthly — between steps, rate is FIXED (driver absorbs fuel movement)
+const MFV_STEPS = [
+  [1.86, 0.000], [1.91, 0.010], [1.93, 0.020], [1.95, 0.030],
+  [2.00, 0.040], [2.05, 0.045], [2.10, 0.050], [2.15, 0.053],
+  [2.20, 0.055], [2.25, 0.057], [2.30, 0.058], [2.35, 0.059],
+  [2.40, 0.060], [2.50, 0.061], [2.55, 0.062], [2.58, 0.063],
+  [2.60, 0.065], [2.65, 0.066], [2.69, 0.074], [2.72, 0.077],
+  [2.76, 0.081], [2.80, 0.085], [2.90, 0.095], [3.00, 0.105],
+  [3.10, 0.115], [3.20, 0.125], [3.30, 0.132], [3.50, 0.145],
+  [3.75, 0.165], [4.00, 0.185]
+];
 
 let barChart, scatterChart;
 
 function calcMfvRate(pumpPrice) {
-  // MFV matrix: linear from 0% at $1.86 to ~6.3% at $2.584
-  // Rate = (pumpPrice - 1.86) / (2.584 - 1.86) * 0.063
+  // Step function: find the highest step <= pump price, use that rate
+  // This means rate is FIXED between steps — driver absorbs price movement within a band
   if (pumpPrice <= BASE_FUEL) return 0;
-  return ((pumpPrice - BASE_FUEL) / (2.584 - BASE_FUEL)) * MFV_RATE;
+  let rate = 0;
+  for (const [price, r] of MFV_STEPS) {
+    if (pumpPrice >= price) rate = r;
+    else break;
+  }
+  return rate;
 }
 
 function update() {
