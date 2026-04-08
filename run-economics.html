@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Woop Sunday Run Economics — KMs, Revenue & MFV</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f9fa;color:#1a1a2e;padding:24px}
+.container{max-width:1200px;margin:0 auto}
+h1{font-size:1.5rem;margin-bottom:4px}
+.sub{color:#666;font-size:.9rem;margin-bottom:20px}
+.controls{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:24px}
+.slider-row{display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap}
+.slider-row label{font-weight:600;min-width:160px}
+.slider-row input[type=range]{flex:1;min-width:200px}
+.slider-row .val{font-size:1.2rem;font-weight:700;min-width:80px;text-align:right}
+.kpi-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.kpi{background:#fff;border-radius:10px;padding:14px 18px;flex:1;min-width:140px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.kpi .label{color:#888;font-size:.75rem;text-transform:uppercase}
+.kpi .value{font-size:1.3rem;font-weight:700;margin-top:2px}
+.kpi .value.green{color:#16a34a}.kpi .value.red{color:#dc2626}.kpi .value.amber{color:#d97706}
+.chart-wrap{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:24px}
+.chart-title{font-size:1.1rem;font-weight:600;margin-bottom:4px}
+.chart-sub{font-size:.85rem;color:#888;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:20px}
+thead th{background:#f1f5f9;padding:8px 6px;text-align:right;font-size:.7rem;text-transform:uppercase;color:#64748b;position:sticky;top:0}
+thead th:first-child,thead th:nth-child(2){text-align:left}
+tbody td{padding:6px;text-align:right;border-bottom:1px solid #f1f5f9}
+tbody td:first-child{text-align:left;font-weight:500}
+tbody td:nth-child(2){text-align:left}
+.surplus{color:#16a34a;font-weight:600}.deficit{color:#dc2626;font-weight:600}
+.note{background:#fff;border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);font-size:.85rem;color:#444;margin-bottom:20px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Woop Sunday Run Economics — Fuel & MFV Analysis</h1>
+<p class="sub">126 Auckland runs with KM data · Nov 2025 – Feb 2026 · Return-to-base (KMs doubled) · Base fuel price $1.86/L</p>
+
+<div class="controls">
+<div class="slider-row">
+<label>Pump Price ($/L):</label>
+<input type="range" id="pumpSlider" min="1.86" max="4.00" step="0.01" value="2.584" oninput="update()">
+<span class="val" id="pumpVal">$2.584</span>
+</div>
+<div class="slider-row">
+<label>Consumption (L/100km):</label>
+<input type="range" id="consSlider" min="8" max="18" step="0.5" value="13" oninput="update()">
+<span class="val" id="consVal">13.0 L</span>
+</div>
+<div class="slider-row">
+<label>Base Fuel Price:</label>
+<span style="font-size:1.1rem;font-weight:600">$1.86/L (0% MFV threshold — fixed)</span>
+</div>
+</div>
+
+<div class="kpi-row">
+<div class="kpi"><div class="label">Avg Run KMs (return)</div><div class="value" id="kpiKm">153.6</div></div>
+<div class="kpi"><div class="label">Avg MFV/Run</div><div class="value green" id="kpiMfv">$18.05</div></div>
+<div class="kpi"><div class="label">Avg Extra Fuel Cost</div><div class="value" id="kpiExtra">$14.45</div></div>
+<div class="kpi"><div class="label">Avg Surplus/Deficit</div><div class="value green" id="kpiSurplus">+$3.60</div></div>
+<div class="kpi"><div class="label">Runs in Deficit</div><div class="value" id="kpiDeficit">0 / 126</div></div>
+</div>
+
+<div class="chart-wrap">
+<div class="chart-title">MFV Received vs Extra Fuel Cost per Run</div>
+<div class="chart-sub">Green = surplus (MFV covers fuel). Red = deficit (driver out of pocket). Sorted by run KMs.</div>
+<canvas id="barChart" height="350"></canvas>
+</div>
+
+<div class="chart-wrap">
+<div class="chart-title">Surplus/Deficit by Run Distance</div>
+<div class="chart-sub">Shows how longer runs are more exposed to fuel cost increases.</div>
+<canvas id="scatterChart" height="300"></canvas>
+</div>
+
+<div id="tableWrap"></div>
+
+<div class="note">
+<strong>Methodology:</strong>
+<ul style="margin:8px 0 0 20px">
+<li><strong>MFV</strong> = 6.3% × base revenue per run (driver receives 100%)</li>
+<li><strong>Extra fuel cost</strong> = (pump price − $1.86) × litres consumed. MFV only needs to cover cost ABOVE the $1.86/L base.</li>
+<li><strong>Return to base:</strong> All Woop runs are return trips (pickup return boxes). KMs doubled.</li>
+<li><strong>Consumption:</strong> 13 L/100km default (real-world loaded urban). Adjustable.</li>
+<li><strong>Data:</strong> 126 Auckland Sunday runs with KM data from tblBulkRun, Nov 2025 – Feb 2026.</li>
+<li><strong>MFV rate source:</strong> tblFuelSurcharge — 6.3% at $2.584/L pump price (Mar 2026).</li>
+</ul>
+</div>
+</div>
+
+<script>
+// Run data: [name, date, oneWayKm, drops, baseRevenue, mfvReceived]
+const runs = [
+["AW01","2025-11-16",123.7,28,358.56,23.39],["AW02","2025-11-16",130.6,26,280.64,18.26],
+["AW06","2025-11-16",59.8,18,161.55,10.47],["AW08","2025-11-16",53.0,32,307.70,19.98],
+["AW11","2025-11-16",81.9,34,344.66,22.42],["AW12","2025-11-16",164.1,30,488.70,31.80],
+["AW13","2025-11-16",66.8,27,280.94,18.29],["AW14","2025-11-16",37.7,26,228.80,14.82],
+["AW15","2025-11-16",32.2,37,325.60,21.09],["AW18","2025-11-16",33.5,35,308.00,19.95],
+["AW19","2025-11-16",35.7,43,397.75,25.80],["WW8","2025-11-16",25.7,26,235.09,15.30],
+["AW02","2025-11-23",107.2,22,226.52,14.74],["AW06","2025-11-23",87.2,32,316.74,20.59],
+["AW07","2025-11-23",60.6,28,271.60,17.64],["AW11","2025-11-23",73.5,29,287.96,18.72],
+["AW14","2025-11-23",35.1,21,184.80,11.97],["AW21","2025-11-23",36.2,35,308.00,19.95],
+["NW1","2025-11-23",50.3,12,126.24,8.16],["NW2","2025-11-23",64.0,10,109.80,7.12],
+["TW1","2025-11-23",66.9,10,291.02,18.90],["WW1","2025-11-23",119.3,23,267.99,17.40],
+["WW2","2025-11-23",80.1,16,202.55,13.10],["WW3","2025-11-23",65.0,18,180.20,11.67],
+["WW5","2025-11-23",42.9,30,278.70,18.00],["WW6","2025-11-23",31.2,21,195.09,12.60],
+["AW02","2025-11-30",146.5,26,283.47,18.45],["AW22","2025-11-30",23.6,26,228.80,14.82],
+["AW23","2025-11-30",30.8,22,193.60,12.54],["HWR","2025-11-30",204.4,27,444.06,28.94],
+["TW1","2025-11-30",73.7,9,255.45,16.59],["TW2","2025-11-30",47.1,25,237.25,15.50],
+["TW3","2025-11-30",36.0,15,138.00,9.00],["TW4","2025-11-30",52.7,11,142.00,9.24],
+["WW1","2025-11-30",124.7,30,335.10,21.75],["AW01","2025-12-07",124.3,26,349.30,25.88],
+["AW06","2025-12-07",79.7,32,315.66,23.31],["AW13","2025-12-07",36.7,25,220.25,16.25],
+["AW18","2025-12-07",25.9,26,240.24,17.68],["AW19","2025-12-07",27.3,22,203.28,14.96],
+["AW01","2025-12-14",152.1,25,351.65,26.05],["AW02","2025-12-14",106.2,33,321.56,23.80],
+["WW1","2025-12-14",116.3,21,241.42,17.87],["WW2","2025-12-14",72.4,12,129.18,9.60],
+["WW3","2025-12-14",66.5,14,143.95,10.68],["WW4","2025-12-14",40.3,19,176.70,13.11],
+["WW5","2025-12-14",36.3,19,176.70,13.11],["WW6","2025-12-14",33.3,16,148.80,11.04],
+["WW7","2025-12-14",37.8,19,176.70,13.11],["WW8","2025-12-14",23.8,24,218.70,16.16],
+["WW9","2025-12-14",31.1,12,106.20,7.80],["AW01","2025-12-21",116.8,22,263.58,19.54],
+["NW1","2025-12-21",29.1,3,31.56,2.34],["NW2","2025-12-21",42.4,4,45.95,3.39],
+["AW01","2025-12-28",108.6,29,297.60,22.08],["AW03","2025-12-28",43.9,11,103.02,7.60],
+["AW05","2025-12-28",66.1,18,177.14,13.08],["AW08","2025-12-28",40.4,24,211.44,15.60],
+["TW3","2026-01-04",70.8,18,171.90,13.94],["WW1","2026-01-04",94.0,17,186.59,15.13],
+["WW3","2026-01-04",53.2,30,257.70,21.00],["WW4","2026-01-04",55.1,32,274.88,22.40],
+["WW5","2026-01-04",44.1,25,208.35,16.86],["AW01","2026-01-18",131.1,21,279.00,22.65],
+["AW02","2026-01-18",103.1,19,179.32,14.58],["AW03","2026-01-18",142.9,19,334.97,27.17],
+["AW04","2026-01-18",95.8,18,331.07,26.86],["AW05","2026-01-18",63.0,24,216.23,17.49],
+["AW06","2026-01-18",43.2,12,108.36,8.76],["AW07","2026-01-18",67.8,35,329.80,26.86],
+["AW08","2026-01-18",50.5,40,378.30,30.81],["AW09","2026-01-18",44.3,22,203.50,16.50],
+["AW10","2026-01-18",88.3,35,341.99,27.75],["AW11","2026-01-18",148.3,20,345.56,28.03],
+["AW12","2026-01-18",57.7,19,191.83,15.54],["AW13","2026-01-18",30.3,28,246.68,19.88],
+["AW14","2026-01-18",24.9,30,264.30,21.30],["AW15","2026-01-18",32.1,25,220.25,17.75],
+["AW16","2026-01-18",30.6,27,237.87,19.17],["AW17","2026-01-18",33.9,40,370.00,30.00],
+["AW18","2026-01-18",21.0,17,153.29,12.39],["AW19","2026-01-18",34.1,34,299.54,24.14],
+["AW20","2026-01-18",31.4,27,237.87,19.17],["AW21","2026-01-18",32.9,26,229.06,18.46],
+["HWR","2026-01-18",232.8,28,487.82,39.45],["NW1","2026-01-18",40.7,5,52.60,4.25],
+["NW2","2026-01-18",65.7,9,110.20,8.95],["TW3","2026-01-18",76.2,22,242.84,19.60],
+["WW8","2026-01-18",36.5,27,243.79,19.77],["AW01","2026-01-25",160.3,39,447.08,36.35],
+["AW03","2026-01-25",149.0,14,267.87,21.73],["AW07","2026-01-25",60.0,38,368.60,30.02],
+["AW08","2026-01-25",46.5,23,212.75,17.25],["TW1","2026-01-25",61.3,10,307.19,24.87],
+["AW03","2026-02-01",146.5,20,348.74,21.94],["AW04","2026-02-01",103.4,18,334.15,21.02],
+["AW06","2026-02-01",60.5,25,208.68,13.12],["AW11","2026-02-01",107.1,19,227.62,14.33],
+["AW12","2026-02-01",64.1,22,214.36,13.48],["AW18","2026-02-01",39.1,31,258.78,16.27],
+["AW19","2026-02-01",33.6,31,256.68,16.12],["WW4","2026-02-01",37.1,18,157.32,9.90],
+["AW02","2026-02-08",109.5,25,250.87,15.76],["AW03","2026-02-08",154.3,22,442.39,27.87],
+["AW04","2026-02-08",118.0,20,389.44,24.55],["AW05","2026-02-08",76.8,27,266.49,16.78],
+["AW06","2026-02-08",47.8,33,290.73,18.48],["AW08","2026-02-08",51.8,39,376.05,23.64],
+["AW09","2026-02-08",47.3,31,281.91,17.76],["AW11","2026-02-08",117.8,23,321.41,20.29],
+["AW12","2026-02-08",67.6,25,253.01,15.92],["AW14","2026-02-08",26.6,30,264.30,16.80],
+["AW15","2026-02-08",28.0,26,240.50,15.08],["AW16","2026-02-08",31.5,29,261.65,16.52],
+["AW18","2026-02-08",36.7,38,334.78,21.28],["HW1","2026-02-08",66.6,21,210.19,13.28],
+["HW2","2026-02-08",78.0,19,339.50,21.41],["HWR","2026-02-08",243.0,29,536.55,33.81],
+["TW2","2026-02-08",47.5,24,227.76,14.40],["WW1","2026-02-08",118.7,31,373.20,23.54],
+["AW01","2026-02-15",135.4,25,310.40,19.49],["AW06","2026-02-15",74.8,27,239.63,15.20],
+["AW16","2026-02-15",28.8,32,296.00,18.56],["AW17","2026-02-15",28.0,35,321.55,20.20],
+["AW24","2026-02-22",30.2,32,281.92,17.92]
+];
+
+const BASE_FUEL = 1.86;
+const MFV_RATE = 0.063;
+
+let barChart, scatterChart;
+
+function calcMfvRate(pumpPrice) {
+  // MFV matrix: linear from 0% at $1.86 to ~6.3% at $2.584
+  // Rate = (pumpPrice - 1.86) / (2.584 - 1.86) * 0.063
+  if (pumpPrice <= BASE_FUEL) return 0;
+  return ((pumpPrice - BASE_FUEL) / (2.584 - BASE_FUEL)) * MFV_RATE;
+}
+
+function update() {
+  const pump = parseFloat(document.getElementById('pumpSlider').value);
+  const cons = parseFloat(document.getElementById('consSlider').value);
+  document.getElementById('pumpVal').textContent = '$' + pump.toFixed(3);
+  document.getElementById('consVal').textContent = cons.toFixed(1) + ' L';
+
+  const mfvRate = calcMfvRate(pump);
+  
+  // Calculate per run
+  const results = runs.map(r => {
+    const [name, date, owKm, drops, baseRev, origMfv] = r;
+    const returnKm = owKm * 2;
+    const litres = returnKm * cons / 100;
+    const totalFuel = litres * pump;
+    const baseFuel = litres * BASE_FUEL;
+    const extraFuel = totalFuel - baseFuel;
+    const mfv = baseRev * mfvRate;
+    const surplus = mfv - extraFuel;
+    return { name, date, owKm, returnKm, drops, baseRev, mfv, extraFuel, surplus, litres };
+  }).sort((a,b) => a.returnKm - b.returnKm);
+
+  // KPIs
+  const avgKm = results.reduce((s,r) => s + r.returnKm, 0) / results.length;
+  const avgMfv = results.reduce((s,r) => s + r.mfv, 0) / results.length;
+  const avgExtra = results.reduce((s,r) => s + r.extraFuel, 0) / results.length;
+  const avgSurplus = avgMfv - avgExtra;
+  const defCount = results.filter(r => r.surplus < 0).length;
+
+  document.getElementById('kpiKm').textContent = avgKm.toFixed(0) + ' km';
+  document.getElementById('kpiMfv').textContent = '$' + avgMfv.toFixed(2);
+  document.getElementById('kpiExtra').textContent = '$' + avgExtra.toFixed(2);
+  
+  const surpEl = document.getElementById('kpiSurplus');
+  surpEl.textContent = (avgSurplus >= 0 ? '+$' : '-$') + Math.abs(avgSurplus).toFixed(2);
+  surpEl.className = 'value ' + (avgSurplus >= 0 ? 'green' : 'red');
+
+  const defEl = document.getElementById('kpiDeficit');
+  defEl.textContent = defCount + ' / ' + results.length;
+  defEl.className = 'value ' + (defCount === 0 ? 'green' : defCount > results.length/2 ? 'red' : 'amber');
+
+  // Bar chart
+  const labels = results.map(r => r.name + ' ' + r.returnKm.toFixed(0) + 'km');
+  if (barChart) barChart.destroy();
+  barChart = new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'MFV Received', data: results.map(r => r.mfv), backgroundColor: '#16a34a80', borderColor: '#16a34a', borderWidth: 1 },
+        { label: 'Extra Fuel Cost', data: results.map(r => r.extraFuel), backgroundColor: results.map(r => r.surplus >= 0 ? '#f59e0b40' : '#dc262640'), borderColor: results.map(r => r.surplus >= 0 ? '#f59e0b' : '#dc2626'), borderWidth: 1 }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + v.toFixed(0) } }, x: { ticks: { maxRotation: 90, font: { size: 8 } } } },
+      plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toFixed(2) } } }
+    }
+  });
+
+  // Scatter
+  if (scatterChart) scatterChart.destroy();
+  scatterChart = new Chart(document.getElementById('scatterChart'), {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Surplus/Deficit',
+        data: results.map(r => ({ x: r.returnKm, y: r.surplus })),
+        backgroundColor: results.map(r => r.surplus >= 0 ? '#16a34a' : '#dc2626'),
+        pointRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: 'Return KMs' }, beginAtZero: true },
+        y: { title: { display: true, text: 'Surplus / Deficit ($)' }, ticks: { callback: v => '$' + v.toFixed(0) } }
+      },
+      plugins: {
+        legend: { display: false },
+        annotation: { annotations: { zero: { type: 'line', yMin: 0, yMax: 0, borderColor: '#666', borderWidth: 1, borderDash: [4,4] } } },
+        tooltip: { callbacks: { label: ctx => ctx.raw.x.toFixed(0) + 'km: ' + (ctx.raw.y >= 0 ? '+$' : '-$') + Math.abs(ctx.raw.y).toFixed(2) } }
+      }
+    }
+  });
+
+  // Table
+  let html = '<table><thead><tr><th>Run</th><th>Date</th><th>1-Way KM</th><th>Return KM</th><th>Drops</th><th>Base Rev</th><th>MFV</th><th>Litres</th><th>Extra Fuel</th><th>Surplus/Deficit</th></tr></thead><tbody>';
+  results.forEach(r => {
+    const cls = r.surplus >= 0 ? 'surplus' : 'deficit';
+    const sign = r.surplus >= 0 ? '+$' : '-$';
+    html += `<tr><td>${r.name}</td><td>${r.date}</td><td>${r.owKm.toFixed(1)}</td><td>${r.returnKm.toFixed(0)}</td><td>${r.drops}</td><td>$${r.baseRev.toFixed(2)}</td><td>$${r.mfv.toFixed(2)}</td><td>${r.litres.toFixed(1)}</td><td>$${r.extraFuel.toFixed(2)}</td><td class="${cls}">${sign}${Math.abs(r.surplus).toFixed(2)}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('tableWrap').innerHTML = html;
+}
+
+update();
+</script>
+</body></html>
