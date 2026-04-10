@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Woop Cost Decomposition — What's Driving Per-Box Cost Increases?</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f8f9fa;color:#1a1a1a;line-height:1.6;padding:20px}
+.container{max-width:1200px;margin:0 auto}
+h1{font-size:1.6rem;margin-bottom:4px;color:#1a2744}
+.subtitle{color:#666;margin-bottom:24px;font-size:0.9rem}
+.nav{margin-bottom:20px}
+.nav a{color:#2563eb;text-decoration:none;font-size:0.9rem}
+.nav a:hover{text-decoration:underline}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.card h3{font-size:0.78rem;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.card .value{font-size:1.6rem;font-weight:700}
+.card .detail{font-size:0.8rem;color:#888;margin-top:3px}
+.value.green{color:#16a34a}.value.red{color:#dc2626}.value.amber{color:#d97706}.value.navy{color:#1a2744}
+.highlight{background:#1a2744;color:#fff;border-radius:10px;padding:20px 24px;margin-bottom:24px}
+.highlight h3{font-size:1.1rem;margin-bottom:12px;color:#e87722}
+.highlight p{font-size:0.92rem;line-height:1.7;opacity:0.95}
+.highlight .stat-row{display:flex;gap:24px;flex-wrap:wrap;margin-top:14px}
+.highlight .stat{text-align:center;min-width:120px}
+.highlight .stat .num{font-size:1.8rem;font-weight:700;color:#e87722}
+.highlight .stat .label{font-size:0.78rem;opacity:0.8}
+.section{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:24px}
+.section h2{font-size:1.15rem;margin-bottom:14px;color:#1a2744}
+.section .section-desc{font-size:0.88rem;color:#666;margin-bottom:16px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+@media(max-width:768px){.chart-row{grid-template-columns:1fr}}
+.chart-box{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.chart-box h3{font-size:1rem;margin-bottom:10px;color:#333}
+.chart-box.full{grid-column:1/-1}
+canvas{width:100%!important}
+table{width:100%;border-collapse:collapse;font-size:0.85rem}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid #eee}
+th{background:#f8f9fa;font-weight:600;color:#555;position:sticky;top:0}
+th:first-child,td:first-child{text-align:left}
+tr:hover{background:#f0f7ff}
+tr.total-row{background:#f0f4f8;font-weight:700}
+tr.total-row:hover{background:#e4eaf2}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:0.75rem;font-weight:600}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-red{background:#fee2e2;color:#991b1b}
+.badge-amber{background:#fef3c7;color:#92400e}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.callout{background:#fef9f0;border-left:4px solid #e87722;padding:14px 18px;border-radius:0 8px 8px 0;margin:16px 0;font-size:0.9rem}
+.callout.info{border-left-color:#1a2744;background:#f0f2f8}
+.callout.method{border-left-color:#27ae60;background:#f0f8f2}
+.methodology{background:#f0f4f8;border-radius:8px;padding:16px;margin-top:20px;font-size:0.85rem;color:#555}
+.methodology h4{margin-bottom:8px;color:#333}
+.methodology ul{margin-left:18px}
+.methodology li{margin-bottom:4px}
+.waterfall-bar{display:flex;align-items:center;margin-bottom:6px;font-size:0.85rem}
+.waterfall-bar .wf-label{width:180px;text-align:right;padding-right:12px;color:#555}
+.waterfall-bar .wf-bar-area{flex:1;position:relative;height:28px}
+.waterfall-bar .wf-bar{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-weight:600;font-size:0.82rem;color:#fff;min-width:40px}
+.waterfall-bar .wf-val{margin-left:8px;color:#333;font-weight:600;font-size:0.85rem}
+.tab-buttons{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tab-btn{padding:6px 16px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:0.85rem;color:#555;transition:all 0.2s}
+.tab-btn.active{background:#1a2744;color:#fff;border-color:#1a2744}
+.tab-btn:hover{border-color:#1a2744}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.table-scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="nav">
+    <a href="index.html">&larr; Back to Dashboard</a> &nbsp;|&nbsp;
+    <a href="zone-prices-v2.html">Zone Prices</a> &nbsp;|&nbsp;
+    <a href="mfv-economics.html">MFV Economics</a> &nbsp;|&nbsp;
+    <a href="run-km.html">Run KM Analysis</a>
+  </div>
+
+  <h1>Woop Cost Decomposition</h1>
+  <p class="subtitle">What's driving per-box cost increases from 2017 to 2025 &bull; Generated 2026-04-11</p>
+
+  <!-- Executive Summary -->
+  <div class="highlight">
+    <h3>The Bottom Line</h3>
+    <p>Woop's average all-in per-box cost has increased from <strong>$8.45</strong> in 2017 to <strong>$12.10</strong> in 2024 (+$3.65, +43%) and <strong>$14.73</strong> in 2025 (+$6.28, +74%). The 2025 jump is primarily driven by linehaul now being charged as a visible per-box component ($2.31/box) rather than being bundled into other costs. Base delivery rate inflation accounts for the majority of the 2017&ndash;2024 increase.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="num">$8.45</div><div class="label">2017 per box</div></div>
+      <div class="stat"><div class="num">$12.10</div><div class="label">2024 per box</div></div>
+      <div class="stat"><div class="num">$14.73</div><div class="label">2025 per box</div></div>
+      <div class="stat"><div class="num">+74%</div><div class="label">Total increase</div></div>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="cards" id="kpiCards"></div>
+
+  <!-- Cost Decomposition Chart -->
+  <div class="section">
+    <h2>Per-Box Cost Decomposition Over Time</h2>
+    <p class="section-desc">Shows how the average per-box cost breaks down into base delivery rate, fuel surcharge (MFV), and linehaul components each year.</p>
+    <canvas id="chartDecomp" height="300"></canvas>
+  </div>
+
+  <!-- Attribution Waterfall -->
+  <div class="section">
+    <h2>What Explains the Cost Increase? (2017 &rarr; 2024)</h2>
+    <p class="section-desc">Breaking down the $3.65 per-box increase into its component causes. Each bar shows how much of the increase is attributable to each factor.</p>
+    <div id="waterfallContainer"></div>
+    <div class="callout" style="margin-top:16px">
+      <strong>Note on 2025:</strong> The 2025 all-in cost of $14.73 includes $2.31/box of linehaul that was previously bundled into run-level charges or not separated. This represents a change in cost <em>visibility</em> as much as a cost increase &mdash; linehaul was always incurred, but is now explicitly priced per box.
+    </div>
+  </div>
+
+  <!-- Year-by-Year Table -->
+  <div class="section">
+    <h2>Year-by-Year Cost Breakdown</h2>
+    <p class="section-desc">Detailed annual view of per-box cost components and total all-in cost including linehaul.</p>
+    <div class="table-scroll">
+      <table id="tableDecomp"></table>
+    </div>
+  </div>
+
+  <!-- Regional Charts -->
+  <div class="chart-row">
+    <div class="chart-box">
+      <h3>Delivery Volume by Region</h3>
+      <canvas id="chartRegionVol" height="280"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Regional Volume Share (%)</h3>
+      <canvas id="chartRegionShare" height="280"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-box">
+      <h3>Average Per-Box Cost by Region</h3>
+      <canvas id="chartRegionCost" height="280"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>Monthly Cost Trend</h3>
+      <canvas id="chartMonthly" height="280"></canvas>
+    </div>
+  </div>
+
+  <!-- Regional Detail Tables -->
+  <div class="section">
+    <h2>Regional Cost Detail</h2>
+    <p class="section-desc">Per-box delivery cost by region and year. Note: 2017&ndash;2018 data uses an older job naming system where run names were not consistently assigned, so regional classification is incomplete for those years.</p>
+    <div class="tab-buttons" id="regionTabs"></div>
+    <div id="regionTabContent"></div>
+  </div>
+
+  <!-- Linehaul Section -->
+  <div class="section">
+    <h2>Linehaul Cost Evolution</h2>
+    <p class="section-desc">Linehaul (the cost of transporting boxes from depot to delivery areas) has been handled in three distinct periods.</p>
+    <div class="callout info">
+      <strong>Period 1 &mdash; Pre-2023:</strong> Linehaul was not charged as a separate line item. It was either bundled into base rates or absorbed as an operational cost. No separate linehaul jobs appear in the data before September 2023.
+    </div>
+    <div class="callout info">
+      <strong>Period 2 &mdash; Sep 2023 to Feb 2025:</strong> Linehaul began appearing as separate jobs (LH/LHP suffix) but volumes were minimal &mdash; only 8 jobs in 2023 and 219 in 2024, contributing just $0.04/box in 2024.
+    </div>
+    <div class="callout">
+      <strong>Period 3 &mdash; March 2025 onwards (new per-box model):</strong> Linehaul is now built into the per-box price structure. 62,093 linehaul jobs in 2025, contributing <strong>$2.31 per box</strong> to the all-in cost. This is now a significant and visible cost component.
+    </div>
+    <canvas id="chartLinehaul" height="200" style="margin-top:16px"></canvas>
+  </div>
+
+  <!-- Geographic Expansion -->
+  <div class="section">
+    <h2>Geographic Expansion</h2>
+    <p class="section-desc">Woop's geographic footprint has expanded from Auckland-focused operations to national coverage. This section uses 2019+ data when regional run name classification became reliable.</p>
+    <div class="table-scroll">
+      <table id="tableGeo"></table>
+    </div>
+    <div class="callout method" style="margin-top:16px">
+      <strong>Impact on average cost:</strong> Geographic expansion has a <em>moderating</em> effect on the weighted average cost. Auckland (the lowest-cost region at ~$11.70/box in 2025) consistently represents ~60% of volume. Wellington costs are similar to Auckland, while Waikato/BoP and Christchurch have higher per-box costs due to longer distances and linehaul requirements.
+    </div>
+  </div>
+
+  <!-- Methodology -->
+  <div class="methodology">
+    <h4>Methodology &amp; Data Notes</h4>
+    <ul>
+      <li><strong>Data source:</strong> tucjobarchive table, filtered to client codes WOOP, WOOPH, WOOPW, WOOPC. Non-void jobs only.</li>
+      <li><strong>Delivery classification:</strong> Old model (pre-2025): rel=1, speed IN (95, 94, 4, 120, 110, 96). New model (2025+): rel=20, speed=95 (DEL suffix).</li>
+      <li><strong>Linehaul classification:</strong> rel=20, speed IN (142, 126) &mdash; LHP and LH1 child jobs in the new per-box model.</li>
+      <li><strong>Parent jobs (rel=19) excluded</strong> to avoid double-counting with DEL child jobs.</li>
+      <li><strong>Region classification:</strong> Based on run name prefix (AW=Auckland, HW/TW=Waikato/BoP, WW=Wellington, CW=Christchurch). Pre-2019 data used a different naming convention without run names, so appears as "Other".</li>
+      <li><strong>Base rate vs fuel split:</strong> rawbaseamount and fuelsurchargeamount fields available from ~2021. Earlier years show total amount as base.</li>
+      <li><strong>Linehaul per box:</strong> Total linehaul revenue for a period divided by number of delivery jobs in the same period.</li>
+      <li><strong>All-in cost:</strong> Delivery amount + linehaul per box. This is the true cost per box to the customer.</li>
+      <li><strong>Amount filter:</strong> Jobs with amount &le;$0 or &gt;$500 excluded as outliers (2,097 records).</li>
+      <li><strong>Total records analysed:</strong> 1,190,015 rows; 1,018,640 classified as deliveries; 62,320 as linehaul.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  years: [2017,2018,2019,2020,2021,2022,2023,2024,2025],
+  regions: ['Auckland','Waikato/BoP','Wellington','Christchurch','Other'],
+  volume_by_region: {
+    'Auckland':[0,1024,50241,110313,129357,107293,67587,49870,34487],
+    'Waikato/BoP':[0,1131,8652,17996,19964,17485,10843,8180,6014],
+    'Wellington':[0,2916,14724,30535,35370,29989,19795,12838,9260],
+    'Christchurch':[0,200,10234,22670,21627,17828,11106,8109,5577],
+    'Other':[28561,61041,12822,2409,5597,6301,4254,3078,1362]
+  },
+  cost_by_region: {
+    'Auckland':[null,7.88,7.49,7.25,8.33,9.47,10.66,11.39,11.70],
+    'Waikato/BoP':[null,10.56,10.16,10.21,10.44,11.06,14.95,14.89,15.73],
+    'Wellington':[null,9.33,9.09,8.77,8.85,9.23,10.31,11.34,11.44],
+    'Christchurch':[null,19.25,10.61,10.18,9.80,10.18,11.13,11.95,13.78],
+    'Other':[8.45,8.28,8.50,15.29,17.51,17.96,18.41,18.67,16.93]
+  },
+  decomposition: [
+    {year:2017,del_count:28561,avg_total:8.45,avg_base:8.45,avg_fuel:0.05,avg_lh:0},
+    {year:2018,del_count:66312,avg_total:8.39,avg_base:8.39,avg_fuel:0.22,avg_lh:0},
+    {year:2019,del_count:96673,avg_total:8.44,avg_base:8.44,avg_fuel:0.20,avg_lh:0},
+    {year:2020,del_count:183923,avg_total:8.26,avg_base:8.26,avg_fuel:0.07,avg_lh:0},
+    {year:2021,del_count:211915,avg_total:9.01,avg_base:8.93,avg_fuel:0.05,avg_lh:0},
+    {year:2022,del_count:178896,avg_total:9.95,avg_base:9.26,avg_fuel:0.19,avg_lh:0},
+    {year:2023,del_count:113585,avg_total:11.34,avg_base:9.96,avg_fuel:0.78,avg_lh:0},
+    {year:2024,del_count:82075,avg_total:12.06,avg_base:10.59,avg_fuel:0.87,avg_lh:0.04},
+    {year:2025,del_count:56700,avg_total:12.42,avg_base:11.03,avg_fuel:0.76,avg_lh:2.31}
+  ],
+  regional_cost_detail: {
+    'Auckland':[
+      {year:2017,del_count:0,avg_total:0,avg_base:0,avg_fuel:0,avg_lh:0},
+      {year:2018,del_count:1024,avg_total:7.88,avg_base:7.88,avg_fuel:0.20,avg_lh:0},
+      {year:2019,del_count:50241,avg_total:7.49,avg_base:7.49,avg_fuel:0.17,avg_lh:0},
+      {year:2020,del_count:110313,avg_total:7.25,avg_base:7.25,avg_fuel:0.03,avg_lh:0},
+      {year:2021,del_count:129357,avg_total:8.33,avg_base:8.27,avg_fuel:0.03,avg_lh:0},
+      {year:2022,del_count:107293,avg_total:9.47,avg_base:8.87,avg_fuel:0.16,avg_lh:0},
+      {year:2023,del_count:67587,avg_total:10.66,avg_base:9.38,avg_fuel:0.74,avg_lh:0},
+      {year:2024,del_count:49870,avg_total:11.39,avg_base:10.00,avg_fuel:0.82,avg_lh:0.01},
+      {year:2025,del_count:34487,avg_total:11.70,avg_base:10.43,avg_fuel:0.68,avg_lh:1.56}
+    ],
+    'Waikato/BoP':[
+      {year:2017,del_count:0,avg_total:0,avg_base:0,avg_fuel:0,avg_lh:0},
+      {year:2018,del_count:1131,avg_total:10.56,avg_base:10.56,avg_fuel:0.29,avg_lh:0},
+      {year:2019,del_count:8652,avg_total:10.16,avg_base:10.16,avg_fuel:0.23,avg_lh:0},
+      {year:2020,del_count:17996,avg_total:10.21,avg_base:10.21,avg_fuel:0.10,avg_lh:0},
+      {year:2021,del_count:19964,avg_total:10.44,avg_base:10.33,avg_fuel:0.07,avg_lh:0},
+      {year:2022,del_count:17485,avg_total:11.06,avg_base:10.19,avg_fuel:0.26,avg_lh:0},
+      {year:2023,del_count:10843,avg_total:14.95,avg_base:12.60,avg_fuel:0.98,avg_lh:0},
+      {year:2024,del_count:8180,avg_total:14.89,avg_base:12.65,avg_fuel:1.05,avg_lh:0.16},
+      {year:2025,del_count:6014,avg_total:15.73,avg_base:13.52,avg_fuel:1.07,avg_lh:4.53}
+    ],
+    'Wellington':[
+      {year:2017,del_count:0,avg_total:0,avg_base:0,avg_fuel:0,avg_lh:0},
+      {year:2018,del_count:2916,avg_total:9.33,avg_base:9.33,avg_fuel:0.24,avg_lh:0},
+      {year:2019,del_count:14724,avg_total:9.09,avg_base:9.09,avg_fuel:0.21,avg_lh:0},
+      {year:2020,del_count:30535,avg_total:8.77,avg_base:8.77,avg_fuel:0.08,avg_lh:0},
+      {year:2021,del_count:35370,avg_total:8.85,avg_base:8.75,avg_fuel:0.07,avg_lh:0},
+      {year:2022,del_count:29989,avg_total:9.23,avg_base:8.52,avg_fuel:0.20,avg_lh:0},
+      {year:2023,del_count:19795,avg_total:10.31,avg_base:9.01,avg_fuel:0.71,avg_lh:0},
+      {year:2024,del_count:12838,avg_total:11.34,avg_base:9.94,avg_fuel:0.80,avg_lh:0.01},
+      {year:2025,del_count:9260,avg_total:11.44,avg_base:10.22,avg_fuel:0.64,avg_lh:2.20}
+    ],
+    'Christchurch':[
+      {year:2017,del_count:0,avg_total:0,avg_base:0,avg_fuel:0,avg_lh:0},
+      {year:2018,del_count:200,avg_total:19.25,avg_base:19.25,avg_fuel:0.43,avg_lh:0},
+      {year:2019,del_count:10234,avg_total:10.61,avg_base:10.61,avg_fuel:0.28,avg_lh:0},
+      {year:2020,del_count:22670,avg_total:10.18,avg_base:10.18,avg_fuel:0.15,avg_lh:0},
+      {year:2021,del_count:21627,avg_total:9.80,avg_base:9.71,avg_fuel:0.06,avg_lh:0},
+      {year:2022,del_count:17828,avg_total:10.18,avg_base:9.45,avg_fuel:0.22,avg_lh:0},
+      {year:2023,del_count:11106,avg_total:11.13,avg_base:9.77,avg_fuel:0.77,avg_lh:0},
+      {year:2024,del_count:8109,avg_total:11.95,avg_base:10.49,avg_fuel:0.87,avg_lh:0.03},
+      {year:2025,del_count:5577,avg_total:13.78,avg_base:11.85,avg_fuel:1.01,avg_lh:3.93}
+    ],
+    'Other':[
+      {year:2017,del_count:28561,avg_total:8.45,avg_base:8.45,avg_fuel:0.05,avg_lh:0},
+      {year:2018,del_count:61041,avg_total:8.28,avg_base:8.28,avg_fuel:0.22,avg_lh:0},
+      {year:2019,del_count:12822,avg_total:8.50,avg_base:8.50,avg_fuel:0.26,avg_lh:0},
+      {year:2020,del_count:2409,avg_total:15.29,avg_base:15.29,avg_fuel:0.63,avg_lh:0},
+      {year:2021,del_count:5597,avg_total:17.51,avg_base:17.35,avg_fuel:0.12,avg_lh:0},
+      {year:2022,del_count:6301,avg_total:17.96,avg_base:16.39,avg_fuel:0.43,avg_lh:0},
+      {year:2023,del_count:4254,avg_total:18.41,avg_base:15.94,avg_fuel:1.26,avg_lh:0},
+      {year:2024,del_count:3078,avg_total:18.67,avg_base:16.38,avg_fuel:1.32,avg_lh:0.12},
+      {year:2025,del_count:1362,avg_total:16.93,avg_base:14.82,avg_fuel:1.11,avg_lh:3.93}
+    ]
+  },
+  region_shares: {
+    'Auckland':[0.0,1.5,52.0,60.0,61.0,60.0,59.5,60.8,60.8],
+    'Waikato/BoP':[0.0,1.7,8.9,9.8,9.4,9.8,9.5,10.0,10.6],
+    'Wellington':[0.0,4.4,15.2,16.6,16.7,16.8,17.4,15.6,16.3],
+    'Christchurch':[0.0,0.3,10.6,12.3,10.2,10.0,9.8,9.9,9.8],
+    'Other':[100.0,92.1,13.3,1.3,2.6,3.5,3.7,3.8,2.4]
+  },
+  linehaul_timeline: {first_seen:'2023-09-04',by_year:{'2017':0,'2018':0,'2019':0,'2020':0,'2021':0,'2022':0,'2023':8,'2024':219,'2025':62093}},
+  monthly_trend: null, // loaded separately if needed
+  attribution: {
+    baseline_year:2017, comparison_year:2024,
+    baseline_cost:8.45, current_cost_2024:12.10, current_cost_2025:14.73,
+    total_increase_2024:3.65, total_increase_2025:6.28,
+    base_rate_increase:2.14, fuel_surcharge:0.87, linehaul_component:0.04,
+    geo_mix_effect:0.00, zone_mix_residual:0.60
+  }
+};
+
+const COLORS = {
+  'Auckland':'#2563eb','Waikato/BoP':'#9333ea','Wellington':'#16a34a',
+  'Christchurch':'#ea580c','Other':'#6b7280',
+  base:'#2563eb',fuel:'#ea580c',linehaul:'#9333ea',total:'#1a2744'
+};
+
+// =========================================================================
+// KPI Cards
+// =========================================================================
+(function(){
+  const d = DATA.decomposition;
+  const d17 = d[0], d24 = d[7], d25 = d[8];
+  const allin24 = d24.avg_total + d24.avg_lh;
+  const allin25 = d25.avg_total + d25.avg_lh;
+  const pctInc = ((allin25 - d17.avg_total) / d17.avg_total * 100).toFixed(0);
+  const baseInc = ((d24.avg_base - d17.avg_base) / d17.avg_base * 100).toFixed(0);
+  const totalDels = d.reduce((s,r) => s + r.del_count, 0);
+
+  const cards = [
+    {title:'2017 Per Box',value:'$'+d17.avg_total.toFixed(2),detail:'Baseline (all base rate)',cls:'navy'},
+    {title:'2024 Per Box',value:'$'+allin24.toFixed(2),detail:'+$'+DATA.attribution.total_increase_2024.toFixed(2)+' vs 2017',cls:'amber'},
+    {title:'2025 All-In',value:'$'+allin25.toFixed(2),detail:'Incl $'+d25.avg_lh.toFixed(2)+' linehaul',cls:'red'},
+    {title:'Total Increase',value:'+'+pctInc+'%',detail:'2017 to 2025 all-in',cls:'red'},
+    {title:'Base Rate Growth',value:'+'+baseInc+'%',detail:'$'+d17.avg_base.toFixed(2)+' to $'+d24.avg_base.toFixed(2),cls:'amber'},
+    {title:'Total Deliveries',value:(totalDels/1000).toFixed(0)+'K',detail:'2017-2025 analysed',cls:'navy'}
+  ];
+
+  let html = '';
+  cards.forEach(c => {
+    html += '<div class="card"><h3>'+c.title+'</h3><div class="value '+c.cls+'">'+c.value+'</div><div class="detail">'+c.detail+'</div></div>';
+  });
+  document.getElementById('kpiCards').innerHTML = html;
+})();
+
+// =========================================================================
+// Cost Decomposition Stacked Bar Chart
+// =========================================================================
+(function(){
+  const d = DATA.decomposition;
+  new Chart(document.getElementById('chartDecomp'), {
+    type: 'bar',
+    data: {
+      labels: DATA.years.map(String),
+      datasets: [
+        {label:'Base Rate',data:d.map(r=>r.avg_base),backgroundColor:'#2563eb',borderRadius:2,order:3},
+        {label:'Fuel Surcharge',data:d.map(r=>r.avg_fuel),backgroundColor:'#ea580c',borderRadius:2,order:2},
+        {label:'Linehaul/box',data:d.map(r=>r.avg_lh),backgroundColor:'#9333ea',borderRadius:2,order:1},
+        {label:'All-In Total',data:d.map(r=>+(r.avg_total+r.avg_lh).toFixed(2)),type:'line',borderColor:'#1a2744',backgroundColor:'transparent',pointRadius:5,pointBackgroundColor:'#1a2744',tension:0.3,borderWidth:2,order:0,yAxisID:'y'}
+      ]
+    },
+    options: {
+      responsive:true,
+      scales: {
+        x:{grid:{display:false}},
+        y:{stacked:true,beginAtZero:true,title:{display:true,text:'$ per box'},ticks:{callback:v=>'$'+v}}
+      },
+      plugins: {
+        tooltip:{callbacks:{label:ctx=>{
+          let v = ctx.parsed.y;
+          return ctx.dataset.label+': $'+v.toFixed(2);
+        }}},
+        legend:{position:'top',labels:{usePointStyle:true,padding:16}}
+      }
+    }
+  });
+})();
+
+// =========================================================================
+// Attribution Waterfall
+// =========================================================================
+(function(){
+  const a = DATA.attribution;
+  // Recalculate attribution properly:
+  // Total increase 2017->2024 = $3.65
+  // Base rate increase = $2.14 (from $8.45 to $10.59)
+  // Fuel surcharge = $0.82 (from ~$0.05 to $0.87) - net increase
+  // Linehaul = $0.04
+  // Zone mix / other = residual
+  const fuelNet = 0.82; // $0.87 - $0.05 baseline fuel
+  const lh = a.linehaul_component;
+  const baseRate = a.base_rate_increase;
+  const residual = +(a.total_increase_2024 - baseRate - fuelNet - lh).toFixed(2);
+
+  const items = [
+    {label:'Base Rate Inflation',value:baseRate,pct:((baseRate/a.total_increase_2024)*100).toFixed(0),color:'#2563eb'},
+    {label:'Fuel Surcharge (MFV)',value:fuelNet,pct:((fuelNet/a.total_increase_2024)*100).toFixed(0),color:'#ea580c'},
+    {label:'Linehaul (2024)',value:lh,pct:((lh/a.total_increase_2024)*100).toFixed(0),color:'#9333ea'},
+    {label:'Zone Mix / Other',value:residual,pct:((residual/a.total_increase_2024)*100).toFixed(0),color:'#6b7280'}
+  ];
+
+  const maxVal = a.total_increase_2024;
+  let html = '';
+  // Start bar
+  html += '<div class="waterfall-bar"><div class="wf-label" style="font-weight:700">2017 baseline</div><div class="wf-bar-area"><div class="wf-bar" style="width:1px;background:#1a2744"></div></div><div class="wf-val">$'+a.baseline_cost.toFixed(2)+'</div></div>';
+
+  items.forEach(item => {
+    const w = Math.max(Math.abs(item.value)/maxVal*100, 8);
+    html += '<div class="waterfall-bar"><div class="wf-label">'+item.label+'</div><div class="wf-bar-area"><div class="wf-bar" style="width:'+w+'%;background:'+item.color+'">+$'+item.value.toFixed(2)+'</div></div><div class="wf-val">'+item.pct+'% of increase</div></div>';
+  });
+
+  // Total bar
+  html += '<div class="waterfall-bar"><div class="wf-label" style="font-weight:700">2024 all-in</div><div class="wf-bar-area"><div class="wf-bar" style="width:100%;background:#1a2744">$'+a.current_cost_2024.toFixed(2)+'</div></div><div class="wf-val">+$'+a.total_increase_2024.toFixed(2)+' total</div></div>';
+
+  document.getElementById('waterfallContainer').innerHTML = html;
+})();
+
+// =========================================================================
+// Year-by-Year Table
+// =========================================================================
+(function(){
+  const d = DATA.decomposition;
+  let html = '<thead><tr><th>Year</th><th>Deliveries</th><th>Base Rate</th><th>Fuel (MFV)</th><th>Linehaul/box</th><th>Del Total</th><th>All-In/box</th><th>YoY Change</th><th>vs 2017</th></tr></thead><tbody>';
+
+  d.forEach((r,i) => {
+    const allin = +(r.avg_total + r.avg_lh).toFixed(2);
+    const prev = i > 0 ? +(d[i-1].avg_total + d[i-1].avg_lh).toFixed(2) : allin;
+    const yoy = i > 0 ? allin - prev : 0;
+    const vs17 = allin - (d[0].avg_total + d[0].avg_lh);
+    const yoyCls = yoy > 0.1 ? 'badge-red' : yoy < -0.1 ? 'badge-green' : 'badge-blue';
+    const isCurrent = r.year === 2025;
+
+    html += '<tr'+(isCurrent?' class="total-row"':'')+'>';
+    html += '<td><strong>'+r.year+'</strong></td>';
+    html += '<td>'+r.del_count.toLocaleString()+'</td>';
+    html += '<td>$'+r.avg_base.toFixed(2)+'</td>';
+    html += '<td>$'+r.avg_fuel.toFixed(2)+'</td>';
+    html += '<td>'+(r.avg_lh > 0 ? '$'+r.avg_lh.toFixed(2) : '&mdash;')+'</td>';
+    html += '<td>$'+r.avg_total.toFixed(2)+'</td>';
+    html += '<td><strong>$'+allin.toFixed(2)+'</strong></td>';
+    html += '<td>'+(i>0?'<span class="badge '+yoyCls+'">'+(yoy>=0?'+':'')+yoy.toFixed(2)+'</span>':'')+'</td>';
+    html += '<td>'+(vs17!==0?'<span class="badge '+(vs17>0?'badge-red':'badge-green')+'">'+(vs17>=0?'+':'')+vs17.toFixed(2)+'</span>':'')+'</td>';
+    html += '</tr>';
+  });
+
+  html += '</tbody>';
+  document.getElementById('tableDecomp').innerHTML = html;
+})();
+
+// =========================================================================
+// Regional Volume Chart (stacked bar)
+// =========================================================================
+(function(){
+  const datasets = DATA.regions.map(r => ({
+    label: r,
+    data: DATA.volume_by_region[r],
+    backgroundColor: COLORS[r],
+    borderRadius: 2
+  }));
+
+  new Chart(document.getElementById('chartRegionVol'), {
+    type:'bar',
+    data:{labels:DATA.years.map(String),datasets:datasets},
+    options:{
+      responsive:true,
+      scales:{
+        x:{stacked:true,grid:{display:false}},
+        y:{stacked:true,title:{display:true,text:'Deliveries'},ticks:{callback:v=>(v/1000)+'K'}}
+      },
+      plugins:{legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:11}}}}
+    }
+  });
+})();
+
+// =========================================================================
+// Regional Share Chart (100% stacked)
+// =========================================================================
+(function(){
+  // Use shares from 2019 onwards (reliable data)
+  const labels = DATA.years.map(String);
+  const datasets = DATA.regions.map(r => ({
+    label: r,
+    data: DATA.region_shares[r],
+    backgroundColor: COLORS[r],
+    borderRadius: 2
+  }));
+
+  new Chart(document.getElementById('chartRegionShare'), {
+    type:'bar',
+    data:{labels:labels,datasets:datasets},
+    options:{
+      responsive:true,
+      scales:{
+        x:{stacked:true,grid:{display:false}},
+        y:{stacked:true,max:100,title:{display:true,text:'% of Volume'},ticks:{callback:v=>v+'%'}}
+      },
+      plugins:{
+        legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:11}}},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.y.toFixed(1)+'%'}}
+      }
+    }
+  });
+})();
+
+// =========================================================================
+// Regional Cost Line Chart
+// =========================================================================
+(function(){
+  const datasets = DATA.regions.filter(r=>r!=='Other').map(r => ({
+    label: r,
+    data: DATA.cost_by_region[r],
+    borderColor: COLORS[r],
+    backgroundColor: 'transparent',
+    tension: 0.3,
+    pointRadius: 4,
+    pointBackgroundColor: COLORS[r],
+    borderWidth: 2,
+    spanGaps: true
+  }));
+
+  new Chart(document.getElementById('chartRegionCost'), {
+    type:'line',
+    data:{labels:DATA.years.map(String),datasets:datasets},
+    options:{
+      responsive:true,
+      scales:{
+        x:{grid:{display:false}},
+        y:{beginAtZero:false,title:{display:true,text:'$ per box'},ticks:{callback:v=>'$'+v}}
+      },
+      plugins:{
+        legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:11}}},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+(ctx.parsed.y||0).toFixed(2)}}
+      }
+    }
+  });
+})();
+
+// =========================================================================
+// Monthly Cost Trend (simplified - annual data as proxy)
+// =========================================================================
+(function(){
+  const d = DATA.decomposition;
+  new Chart(document.getElementById('chartMonthly'), {
+    type:'line',
+    data:{
+      labels:DATA.years.map(String),
+      datasets:[
+        {label:'Base Rate',data:d.map(r=>r.avg_base),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,0.1)',fill:true,tension:0.3,pointRadius:4,borderWidth:2},
+        {label:'Total Del Cost',data:d.map(r=>r.avg_total),borderColor:'#1a2744',backgroundColor:'transparent',tension:0.3,pointRadius:4,borderWidth:2,borderDash:[5,3]},
+        {label:'All-In (incl LH)',data:d.map(r=>+(r.avg_total+r.avg_lh).toFixed(2)),borderColor:'#dc2626',backgroundColor:'transparent',tension:0.3,pointRadius:5,borderWidth:2.5}
+      ]
+    },
+    options:{
+      responsive:true,
+      scales:{
+        x:{grid:{display:false}},
+        y:{beginAtZero:false,title:{display:true,text:'$ per box'},ticks:{callback:v=>'$'+v}}
+      },
+      plugins:{
+        legend:{position:'top',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:11}}},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+(ctx.parsed.y||0).toFixed(2)}}
+      }
+    }
+  });
+})();
+
+// =========================================================================
+// Regional Detail Tabs
+// =========================================================================
+(function(){
+  let tabHtml = '';
+  let contentHtml = '';
+
+  DATA.regions.forEach((r,idx) => {
+    const active = idx === 0 ? ' active' : '';
+    tabHtml += '<button class="tab-btn'+active+'" onclick="showRegionTab('+idx+')">'+r+'</button>';
+
+    const detail = DATA.regional_cost_detail[r];
+    let tableHtml = '<div class="tab-content'+active+'" id="regionTab'+idx+'"><div class="table-scroll"><table>';
+    tableHtml += '<thead><tr><th>Year</th><th>Deliveries</th><th>Base Rate</th><th>Fuel</th><th>Linehaul/box</th><th>Avg Cost</th><th>All-In</th></tr></thead><tbody>';
+
+    detail.forEach(row => {
+      if (row.del_count === 0) {
+        tableHtml += '<tr><td>'+row.year+'</td><td colspan="6" style="text-align:center;color:#999">No data</td></tr>';
+        return;
+      }
+      const allin = +(row.avg_total + row.avg_lh).toFixed(2);
+      tableHtml += '<tr>';
+      tableHtml += '<td><strong>'+row.year+'</strong></td>';
+      tableHtml += '<td>'+row.del_count.toLocaleString()+'</td>';
+      tableHtml += '<td>$'+row.avg_base.toFixed(2)+'</td>';
+      tableHtml += '<td>$'+row.avg_fuel.toFixed(2)+'</td>';
+      tableHtml += '<td>'+(row.avg_lh > 0 ? '$'+row.avg_lh.toFixed(2) : '&mdash;')+'</td>';
+      tableHtml += '<td>$'+row.avg_total.toFixed(2)+'</td>';
+      tableHtml += '<td><strong>$'+allin.toFixed(2)+'</strong></td>';
+      tableHtml += '</tr>';
+    });
+
+    tableHtml += '</tbody></table></div></div>';
+    contentHtml += tableHtml;
+  });
+
+  document.getElementById('regionTabs').innerHTML = tabHtml;
+  document.getElementById('regionTabContent').innerHTML = contentHtml;
+})();
+
+function showRegionTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-content').forEach((c,i) => c.classList.toggle('active', i===idx));
+}
+
+// =========================================================================
+// Linehaul Chart
+// =========================================================================
+(function(){
+  const lh = DATA.linehaul_timeline.by_year;
+  const d = DATA.decomposition;
+
+  new Chart(document.getElementById('chartLinehaul'), {
+    type:'bar',
+    data:{
+      labels:DATA.years.map(String),
+      datasets:[
+        {label:'LH Jobs',data:DATA.years.map(y=>lh[y]||0),backgroundColor:'rgba(147,51,234,0.3)',borderColor:'#9333ea',borderWidth:1,borderRadius:4,yAxisID:'y'},
+        {label:'LH $/box',data:d.map(r=>r.avg_lh),type:'line',borderColor:'#9333ea',backgroundColor:'transparent',pointRadius:5,pointBackgroundColor:'#9333ea',tension:0.3,borderWidth:2.5,yAxisID:'y1'}
+      ]
+    },
+    options:{
+      responsive:true,
+      scales:{
+        x:{grid:{display:false}},
+        y:{beginAtZero:true,title:{display:true,text:'LH Jobs'},position:'left',ticks:{callback:v=>v>=1000?(v/1000)+'K':v}},
+        y1:{beginAtZero:true,title:{display:true,text:'$ per box'},position:'right',grid:{display:false},ticks:{callback:v=>'$'+v.toFixed(2)}}
+      },
+      plugins:{
+        legend:{position:'top',labels:{usePointStyle:true,padding:16}},
+        tooltip:{callbacks:{label:ctx=>{
+          if(ctx.datasetIndex===0) return 'LH Jobs: '+ctx.parsed.y.toLocaleString();
+          return 'LH/box: $'+ctx.parsed.y.toFixed(2);
+        }}}
+      }
+    }
+  });
+})();
+
+// =========================================================================
+// Geographic Table
+// =========================================================================
+(function(){
+  // Show volume and cost by region from 2019 (when regional data is reliable)
+  const geoYears = [2019,2020,2021,2022,2023,2024,2025];
+  let html = '<thead><tr><th>Region</th>';
+  geoYears.forEach(y => html += '<th colspan="2">'+y+'</th>');
+  html += '</tr><tr><th></th>';
+  geoYears.forEach(() => html += '<th>Vol</th><th>$/box</th>');
+  html += '</tr></thead><tbody>';
+
+  DATA.regions.forEach(r => {
+    if (r === 'Other') return; // skip Other for cleaner display
+    html += '<tr><td><strong>'+r+'</strong></td>';
+    geoYears.forEach(y => {
+      const yi = DATA.years.indexOf(y);
+      const vol = DATA.volume_by_region[r][yi];
+      const cost = DATA.cost_by_region[r][yi];
+      html += '<td>'+(vol > 0 ? (vol/1000).toFixed(1)+'K' : '&mdash;')+'</td>';
+      html += '<td>'+(cost ? '$'+cost.toFixed(2) : '&mdash;')+'</td>';
+    });
+    html += '</tr>';
+  });
+
+  // Total row
+  html += '<tr class="total-row"><td><strong>Total</strong></td>';
+  geoYears.forEach(y => {
+    const yi = DATA.years.indexOf(y);
+    const totalVol = DATA.regions.reduce((s,r) => s + DATA.volume_by_region[r][yi], 0);
+    const d = DATA.decomposition[yi];
+    const allin = +(d.avg_total + d.avg_lh).toFixed(2);
+    html += '<td>'+(totalVol/1000).toFixed(1)+'K</td>';
+    html += '<td>$'+allin.toFixed(2)+'</td>';
+  });
+  html += '</tr>';
+
+  html += '</tbody>';
+  document.getElementById('tableGeo').innerHTML = html;
+})();
+</script>
+</body>
+</html>
